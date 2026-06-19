@@ -1,0 +1,17 @@
+<!-- @dsCard group="Spacing" viewport="700x170" subtitle="Elevation — cool-tinted shadows" name="Shadows" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../styles.css">
+<style>
+  body{margin:0;font-family:var(--font-body);background:var(--paper);padding:30px}
+  .row{display:flex;gap:26px}
+  .col{display:flex;flex-direction:column;align-items:center;gap:10px}
+  .box{width:120px;height:64px;background:var(--white);border-radius:var(--r-lg)}
+  .lbl{font-size:11px;color:var(--text-muted)}
+</style></head>
+<body>
+  <div class="row">
+    <div class="col"><div class="box" style="box-shadow:var(--shadow-sm)"></div><div class="lbl">sm · resting card</div></div>
+    <div class="col"><div class="box" style="box-shadow:var(--shadow-md)"></div><div class="lbl">md · raised</div></div>
+    <div class="col"><div class="box" style="box-shadow:var(--shadow-lg)"></div><div class="lbl">lg · hover / modal</div></div>
+    <div class="col"><div class="box" style="box-shadow:var(--shadow-action);background:var(--orange-500)"></div><div class="lbl">action glow</div></div>
+  </div>
+</body></html>

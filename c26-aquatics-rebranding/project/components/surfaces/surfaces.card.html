@@ -1,0 +1,46 @@
+<!-- @dsCard group="Components" viewport="700x280" subtitle="Content card + program tile + stat band" name="Surfaces" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>
+  body{margin:0;font-family:var(--font-body);background:var(--paper);padding:24px}
+  h3{font-family:var(--font-display);font-weight:700;font-size:21px;color:var(--navy-700);margin:0}
+  p{font-size:14px;line-height:1.5;color:var(--text-body);margin:0}
+  .band{background:var(--navy-700);border-radius:var(--r-lg);padding:24px;display:flex;justify-content:space-between;margin-top:18px}
+</style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const NS = Object.values(window).find(o => o && typeof o === "object" && typeof o.Card === "function" && typeof o.StatBlock === "function") || {};
+    const { Card, StatBlock, Badge } = NS;
+    const hatch = "repeating-linear-gradient(45deg,#dfe7eb,#dfe7eb 8px,#eef3f5 8px,#eef3f5 16px)";
+    function Demo() {
+      return (
+        <div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"16px"}}>
+            <Card media={<div style={{height:"100%",background:hatch}}/>} mediaHeight={96} interactive>
+              {Badge ? <Badge tone="teal">Ages 6–12</Badge> : null}
+              <h3>Youth Development</h3>
+              <p>Stroke technique and endurance in groups of four or fewer.</p>
+            </Card>
+            <Card media={<div style={{height:"100%",background:hatch}}/>} mediaHeight={96} interactive>
+              {Badge ? <Badge tone="orange">Popular</Badge> : null}
+              <h3>Adult Lessons</h3>
+              <p>Learn to swim or refine your form at any level.</p>
+            </Card>
+          </div>
+          <div className="band">
+            <StatBlock value="≤4" label="Per class" />
+            <StatBlock value="20+" label="Yrs coaching" />
+            <StatBlock value="365" label="Indoor days" />
+            <StatBlock value="100%" label="Certified" />
+          </div>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+  </script>
+</body></html>

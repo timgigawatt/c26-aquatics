@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<template id="__bundler_thumbnail" data-bg-color="#1d1d1d">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect x="180" y="160" width="380" height="480" rx="18" fill="none" stroke="#ffffff" stroke-width="10"/>
+    <rect x="640" y="160" width="380" height="480" rx="18" fill="none" stroke="#ffffff" stroke-width="10"/>
+    <rect x="220" y="210" width="300" height="90" rx="10" fill="#ffffff" opacity="0.85"/>
+    <rect x="220" y="330" width="140" height="120" rx="8" fill="#ffffff" opacity="0.45"/>
+    <rect x="380" y="330" width="140" height="120" rx="8" fill="#ffffff" opacity="0.45"/>
+    <rect x="680" y="210" width="300" height="90" rx="10" fill="#ffffff" opacity="0.85"/>
+    <rect x="680" y="330" width="300" height="40" rx="8" fill="#ffffff" opacity="0.35"/>
+    <rect x="680" y="390" width="220" height="40" rx="8" fill="#ffffff" opacity="0.35"/>
+    <text x="600" y="730" font-family="Helvetica,Arial,sans-serif" font-size="44" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="2">C26 AQUATICS · WIREFRAMES</text>
+  </svg>
+</template>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+
+<div style="min-width:100%;width:max-content;min-height:100vh;box-sizing:border-box;padding:40px 48px 80px;background:#e7e5df">
+
+  <!-- ===== HEADER / CONTROLS ===== -->
+  <div style="position:sticky;top:0;z-index:20;margin:-40px -48px 28px;padding:18px 48px;background:rgba(231,229,223,.92);backdrop-filter:blur(6px);border-bottom:1px solid #d6d4cc;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+    <div>
+      <div style="font-family:Caveat;font-size:30px;font-weight:700;color:#1d1d1d;line-height:1">C26 Aquatics — rebrand wireframes</div>
+      <div style="font-size:12px;color:#6b6b66;margin-top:3px">Low-fi structure exploration · Apple-minimal ↔ Nike-athletic · placeholders for imagery</div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <div onClick="{{ setHome }}" style="{{ homeStyle }}">Homepage · 4 options</div>
+      <div onClick="{{ setLessons }}" style="{{ lessonsStyle }}">Swim Lessons · 2 options</div>
+    </div>
+  </div>
+
+  <!-- legend -->
+  <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-bottom:22px;font-size:11px;color:#7a7a73">
+    <div style="display:flex;align-items:center;gap:7px"><div style="width:26px;height:14px;border:1.5px solid #d2d2d2;border-radius:3px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 5px,#f7f7f7 5px,#f7f7f7 10px)"></div>image placeholder</div>
+    <div style="display:flex;align-items:center;gap:7px"><div style="width:34px;height:7px;border-radius:4px;background:#e6e6e6"></div>body copy</div>
+    <div style="display:flex;align-items:center;gap:7px"><div style="font-family:'Courier New',monospace;font-size:8px;letter-spacing:.1em;color:#c4c4c4;text-transform:uppercase">SECTION</div>section label</div>
+    <div style="display:flex;align-items:center;gap:7px"><span style="font-family:Caveat;font-size:16px;color:{{ accent }}">note</span>design rationale</div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ===================== HOMEPAGE OPTIONS ===================== -->
+  <!-- ============================================================ -->
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <div style="display:flex;gap:40px;align-items:flex-start">
+
+    <!-- ============ OPTION A — APPLE MINIMAL ============ -->
+    <div data-screen-label="Homepage Option A" style="width:400px;flex:none">
+      <div style="font-family:Caveat;font-size:21px;font-weight:700;color:#1d1d1d;margin-bottom:3px">Option A · “Apple-minimal”</div>
+      <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+      <div style="font-family:Caveat;font-size:15px;line-height:1.25;color:{{ accent }};margin-bottom:10px">Quiet, centered, lots of air. Flat nav. Calm hero answers what / who / where-next in 5 sec.</div>
+      </sc-if>
+      <div style="background:#fff;border:1px solid #ddd;border-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,.08);overflow:hidden">
+
+        <!-- NAV flat -->
+        <div style="position:relative;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #eee">
+          <div style="position:absolute;top:4px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">NAV · FLAT STICKY</div>
+          <div style="font-family:Caveat;font-size:19px;font-weight:700;color:#1d1d1d">C26</div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <div style="display:flex;gap:8px;font-size:8.5px;color:#8a8a8a;font-weight:600">Programs<span>Members</span><span>Events</span><span>About</span></div>
+            <div style="background:#1d1d1d;color:#fff;font-size:9px;font-weight:700;padding:6px 10px;border-radius:6px">Book Now</div>
+          </div>
+        </div>
+
+        <!-- HERO centered -->
+        <div style="position:relative;padding:34px 26px 30px;text-align:center;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">HERO · CENTERED</div>
+          <div style="font-size:19px;font-weight:700;letter-spacing:-.02em;color:#1a1a1a;line-height:1.15">Swim Lessons, Training &amp; Aquatic Performance</div>
+          <div style="display:flex;flex-direction:column;gap:5px;align-items:center;margin:13px 0 16px">
+            <div style="height:7px;border-radius:4px;background:#e9e9e9;width:78%"></div>
+            <div style="height:7px;border-radius:4px;background:#ececec;width:62%"></div>
+          </div>
+          <div style="display:flex;gap:9px;justify-content:center">
+            <div style="background:#1d1d1d;color:#fff;font-size:11px;font-weight:700;padding:9px 15px;border-radius:7px">Book Lessons</div>
+            <div style="border:1.5px solid #1d1d1d;color:#1d1d1d;font-size:11px;font-weight:700;padding:8px 14px;border-radius:7px">Explore Programs</div>
+          </div>
+        </div>
+
+        <!-- PROGRAM SELECTOR — card grid -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">PROGRAM SELECTOR · GRID</div>
+          <div style="font-size:12px;font-weight:700;color:#222;margin-bottom:11px">Find your path</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+            <div style="border:1px solid #e6e6e6;border-radius:6px;padding:8px;display:flex;flex-direction:column;gap:6px"><div style="height:44px;border:1.5px solid #d6d6d6;border-radius:4px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Infant &amp; Child</div></div>
+            <div style="border:1px solid #e6e6e6;border-radius:6px;padding:8px;display:flex;flex-direction:column;gap:6px"><div style="height:44px;border:1.5px solid #d6d6d6;border-radius:4px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Youth Development</div></div>
+            <div style="border:1px solid #e6e6e6;border-radius:6px;padding:8px;display:flex;flex-direction:column;gap:6px"><div style="height:44px;border:1.5px solid #d6d6d6;border-radius:4px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Adult Lessons</div></div>
+            <div style="border:1px solid #e6e6e6;border-radius:6px;padding:8px;display:flex;flex-direction:column;gap:6px"><div style="height:44px;border:1.5px solid #d6d6d6;border-radius:4px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Competitive</div></div>
+            <div style="border:1px solid #e6e6e6;border-radius:6px;padding:8px;display:flex;flex-direction:column;gap:6px"><div style="height:44px;border:1.5px solid #d6d6d6;border-radius:4px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Triathlon</div></div>
+            <div style="border:1px solid #e6e6e6;border-radius:6px;padding:8px;display:flex;flex-direction:column;gap:6px"><div style="height:44px;border:1.5px solid #d6d6d6;border-radius:4px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Memberships</div></div>
+          </div>
+        </div>
+
+        <!-- WHY C26 — 4 benefit blocks -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">WHY C26 · 4 BLOCKS</div>
+          <div style="font-size:12px;font-weight:700;color:#222;margin-bottom:11px">Why C26 Aquatics</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+            <div style="display:flex;flex-direction:column;gap:5px"><div style="width:18px;height:18px;border:1.5px solid #cfcfcf;border-radius:5px"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Expert coaches</div><div style="height:6px;border-radius:3px;background:#ececec;width:85%"></div></div>
+            <div style="display:flex;flex-direction:column;gap:5px"><div style="width:18px;height:18px;border:1.5px solid #cfcfcf;border-radius:5px"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Small classes</div><div style="height:6px;border-radius:3px;background:#ececec;width:80%"></div></div>
+            <div style="display:flex;flex-direction:column;gap:5px"><div style="width:18px;height:18px;border:1.5px solid #cfcfcf;border-radius:5px"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Proven results</div><div style="height:6px;border-radius:3px;background:#ececec;width:88%"></div></div>
+            <div style="display:flex;flex-direction:column;gap:5px"><div style="width:18px;height:18px;border:1.5px solid #cfcfcf;border-radius:5px"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Year-round pool</div><div style="height:6px;border-radius:3px;background:#ececec;width:75%"></div></div>
+          </div>
+        </div>
+
+        <!-- COACHES -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">COACHES</div>
+          <div style="font-size:12px;font-weight:700;color:#222;margin-bottom:11px">Meet the coaches</div>
+          <div style="display:flex;gap:10px">
+            <div style="flex:1;display:flex;flex-direction:column;gap:5px;align-items:center"><div style="width:52px;height:52px;border-radius:50%;border:1.5px solid #d6d6d6;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="font-size:9px;font-weight:700;color:#2a2a2a">Robbie B.</div><div style="height:5px;border-radius:3px;background:#ececec;width:70%"></div></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:5px;align-items:center"><div style="width:52px;height:52px;border-radius:50%;border:1.5px solid #d6d6d6;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="font-size:9px;font-weight:700;color:#2a2a2a">Ruth S.</div><div style="height:5px;border-radius:3px;background:#ececec;width:70%"></div></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:5px;align-items:center"><div style="width:52px;height:52px;border-radius:50%;border:1.5px solid #d6d6d6;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="font-size:9px;font-weight:700;color:#2a2a2a">Team</div><div style="height:5px;border-radius:3px;background:#ececec;width:70%"></div></div>
+          </div>
+        </div>
+
+        <!-- TESTIMONIALS -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">TESTIMONIALS</div>
+          <div style="display:flex;gap:9px">
+            <div style="flex:1;border:1px solid #ececec;border-radius:6px;padding:9px;display:flex;flex-direction:column;gap:5px"><div style="font-size:18px;color:#d0d0d0;line-height:.6;font-family:Caveat">“</div><div style="height:6px;border-radius:3px;background:#ececec;width:95%"></div><div style="height:6px;border-radius:3px;background:#ececec;width:80%"></div><div style="font-size:8.5px;color:#9a9a9a">— Parent</div></div>
+            <div style="flex:1;border:1px solid #ececec;border-radius:6px;padding:9px;display:flex;flex-direction:column;gap:5px"><div style="font-size:18px;color:#d0d0d0;line-height:.6;font-family:Caveat">“</div><div style="height:6px;border-radius:3px;background:#ececec;width:95%"></div><div style="height:6px;border-radius:3px;background:#ececec;width:80%"></div><div style="font-size:8.5px;color:#9a9a9a">— Adult swimmer</div></div>
+          </div>
+        </div>
+
+        <!-- FAQ -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">FAQ</div>
+          <div style="font-size:12px;font-weight:700;color:#222;margin-bottom:10px">Common questions</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:7px;border-bottom:1px solid #f0f0f0"><div style="height:7px;border-radius:4px;background:#e6e6e6;width:70%"></div><div style="color:#bbb;font-size:13px">+</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:7px;border-bottom:1px solid #f0f0f0"><div style="height:7px;border-radius:4px;background:#e6e6e6;width:62%"></div><div style="color:#bbb;font-size:13px">+</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:7px;border-bottom:1px solid #f0f0f0"><div style="height:7px;border-radius:4px;background:#e6e6e6;width:75%"></div><div style="color:#bbb;font-size:13px">+</div></div>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div style="position:relative;padding:26px 16px;text-align:center;background:#1d1d1d">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#555">FINAL CTA</div>
+          <div style="font-size:14px;font-weight:700;color:#fff">Ready to get in the water?</div>
+          <div style="display:inline-flex;margin-top:11px;background:#fff;color:#1d1d1d;font-size:11px;font-weight:700;padding:9px 16px;border-radius:7px">Book Your First Session</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============ OPTION B — NIKE ATHLETIC ============ -->
+    <div data-screen-label="Homepage Option B" style="width:400px;flex:none">
+      <div style="font-family:Caveat;font-size:21px;font-weight:700;color:#1d1d1d;margin-bottom:3px">Option B · “Nike-athletic”</div>
+      <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+      <div style="font-family:Caveat;font-size:15px;line-height:1.25;color:{{ accent }};margin-bottom:10px">Full-bleed hero, mega-menu, a hard stats band, audience tabs. Performance-forward, premium energy.</div>
+      </sc-if>
+      <div style="background:#fff;border:1px solid #ddd;border-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,.08);overflow:hidden">
+
+        <!-- NAV mega-menu -->
+        <div style="position:relative;border-bottom:1px solid #eee">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px">
+            <div style="position:absolute;top:4px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">NAV · MEGA-MENU</div>
+            <div style="font-family:Caveat;font-size:19px;font-weight:800;color:#1d1d1d">C26</div>
+            <div style="display:flex;gap:9px;align-items:center;font-size:8.5px;color:#1d1d1d;font-weight:700"><span style="border-bottom:2px solid #1d1d1d;padding-bottom:2px">Programs ▾</span><span style="color:#9a9a9a">Members</span><span style="color:#9a9a9a">Events</span><div style="background:#1d1d1d;color:#fff;padding:6px 10px;border-radius:6px">Book</div></div>
+          </div>
+          <!-- open mega panel sketch -->
+          <div style="background:#fafafa;border-top:1px solid #eee;padding:11px 16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px">
+            <div style="font-size:8px;color:#555;font-weight:700">Swim Lessons<div style="height:5px;background:#e8e8e8;border-radius:3px;margin-top:4px"></div></div>
+            <div style="font-size:8px;color:#555;font-weight:700">Competitive<div style="height:5px;background:#e8e8e8;border-radius:3px;margin-top:4px"></div></div>
+            <div style="font-size:8px;color:#555;font-weight:700">Swim Analysis<div style="height:5px;background:#e8e8e8;border-radius:3px;margin-top:4px"></div></div>
+            <div style="font-size:8px;color:#555;font-weight:700">Swim Camps<div style="height:5px;background:#e8e8e8;border-radius:3px;margin-top:4px"></div></div>
+            <div style="font-size:8px;color:#555;font-weight:700">Triathlon<div style="height:5px;background:#e8e8e8;border-radius:3px;margin-top:4px"></div></div>
+            <div style="font-size:8px;color:#9a9a9a">view all →</div>
+          </div>
+        </div>
+
+        <!-- HERO full-bleed -->
+        <div style="position:relative;height:210px;border-bottom:1px dashed #e6e6e6;background:repeating-linear-gradient(45deg,#e9e9e9,#e9e9e9 9px,#f2f2f2 9px,#f2f2f2 18px);display:flex;flex-direction:column;justify-content:flex-end;padding:18px">
+          <div style="position:absolute;top:6px;right:8px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#a8a8a8">HERO · FULL-BLEED IMAGE</div>
+          <div style="position:absolute;top:8px;left:8px;font-family:'Courier New',monospace;font-size:8px;color:#a0a0a0;text-transform:uppercase;letter-spacing:.06em">pool / athlete photo</div>
+          <div style="font-size:24px;font-weight:800;letter-spacing:-.02em;color:#161616;line-height:1.02;max-width:78%">BECOME A STRONGER SWIMMER</div>
+          <div style="height:7px;border-radius:4px;background:rgba(0,0,0,.18);width:55%;margin:9px 0 12px"></div>
+          <div style="display:inline-flex;align-self:flex-start;background:#1d1d1d;color:#fff;font-size:11px;font-weight:800;padding:10px 18px;border-radius:2px">BOOK A SESSION</div>
+        </div>
+
+        <!-- STATS BAND -->
+        <div style="position:relative;padding:18px 16px;background:#1d1d1d;display:flex;justify-content:space-between;text-align:center">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#555">STATS BAND</div>
+          <div><div style="font-size:20px;font-weight:800;color:#fff">≤4</div><div style="font-size:7.5px;color:#aaa;text-transform:uppercase;letter-spacing:.08em">per class</div></div>
+          <div><div style="font-size:20px;font-weight:800;color:#fff">20+</div><div style="font-size:7.5px;color:#aaa;text-transform:uppercase;letter-spacing:.08em">yrs coaching</div></div>
+          <div><div style="font-size:20px;font-weight:800;color:#fff">365</div><div style="font-size:7.5px;color:#aaa;text-transform:uppercase;letter-spacing:.08em">indoor days</div></div>
+          <div><div style="font-size:20px;font-weight:800;color:#fff">PRs</div><div style="font-size:7.5px;color:#aaa;text-transform:uppercase;letter-spacing:.08em">results</div></div>
+        </div>
+
+        <!-- PROGRAM SELECTOR — audience tabs -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">SELECTOR · AUDIENCE TABS</div>
+          <div style="display:flex;gap:6px;margin-bottom:11px">
+            <div style="background:#1d1d1d;color:#fff;font-size:9px;font-weight:700;padding:5px 11px;border-radius:20px">Kids</div>
+            <div style="border:1.5px solid #ddd;color:#777;font-size:9px;font-weight:700;padding:5px 11px;border-radius:20px">Teens</div>
+            <div style="border:1.5px solid #ddd;color:#777;font-size:9px;font-weight:700;padding:5px 11px;border-radius:20px">Adults</div>
+            <div style="border:1.5px solid #ddd;color:#777;font-size:9px;font-weight:700;padding:5px 11px;border-radius:20px">Athletes</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+            <div style="border:1px solid #e6e6e6;border-radius:6px;padding:8px;display:flex;flex-direction:column;gap:6px"><div style="height:50px;border:1.5px solid #d6d6d6;border-radius:4px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Infant &amp; Child</div></div>
+            <div style="border:1px solid #e6e6e6;border-radius:6px;padding:8px;display:flex;flex-direction:column;gap:6px"><div style="height:50px;border:1.5px solid #d6d6d6;border-radius:4px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Youth Development</div></div>
+          </div>
+        </div>
+
+        <!-- DIFFERENTIATORS row -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">WHY C26</div>
+          <div style="display:flex;gap:7px">
+            <div style="flex:1;border-left:2px solid #1d1d1d;padding-left:7px"><div style="font-size:9px;font-weight:800;color:#2a2a2a;text-transform:uppercase">Coaches</div><div style="height:5px;background:#ececec;border-radius:3px;margin-top:5px"></div></div>
+            <div style="flex:1;border-left:2px solid #1d1d1d;padding-left:7px"><div style="font-size:9px;font-weight:800;color:#2a2a2a;text-transform:uppercase">Classes</div><div style="height:5px;background:#ececec;border-radius:3px;margin-top:5px"></div></div>
+            <div style="flex:1;border-left:2px solid #1d1d1d;padding-left:7px"><div style="font-size:9px;font-weight:800;color:#2a2a2a;text-transform:uppercase">Results</div><div style="height:5px;background:#ececec;border-radius:3px;margin-top:5px"></div></div>
+          </div>
+        </div>
+
+        <!-- COACHES -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">COACHES</div>
+          <div style="font-size:12px;font-weight:700;color:#222;margin-bottom:11px">The coaching staff</div>
+          <div style="display:flex;gap:8px">
+            <div style="flex:1;height:74px;border:1.5px solid #d6d6d6;border-radius:5px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px);display:flex;align-items:flex-end;padding:5px"><div style="font-size:8px;font-weight:700;color:#555">Robbie</div></div>
+            <div style="flex:1;height:74px;border:1.5px solid #d6d6d6;border-radius:5px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px);display:flex;align-items:flex-end;padding:5px"><div style="font-size:8px;font-weight:700;color:#555">Ruth</div></div>
+            <div style="flex:1;height:74px;border:1.5px solid #d6d6d6;border-radius:5px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px);display:flex;align-items:flex-end;padding:5px"><div style="font-size:8px;font-weight:700;color:#555">Team</div></div>
+          </div>
+        </div>
+
+        <!-- TESTIMONIALS -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">TESTIMONIALS</div>
+          <div style="border:1px solid #ececec;border-radius:6px;padding:11px;display:flex;flex-direction:column;gap:6px"><div style="height:7px;border-radius:4px;background:#e6e6e6;width:96%"></div><div style="height:7px;border-radius:4px;background:#ececec;width:84%"></div><div style="font-size:8.5px;color:#9a9a9a">— Competitive swimmer</div></div>
+        </div>
+
+        <!-- SERVICE AREA -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">SERVICE AREA · MAP</div>
+          <div style="height:80px;border:1.5px solid #d6d6d6;border-radius:5px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 7px,#f7f7f7 7px,#f7f7f7 14px);display:flex;align-items:center;justify-content:center;font-family:'Courier New',monospace;font-size:8px;color:#a8a8a8;text-transform:uppercase;letter-spacing:.06em">KC metro map</div>
+        </div>
+
+        <!-- CTA -->
+        <div style="position:relative;padding:26px 16px;text-align:center;background:#1d1d1d">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#555">FINAL CTA</div>
+          <div style="font-size:15px;font-weight:800;color:#fff;text-transform:uppercase">Get in the water</div>
+          <div style="display:inline-flex;margin-top:11px;background:#fff;color:#1d1d1d;font-size:11px;font-weight:800;padding:10px 18px;border-radius:2px">BOOK YOUR FIRST SESSION</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============ OPTION C — EDITORIAL SPLIT ============ -->
+    <div data-screen-label="Homepage Option C" style="width:400px;flex:none">
+      <div style="font-family:Caveat;font-size:21px;font-weight:700;color:#1d1d1d;margin-bottom:3px">Option C · “Editorial split”</div>
+      <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+      <div style="font-family:Caveat;font-size:15px;line-height:1.25;color:{{ accent }};margin-bottom:10px">Asymmetric split hero, filmstrip program carousel, numbered “why” list. Magazine-grade, premium.</div>
+      </sc-if>
+      <div style="background:#fff;border:1px solid #ddd;border-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,.08);overflow:hidden">
+
+        <!-- NAV centered logo -->
+        <div style="position:relative;display:flex;align-items:center;justify-content:center;gap:14px;padding:12px 16px;border-bottom:1px solid #eee">
+          <div style="position:absolute;top:4px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">NAV · CENTERED LOGO</div>
+          <div style="display:flex;gap:8px;font-size:8.5px;color:#8a8a8a;font-weight:600">Programs<span>Members</span></div>
+          <div style="font-family:Caveat;font-size:18px;font-weight:700;color:#1d1d1d">C26</div>
+          <div style="display:flex;gap:8px;font-size:8.5px;color:#8a8a8a;font-weight:600">About<span>Contact</span></div>
+        </div>
+
+        <!-- HERO split -->
+        <div style="position:relative;display:flex;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;z-index:2;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">HERO · SPLIT</div>
+          <div style="flex:1.05;padding:24px 16px;display:flex;flex-direction:column;justify-content:center">
+            <div style="font-size:19px;font-weight:700;letter-spacing:-.02em;color:#1a1a1a;line-height:1.12">Aquatic performance, taught with intent.</div>
+            <div style="display:flex;flex-direction:column;gap:5px;margin:11px 0 14px"><div style="height:6px;border-radius:3px;background:#ececec;width:92%"></div><div style="height:6px;border-radius:3px;background:#ececec;width:74%"></div></div>
+            <div style="display:flex;gap:8px"><div style="background:#1d1d1d;color:#fff;font-size:10px;font-weight:700;padding:8px 13px;border-radius:7px">Book Lessons</div><div style="border:1.5px solid #1d1d1d;color:#1d1d1d;font-size:10px;font-weight:700;padding:7px 12px;border-radius:7px">Programs</div></div>
+          </div>
+          <div style="flex:.95;background:repeating-linear-gradient(45deg,#ececec,#ececec 8px,#f4f4f4 8px,#f4f4f4 16px);display:flex;align-items:flex-end;padding:8px"><div style="font-family:'Courier New',monospace;font-size:8px;color:#a0a0a0;text-transform:uppercase">swimmer photo</div></div>
+        </div>
+
+        <!-- PROGRAM FILMSTRIP -->
+        <div style="position:relative;padding:18px 0 18px 16px;border-bottom:1px dashed #e6e6e6;overflow:hidden">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">SELECTOR · FILMSTRIP</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-right:16px;margin-bottom:11px"><div style="font-size:12px;font-weight:700;color:#222">Programs</div><div style="display:flex;gap:5px"><div style="width:18px;height:18px;border:1.5px solid #ddd;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:#999">‹</div><div style="width:18px;height:18px;border:1.5px solid #1d1d1d;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:#1d1d1d">›</div></div></div>
+          <div style="display:flex;gap:9px">
+            <div style="flex:none;width:120px;border:1px solid #e6e6e6;border-radius:6px;padding:8px;display:flex;flex-direction:column;gap:6px"><div style="height:70px;border:1.5px solid #d6d6d6;border-radius:4px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Swim Lessons</div></div>
+            <div style="flex:none;width:120px;border:1px solid #e6e6e6;border-radius:6px;padding:8px;display:flex;flex-direction:column;gap:6px"><div style="height:70px;border:1.5px solid #d6d6d6;border-radius:4px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Competitive</div></div>
+            <div style="flex:none;width:120px;border:1px solid #e6e6e6;border-radius:6px;padding:8px;display:flex;flex-direction:column;gap:6px;opacity:.6"><div style="height:70px;border:1.5px solid #d6d6d6;border-radius:4px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Swim Analysis</div></div>
+          </div>
+        </div>
+
+        <!-- WHY numbered -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">WHY · NUMBERED LIST</div>
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-family:Caveat;font-size:20px;font-weight:700;color:#cfcfcf;line-height:1">01</div><div style="flex:1"><div style="font-size:10px;font-weight:700;color:#2a2a2a">Expert, credentialed coaches</div><div style="height:5px;background:#ececec;border-radius:3px;margin-top:4px;width:85%"></div></div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-family:Caveat;font-size:20px;font-weight:700;color:#cfcfcf;line-height:1">02</div><div style="flex:1"><div style="font-size:10px;font-weight:700;color:#2a2a2a">Small class sizes</div><div style="height:5px;background:#ececec;border-radius:3px;margin-top:4px;width:78%"></div></div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-family:Caveat;font-size:20px;font-weight:700;color:#cfcfcf;line-height:1">03</div><div style="flex:1"><div style="font-size:10px;font-weight:700;color:#2a2a2a">Measurable performance results</div><div style="height:5px;background:#ececec;border-radius:3px;margin-top:4px;width:88%"></div></div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-family:Caveat;font-size:20px;font-weight:700;color:#cfcfcf;line-height:1">04</div><div style="flex:1"><div style="font-size:10px;font-weight:700;color:#2a2a2a">Year-round indoor pool</div><div style="height:5px;background:#ececec;border-radius:3px;margin-top:4px;width:70%"></div></div></div>
+          </div>
+        </div>
+
+        <!-- COACHES editorial -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">COACHES</div>
+          <div style="display:flex;gap:11px;align-items:center"><div style="width:70px;height:80px;flex:none;border:1.5px solid #d6d6d6;border-radius:5px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="flex:1"><div style="font-size:11px;font-weight:700;color:#222">Robbie Bruce</div><div style="font-size:8.5px;color:#9a9a9a;margin-bottom:6px">Head Coach</div><div style="display:flex;flex-direction:column;gap:4px"><div style="height:5px;background:#ececec;border-radius:3px;width:95%"></div><div style="height:5px;background:#ececec;border-radius:3px;width:80%"></div></div></div></div>
+        </div>
+
+        <!-- TESTIMONIALS -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">TESTIMONIALS</div>
+          <div style="font-family:Caveat;font-size:22px;color:#dcdcdc;line-height:.5">“</div>
+          <div style="display:flex;flex-direction:column;gap:5px;margin-top:4px"><div style="height:7px;border-radius:4px;background:#e6e6e6;width:96%"></div><div style="height:7px;border-radius:4px;background:#ececec;width:88%"></div></div>
+          <div style="font-size:8.5px;color:#9a9a9a;margin-top:6px">— Triathlete</div>
+        </div>
+
+        <!-- FAQ -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">FAQ</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid #f0f0f0"><div style="height:7px;border-radius:4px;background:#e6e6e6;width:68%"></div><div style="color:#bbb;font-size:13px">+</div></div>
+            <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid #f0f0f0"><div style="height:7px;border-radius:4px;background:#e6e6e6;width:74%"></div><div style="color:#bbb;font-size:13px">+</div></div>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div style="position:relative;padding:26px 16px;text-align:center;border-top:1px solid #eee">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">FINAL CTA</div>
+          <div style="font-size:15px;font-weight:700;color:#1a1a1a">Ready to get in the water?</div>
+          <div style="display:inline-flex;margin-top:11px;background:#1d1d1d;color:#fff;font-size:11px;font-weight:700;padding:9px 16px;border-radius:7px">Book Your First Session</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============ OPTION D — QUIZ-LED ============ -->
+    <div data-screen-label="Homepage Option D" style="width:400px;flex:none">
+      <div style="font-family:Caveat;font-size:21px;font-weight:700;color:#1d1d1d;margin-bottom:3px">Option D · “Quiz-led / conversion”</div>
+      <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+      <div style="font-family:Caveat;font-size:15px;line-height:1.25;color:{{ accent }};margin-bottom:10px">Hero IS the program finder. Off-canvas nav keeps it clean. Routes every visitor in one tap.</div>
+      </sc-if>
+      <div style="background:#fff;border:1px solid #ddd;border-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,.08);overflow:hidden">
+
+        <!-- NAV off-canvas -->
+        <div style="position:relative;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #eee">
+          <div style="position:absolute;top:4px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">NAV · OFF-CANVAS</div>
+          <div style="font-family:Caveat;font-size:19px;font-weight:700;color:#1d1d1d">C26</div>
+          <div style="display:flex;gap:9px;align-items:center"><div style="background:#1d1d1d;color:#fff;font-size:9px;font-weight:700;padding:6px 11px;border-radius:6px">Book Now</div><div style="display:flex;flex-direction:column;gap:3px;padding:3px"><div style="width:16px;height:2px;background:#1d1d1d"></div><div style="width:16px;height:2px;background:#1d1d1d"></div><div style="width:16px;height:2px;background:#1d1d1d"></div></div></div>
+        </div>
+
+        <!-- HERO + quiz -->
+        <div style="position:relative;padding:24px 16px;border-bottom:1px dashed #e6e6e6;background:repeating-linear-gradient(45deg,#f4f4f4,#f4f4f4 9px,#fafafa 9px,#fafafa 18px)">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#bdbdbd">HERO · PROGRAM FINDER</div>
+          <div style="font-size:20px;font-weight:700;letter-spacing:-.02em;color:#1a1a1a;line-height:1.12;text-align:center">Who's getting in the water?</div>
+          <div style="height:6px;border-radius:3px;background:#e2e2e2;width:60%;margin:9px auto 14px"></div>
+          <div style="background:#fff;border:1px solid #e2e2e2;border-radius:9px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.05)">
+            <div style="font-size:8.5px;font-weight:700;color:#8a8a8a;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">I'm looking for…</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:11px">
+              <div style="border:1.5px solid #1d1d1d;background:#1d1d1d;color:#fff;font-size:9px;font-weight:700;padding:6px 11px;border-radius:20px">Infant</div>
+              <div style="border:1.5px solid #ddd;color:#666;font-size:9px;font-weight:700;padding:6px 11px;border-radius:20px">Child</div>
+              <div style="border:1.5px solid #ddd;color:#666;font-size:9px;font-weight:700;padding:6px 11px;border-radius:20px">Teen</div>
+              <div style="border:1.5px solid #ddd;color:#666;font-size:9px;font-weight:700;padding:6px 11px;border-radius:20px">Adult</div>
+              <div style="border:1.5px solid #ddd;color:#666;font-size:9px;font-weight:700;padding:6px 11px;border-radius:20px">Competitive</div>
+              <div style="border:1.5px solid #ddd;color:#666;font-size:9px;font-weight:700;padding:6px 11px;border-radius:20px">Triathlon</div>
+            </div>
+            <div style="background:#1d1d1d;color:#fff;font-size:11px;font-weight:700;padding:10px;border-radius:7px;text-align:center">Show my programs →</div>
+          </div>
+        </div>
+
+        <!-- WHY 2x2 -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">WHY · 2×2</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+            <div style="border:1px solid #ececec;border-radius:6px;padding:9px"><div style="width:16px;height:16px;border:1.5px solid #cfcfcf;border-radius:5px;margin-bottom:6px"></div><div style="font-size:9px;font-weight:700;color:#2a2a2a">Expert coaches</div></div>
+            <div style="border:1px solid #ececec;border-radius:6px;padding:9px"><div style="width:16px;height:16px;border:1.5px solid #cfcfcf;border-radius:5px;margin-bottom:6px"></div><div style="font-size:9px;font-weight:700;color:#2a2a2a">Small classes</div></div>
+            <div style="border:1px solid #ececec;border-radius:6px;padding:9px"><div style="width:16px;height:16px;border:1.5px solid #cfcfcf;border-radius:5px;margin-bottom:6px"></div><div style="font-size:9px;font-weight:700;color:#2a2a2a">Proven results</div></div>
+            <div style="border:1px solid #ececec;border-radius:6px;padding:9px"><div style="width:16px;height:16px;border:1.5px solid #cfcfcf;border-radius:5px;margin-bottom:6px"></div><div style="font-size:9px;font-weight:700;color:#2a2a2a">Year-round pool</div></div>
+          </div>
+        </div>
+
+        <!-- BROWSE ALL -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">BROWSE ALL PROGRAMS</div>
+          <div style="font-size:12px;font-weight:700;color:#222;margin-bottom:10px">Or browse everything</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid #ececec;border-radius:6px;padding:9px"><div style="font-size:10px;font-weight:700;color:#2a2a2a">Swim Lessons</div><div style="color:#bbb;font-size:11px">→</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid #ececec;border-radius:6px;padding:9px"><div style="font-size:10px;font-weight:700;color:#2a2a2a">Competitive Training</div><div style="color:#bbb;font-size:11px">→</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid #ececec;border-radius:6px;padding:9px"><div style="font-size:10px;font-weight:700;color:#2a2a2a">Swim Analysis</div><div style="color:#bbb;font-size:11px">→</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid #ececec;border-radius:6px;padding:9px"><div style="font-size:10px;font-weight:700;color:#2a2a2a">Triathlon Coaching</div><div style="color:#bbb;font-size:11px">→</div></div>
+          </div>
+        </div>
+
+        <!-- COACHES -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">COACHES</div>
+          <div style="display:flex;gap:10px">
+            <div style="flex:1;display:flex;flex-direction:column;gap:5px;align-items:center"><div style="width:48px;height:48px;border-radius:50%;border:1.5px solid #d6d6d6;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="font-size:8.5px;font-weight:700;color:#2a2a2a">Robbie</div></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:5px;align-items:center"><div style="width:48px;height:48px;border-radius:50%;border:1.5px solid #d6d6d6;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="font-size:8.5px;font-weight:700;color:#2a2a2a">Ruth</div></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:5px;align-items:center"><div style="width:48px;height:48px;border-radius:50%;border:1.5px solid #d6d6d6;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="font-size:8.5px;font-weight:700;color:#2a2a2a">Team</div></div>
+          </div>
+        </div>
+
+        <!-- SERVICE AREA -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">SERVICE AREA</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px">
+            <div style="border:1px solid #e2e2e2;border-radius:14px;font-size:8.5px;color:#666;padding:4px 9px">Overland Park</div>
+            <div style="border:1px solid #e2e2e2;border-radius:14px;font-size:8.5px;color:#666;padding:4px 9px">Leawood</div>
+            <div style="border:1px solid #e2e2e2;border-radius:14px;font-size:8.5px;color:#666;padding:4px 9px">Olathe</div>
+            <div style="border:1px solid #e2e2e2;border-radius:14px;font-size:8.5px;color:#666;padding:4px 9px">Lenexa</div>
+            <div style="border:1px solid #e2e2e2;border-radius:14px;font-size:8.5px;color:#666;padding:4px 9px">Shawnee</div>
+            <div style="border:1px solid #e2e2e2;border-radius:14px;font-size:8.5px;color:#666;padding:4px 9px">Prairie Village</div>
+          </div>
+        </div>
+
+        <!-- TESTIMONIALS + FAQ compact -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">TESTIMONIALS + FAQ</div>
+          <div style="border:1px solid #ececec;border-radius:6px;padding:9px;margin-bottom:11px;display:flex;flex-direction:column;gap:5px"><div style="height:6px;border-radius:3px;background:#e6e6e6;width:92%"></div><div style="font-size:8px;color:#9a9a9a">— Parent</div></div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <div style="display:flex;justify-content:space-between;padding-bottom:6px;border-bottom:1px solid #f0f0f0"><div style="height:6px;border-radius:3px;background:#e6e6e6;width:65%"></div><div style="color:#bbb;font-size:12px">+</div></div>
+            <div style="display:flex;justify-content:space-between;padding-bottom:6px;border-bottom:1px solid #f0f0f0"><div style="height:6px;border-radius:3px;background:#e6e6e6;width:72%"></div><div style="color:#bbb;font-size:12px">+</div></div>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div style="position:relative;padding:26px 16px;text-align:center;background:#1d1d1d">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#555">FINAL CTA</div>
+          <div style="font-size:14px;font-weight:700;color:#fff">Ready to get in the water?</div>
+          <div style="display:inline-flex;margin-top:11px;background:#fff;color:#1d1d1d;font-size:11px;font-weight:700;padding:9px 16px;border-radius:7px">Book Your First Session</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  </sc-if>
+
+  <!-- ============================================================ -->
+  <!-- ==================== SWIM LESSONS PAGE ===================== -->
+  <!-- ============================================================ -->
+  <sc-if value="{{ isLessons }}" hint-placeholder-val="{{ true }}">
+  <div style="display:flex;gap:40px;align-items:flex-start">
+
+    <!-- ===== SWIM LESSONS — Option 1: SEO-structured ===== -->
+    <div data-screen-label="Swim Lessons Option 1" style="width:420px;flex:none">
+      <div style="font-family:Caveat;font-size:21px;font-weight:700;color:#1d1d1d;margin-bottom:3px">Swim Lessons · Opt 1 “SEO depth”</div>
+      <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+      <div style="font-family:Caveat;font-size:15px;line-height:1.25;color:{{ accent }};margin-bottom:10px">Breadcrumb + sub-nav, generous educational copy, age-group cards link to child pages. Built to rank.</div>
+      </sc-if>
+      <div style="background:#fff;border:1px solid #ddd;border-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,.08);overflow:hidden">
+
+        <!-- breadcrumb + subnav -->
+        <div style="position:relative;padding:9px 16px;border-bottom:1px solid #eee">
+          <div style="position:absolute;top:4px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">BREADCRUMB + SUB-NAV</div>
+          <div style="font-size:8px;color:#9a9a9a">Home › Programs › <span style="color:#1d1d1d;font-weight:700">Swim Lessons</span></div>
+          <div style="display:flex;gap:9px;margin-top:8px;font-size:8.5px;font-weight:600;color:#8a8a8a"><span style="color:#1d1d1d;border-bottom:2px solid #1d1d1d;padding-bottom:2px">Overview</span><span>Ages</span><span>Pricing</span><span>FAQ</span></div>
+        </div>
+
+        <!-- HERO -->
+        <div style="position:relative;display:flex;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;z-index:2;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">HERO</div>
+          <div style="flex:1.1;padding:22px 16px">
+            <div style="font-size:20px;font-weight:700;letter-spacing:-.02em;color:#1a1a1a;line-height:1.12">Swim Lessons for every age</div>
+            <div style="display:flex;flex-direction:column;gap:5px;margin:10px 0 13px"><div style="height:6px;border-radius:3px;background:#ececec;width:94%"></div><div style="height:6px;border-radius:3px;background:#ececec;width:80%"></div></div>
+            <div style="background:#1d1d1d;color:#fff;font-size:11px;font-weight:700;padding:9px 14px;border-radius:7px;display:inline-block">Book a Lesson</div>
+          </div>
+          <div style="flex:.9;background:repeating-linear-gradient(45deg,#ececec,#ececec 8px,#f4f4f4 8px,#f4f4f4 16px);display:flex;align-items:flex-end;padding:7px"><div style="font-family:'Courier New',monospace;font-size:7.5px;color:#a0a0a0;text-transform:uppercase">lesson photo</div></div>
+        </div>
+
+        <!-- BENEFITS -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">BENEFITS · 4</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+            <div style="display:flex;flex-direction:column;gap:5px"><div style="width:18px;height:18px;border:1.5px solid #cfcfcf;border-radius:5px"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Water safety first</div><div style="height:5px;background:#ececec;border-radius:3px;width:80%"></div></div>
+            <div style="display:flex;flex-direction:column;gap:5px"><div style="width:18px;height:18px;border:1.5px solid #cfcfcf;border-radius:5px"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Small classes</div><div style="height:5px;background:#ececec;border-radius:3px;width:78%"></div></div>
+            <div style="display:flex;flex-direction:column;gap:5px"><div style="width:18px;height:18px;border:1.5px solid #cfcfcf;border-radius:5px"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Certified coaches</div><div style="height:5px;background:#ececec;border-radius:3px;width:85%"></div></div>
+            <div style="display:flex;flex-direction:column;gap:5px"><div style="width:18px;height:18px;border:1.5px solid #cfcfcf;border-radius:5px"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Year-round indoor</div><div style="height:5px;background:#ececec;border-radius:3px;width:72%"></div></div>
+          </div>
+        </div>
+
+        <!-- PHILOSOPHY -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">LESSON PHILOSOPHY</div>
+          <div style="font-size:12px;font-weight:700;color:#222;margin-bottom:9px">Our teaching method</div>
+          <div style="display:flex;flex-direction:column;gap:5px"><div style="height:6px;border-radius:3px;background:#ececec;width:96%"></div><div style="height:6px;border-radius:3px;background:#ececec;width:92%"></div><div style="height:6px;border-radius:3px;background:#ececec;width:88%"></div><div style="height:6px;border-radius:3px;background:#ececec;width:64%"></div></div>
+        </div>
+
+        <!-- AGE GROUPS -> child pages -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">AGE GROUPS → CHILD PAGES</div>
+          <div style="font-size:12px;font-weight:700;color:#222;margin-bottom:10px">Choose an age group</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+            <div style="border:1px solid #e6e6e6;border-radius:6px;padding:9px"><div style="height:40px;border:1.5px solid #d6d6d6;border-radius:4px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px);margin-bottom:7px"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Infant /swim-lessons/infant</div></div>
+            <div style="border:1px solid #e6e6e6;border-radius:6px;padding:9px"><div style="height:40px;border:1.5px solid #d6d6d6;border-radius:4px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px);margin-bottom:7px"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Children /children</div></div>
+            <div style="border:1px solid #e6e6e6;border-radius:6px;padding:9px"><div style="height:40px;border:1.5px solid #d6d6d6;border-radius:4px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px);margin-bottom:7px"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Teens /teens</div></div>
+            <div style="border:1px solid #e6e6e6;border-radius:6px;padding:9px"><div style="height:40px;border:1.5px solid #d6d6d6;border-radius:4px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px);margin-bottom:7px"></div><div style="font-size:9.5px;font-weight:700;color:#2a2a2a">Adults /adults</div></div>
+          </div>
+        </div>
+
+        <!-- PRICING -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">PRICING OVERVIEW</div>
+          <div style="font-size:12px;font-weight:700;color:#222;margin-bottom:10px">Pricing</div>
+          <div style="display:flex;gap:8px">
+            <div style="flex:1;border:1px solid #e6e6e6;border-radius:6px;padding:9px;text-align:center"><div style="font-size:8px;color:#9a9a9a;text-transform:uppercase">Group</div><div style="font-size:14px;font-weight:800;color:#1a1a1a;margin:3px 0">$$</div><div style="height:5px;background:#ececec;border-radius:3px;width:70%;margin:0 auto"></div></div>
+            <div style="flex:1;border:1.5px solid #1d1d1d;border-radius:6px;padding:9px;text-align:center"><div style="font-size:8px;color:#1d1d1d;text-transform:uppercase;font-weight:700">Semi-private</div><div style="font-size:14px;font-weight:800;color:#1a1a1a;margin:3px 0">$$$</div><div style="height:5px;background:#ececec;border-radius:3px;width:70%;margin:0 auto"></div></div>
+            <div style="flex:1;border:1px solid #e6e6e6;border-radius:6px;padding:9px;text-align:center"><div style="font-size:8px;color:#9a9a9a;text-transform:uppercase">Private</div><div style="font-size:14px;font-weight:800;color:#1a1a1a;margin:3px 0">$$$$</div><div style="height:5px;background:#ececec;border-radius:3px;width:70%;margin:0 auto"></div></div>
+          </div>
+        </div>
+
+        <!-- FAQ -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">FAQ · SEO</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid #f0f0f0"><div style="height:7px;border-radius:4px;background:#e6e6e6;width:80%"></div><div style="color:#bbb;font-size:13px">+</div></div>
+            <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid #f0f0f0"><div style="height:7px;border-radius:4px;background:#e6e6e6;width:68%"></div><div style="color:#bbb;font-size:13px">+</div></div>
+            <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid #f0f0f0"><div style="height:7px;border-radius:4px;background:#e6e6e6;width:74%"></div><div style="color:#bbb;font-size:13px">+</div></div>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div style="position:relative;padding:24px 16px;text-align:center;background:#1d1d1d">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#555">BOOK NOW CTA</div>
+          <div style="font-size:14px;font-weight:700;color:#fff">Start with a first lesson</div>
+          <div style="display:inline-flex;margin-top:11px;background:#fff;color:#1d1d1d;font-size:11px;font-weight:700;padding:9px 16px;border-radius:7px">Book Now</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===== SWIM LESSONS — Option 2: Conversion-forward ===== -->
+    <div data-screen-label="Swim Lessons Option 2" style="width:420px;flex:none">
+      <div style="font-family:Caveat;font-size:21px;font-weight:700;color:#1d1d1d;margin-bottom:3px">Swim Lessons · Opt 2 “Booking-first”</div>
+      <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+      <div style="font-family:Caveat;font-size:15px;line-height:1.25;color:{{ accent }};margin-bottom:10px">Hero pairs copy with a sticky booking card; age selector up top. Conversion over scroll-depth.</div>
+      </sc-if>
+      <div style="background:#fff;border:1px solid #ddd;border-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,.08);overflow:hidden">
+
+        <!-- HERO + booking widget -->
+        <div style="position:relative;display:flex;gap:11px;padding:20px 16px;border-bottom:1px dashed #e6e6e6;background:repeating-linear-gradient(45deg,#f6f6f6,#f6f6f6 9px,#fbfbfb 9px,#fbfbfb 18px)">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#bdbdbd">HERO + BOOKING CARD</div>
+          <div style="flex:1.1">
+            <div style="font-size:19px;font-weight:700;letter-spacing:-.02em;color:#1a1a1a;line-height:1.12">Learn to swim with confidence</div>
+            <div style="display:flex;flex-direction:column;gap:5px;margin-top:9px"><div style="height:6px;border-radius:3px;background:#e4e4e4;width:90%"></div><div style="height:6px;border-radius:3px;background:#e4e4e4;width:70%"></div></div>
+          </div>
+          <div style="flex:.95;background:#fff;border:1px solid #e2e2e2;border-radius:9px;padding:10px;box-shadow:0 2px 8px rgba(0,0,0,.06)">
+            <div style="font-size:8px;font-weight:700;color:#8a8a8a;text-transform:uppercase;margin-bottom:7px">Book a lesson</div>
+            <div style="height:9px;background:#eee;border-radius:4px;margin-bottom:6px"></div>
+            <div style="height:9px;background:#eee;border-radius:4px;margin-bottom:6px"></div>
+            <div style="height:9px;background:#eee;border-radius:4px;margin-bottom:9px"></div>
+            <div style="background:#1d1d1d;color:#fff;font-size:9px;font-weight:700;padding:8px;border-radius:6px;text-align:center">Check availability</div>
+          </div>
+        </div>
+
+        <!-- AGE SELECTOR tabs -->
+        <div style="position:relative;padding:16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">AGE SELECTOR · TABS</div>
+          <div style="display:flex;gap:6px;margin-bottom:11px">
+            <div style="background:#1d1d1d;color:#fff;font-size:9px;font-weight:700;padding:6px 11px;border-radius:20px">Infant</div>
+            <div style="border:1.5px solid #ddd;color:#777;font-size:9px;font-weight:700;padding:6px 11px;border-radius:20px">Child</div>
+            <div style="border:1.5px solid #ddd;color:#777;font-size:9px;font-weight:700;padding:6px 11px;border-radius:20px">Teen</div>
+            <div style="border:1.5px solid #ddd;color:#777;font-size:9px;font-weight:700;padding:6px 11px;border-radius:20px">Adult</div>
+          </div>
+          <div style="display:flex;gap:11px;align-items:center"><div style="width:90px;height:64px;flex:none;border:1.5px solid #d6d6d6;border-radius:5px;background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 6px,#f7f7f7 6px,#f7f7f7 12px)"></div><div style="flex:1;display:flex;flex-direction:column;gap:5px"><div style="font-size:10px;font-weight:700;color:#2a2a2a">Water comfort &amp; safety</div><div style="height:5px;background:#ececec;border-radius:3px;width:90%"></div><div style="height:5px;background:#ececec;border-radius:3px;width:76%"></div></div></div>
+        </div>
+
+        <!-- BENEFITS band -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6;background:#1d1d1d">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#555">BENEFITS BAND</div>
+          <div style="display:flex;justify-content:space-between;text-align:center;color:#fff">
+            <div style="flex:1"><div style="width:16px;height:16px;border:1.5px solid #666;border-radius:5px;margin:0 auto 6px"></div><div style="font-size:8px;color:#ddd">Safety</div></div>
+            <div style="flex:1"><div style="width:16px;height:16px;border:1.5px solid #666;border-radius:5px;margin:0 auto 6px"></div><div style="font-size:8px;color:#ddd">Small classes</div></div>
+            <div style="flex:1"><div style="width:16px;height:16px;border:1.5px solid #666;border-radius:5px;margin:0 auto 6px"></div><div style="font-size:8px;color:#ddd">Coaches</div></div>
+            <div style="flex:1"><div style="width:16px;height:16px;border:1.5px solid #666;border-radius:5px;margin:0 auto 6px"></div><div style="font-size:8px;color:#ddd">Indoor</div></div>
+          </div>
+        </div>
+
+        <!-- PHILOSOPHY -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">PHILOSOPHY</div>
+          <div style="font-size:12px;font-weight:700;color:#222;margin-bottom:9px">How we teach</div>
+          <div style="display:flex;flex-direction:column;gap:5px"><div style="height:6px;border-radius:3px;background:#ececec;width:95%"></div><div style="height:6px;border-radius:3px;background:#ececec;width:85%"></div></div>
+        </div>
+
+        <!-- PRICING -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">PRICING</div>
+          <div style="display:flex;gap:8px">
+            <div style="flex:1;border:1px solid #e6e6e6;border-radius:6px;padding:9px;text-align:center"><div style="font-size:8px;color:#9a9a9a;text-transform:uppercase">Group</div><div style="font-size:13px;font-weight:800;color:#1a1a1a;margin-top:3px">$$</div></div>
+            <div style="flex:1;border:1.5px solid #1d1d1d;border-radius:6px;padding:9px;text-align:center"><div style="font-size:8px;color:#1d1d1d;text-transform:uppercase;font-weight:700">Semi</div><div style="font-size:13px;font-weight:800;color:#1a1a1a;margin-top:3px">$$$</div></div>
+            <div style="flex:1;border:1px solid #e6e6e6;border-radius:6px;padding:9px;text-align:center"><div style="font-size:8px;color:#9a9a9a;text-transform:uppercase">Private</div><div style="font-size:13px;font-weight:800;color:#1a1a1a;margin-top:3px">$$$$</div></div>
+          </div>
+        </div>
+
+        <!-- FAQ -->
+        <div style="position:relative;padding:18px 16px;border-bottom:1px dashed #e6e6e6">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">FAQ</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid #f0f0f0"><div style="height:7px;border-radius:4px;background:#e6e6e6;width:72%"></div><div style="color:#bbb;font-size:13px">+</div></div>
+            <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid #f0f0f0"><div style="height:7px;border-radius:4px;background:#e6e6e6;width:66%"></div><div style="color:#bbb;font-size:13px">+</div></div>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div style="position:relative;padding:24px 16px;text-align:center">
+          <div style="position:absolute;top:5px;right:7px;font-family:'Courier New',monospace;font-size:7.5px;letter-spacing:.1em;color:#c8c8c8">CTA</div>
+          <div style="font-size:14px;font-weight:700;color:#1a1a1a">Reserve your spot</div>
+          <div style="display:inline-flex;margin-top:11px;background:#1d1d1d;color:#fff;font-size:11px;font-weight:700;padding:9px 16px;border-radius:7px">Book Now</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;showNotes&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Black (low-fi)&quot;,&quot;Blue (athletic)&quot;,&quot;Red (energy)&quot;],&quot;default&quot;:&quot;Black (low-fi)&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { tab: 'home' };
+  renderVals() {
+    const accentMap = { 'Black (low-fi)': '#1d1d1d', 'Blue (athletic)': '#1b4dd6', 'Red (energy)': '#c0392b' };
+    const accent = accentMap[this.props.accent] ?? '#1d1d1d';
+    const isHome = this.state.tab === 'home';
+    const tabBase = { padding: '8px 15px', fontSize: '12px', fontWeight: 700, cursor: 'pointer', borderRadius: '7px', border: '1.5px solid #1d1d1d', userSelect: 'none' };
+    const on = { ...tabBase, background: '#1d1d1d', color: '#fff' };
+    const off = { ...tabBase, background: 'transparent', color: '#1d1d1d' };
+    return {
+      tab: this.state.tab,
+      isHome,
+      isLessons: this.state.tab === 'lessons',
+      setHome: () => this.setState({ tab: 'home' }),
+      setLessons: () => this.setState({ tab: 'lessons' }),
+      showNotes: this.props.showNotes ?? true,
+      accent,
+      homeStyle: isHome ? on : off,
+      lessonsStyle: isHome ? off : on,
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+/* ===========================================================================
+   C26 AQUATICS — EFFECTS: radii, borders, shadows, motion
+   Athletic = squared corners on actions, soft corners on content cards.
+   =========================================================================== */
+:root {
+  /* Radii */
+  --r-xs: 2px;    /* athletic buttons / stat chips */
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 14px;   /* content cards */
+  --r-xl: 20px;
+  --r-pill: 999px;
+
+  /* Border widths */
+  --bw-hair: 1px;
+  --bw-bold: 2px;   /* editorial left-rules, active tab underline */
+
+  /* Shadows — cool-tinted, restrained */
+  --shadow-sm: 0 1px 2px rgba(11,31,43,.06), 0 1px 3px rgba(11,31,43,.08);
+  --shadow-md: 0 4px 12px rgba(11,31,43,.10);
+  --shadow-lg: 0 16px 40px rgba(11,31,43,.16);
+  --shadow-action: 0 6px 18px rgba(243,143,31,.30);  /* glow under orange CTAs */
+
+  /* Motion */
+  --ease-out: cubic-bezier(.2,.7,.3,1);
+  --ease-in-out: cubic-bezier(.65,.05,.36,1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 360ms;
+
+  /* Focus */
+  --focus-shadow: 0 0 0 3px rgba(17,179,170,.45);
+}

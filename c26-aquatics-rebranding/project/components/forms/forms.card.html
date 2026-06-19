@@ -1,0 +1,29 @@
+<!-- @dsCard group="Components" viewport="700x240" subtitle="Booking form fields — input + select" name="Forms" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>
+  body{margin:0;font-family:var(--font-body);background:var(--surface);padding:26px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:560px}
+</style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const NS = Object.values(window).find(o => o && typeof o === "object" && typeof o.Input === "function" && typeof o.Select === "function") || {};
+    const { Input, Select } = NS;
+    function Demo() {
+      return (
+        <div className="grid">
+          <Input label="Swimmer name" placeholder="Jordan" />
+          <Select label="Program" options={["Swim Lessons","Competitive","Triathlon"]} />
+          <Select label="Age group" options={["Infant","Child","Teen","Adult"]} />
+          <Input label="Email" type="email" placeholder="you@email.com" hint="We'll confirm your slot here." />
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+  </script>
+</body></html>

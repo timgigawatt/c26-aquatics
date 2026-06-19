@@ -1,0 +1,57 @@
+<!-- @dsCard group="Components" viewport="700x300" subtitle="Button variants, sizes, states + badges" name="Actions" -->
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>
+  body{margin:0;font-family:var(--font-body);background:var(--surface);padding:26px}
+  .grp{margin-bottom:20px}
+  .lbl{font-family:var(--font-subhead);font-weight:600;text-transform:uppercase;letter-spacing:var(--ls-eyebrow);font-size:11px;color:var(--text-muted);margin-bottom:10px}
+  .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .ondark{background:var(--navy-700);padding:16px;border-radius:var(--r-md)}
+</style>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const NS = Object.values(window).find(o => o && typeof o === "object" && typeof o.Button === "function" && typeof o.Badge === "function") || {};
+    const { Button, Badge } = NS;
+    function Demo() {
+      return (
+        <div>
+          <div className="grp">
+            <div className="lbl">Variants</div>
+            <div className="row">
+              <Button variant="primary">Book a session</Button>
+              <Button variant="secondary">View plans</Button>
+              <Button variant="dark">Programs</Button>
+              <Button variant="outline">Learn more</Button>
+              <Button variant="ghost">Skip</Button>
+            </div>
+          </div>
+          <div className="grp">
+            <div className="lbl">Sizes &amp; disabled</div>
+            <div className="row">
+              <Button variant="primary" size="sm">Small</Button>
+              <Button variant="primary" size="md">Medium</Button>
+              <Button variant="primary" size="lg">Large</Button>
+              <Button variant="primary" disabled>Disabled</Button>
+            </div>
+          </div>
+          <div className="grp">
+            <div className="lbl">On dark + badges</div>
+            <div className="row ondark">
+              <Button variant="primary">Book now</Button>
+              <Button variant="outline-light">Tour the pool</Button>
+              <Badge tone="teal">Year-round</Badge>
+              <Badge tone="orange">New</Badge>
+              <Badge tone="outline-light">Indoor</Badge>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById("root")).render(<Demo />);
+  </script>
+</body></html>

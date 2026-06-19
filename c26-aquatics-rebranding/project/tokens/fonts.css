@@ -1,0 +1,5 @@
+/* Webfonts — Barlow superfamily.
+   Barlow Condensed = athletic display/headlines.
+   Barlow           = humanist body + UI.
+   The @font-face rules these URLs resolve to are shipped to consumers. */
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700;800&family=Barlow+Semi+Condensed:wght@600;700&display=swap");
