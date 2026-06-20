@@ -167,7 +167,7 @@ const {
   }
   .hero--home .hero__inner {
     position: relative;
-    padding: var(--space-16) 0 var(--space-20);
+    padding: var(--space-16) 0;
     width: 100%;
   }
   .hero--home .hero__copy {
@@ -262,6 +262,10 @@ const {
     width: 100%;
     height: auto;
     filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.45));
+    will-change: transform;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero__lockup-wordmark { will-change: auto; }
   }
 
   .hero__subtitle {
@@ -274,7 +278,7 @@ const {
 
   .hero__ctas {
     display: flex;
-    gap: var(--space-3);
+    gap: 14px;
     flex-wrap: wrap;
   }
 
@@ -329,15 +333,22 @@ const {
 </style>
 
 <script>
-  // Parallax + slow zoom: photo drifts at 0.4x scroll speed and grows
-  // subtly (capped at 1.12) so the camera feels like it's pushing in.
+  // Parallax: photo drifts at 0.4x scroll (slow-zooms up to 1.12); wordmark
+  // drifts upward at 0.18x scroll (foreground layer, moves faster than the
+  // page — feels like it's rising into the header as you scroll).
   const heroBg = document.querySelector<HTMLElement>('.hero--home .hero__bg');
-  if (heroBg && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const heroWordmark = document.querySelector<HTMLElement>('.hero--home .hero__lockup-wordmark');
+  if ((heroBg || heroWordmark) && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     let y = 0;
     let ticking = false;
     const update = () => {
-      const scale = Math.min(1 + y * 0.0002, 1.12);
-      heroBg.style.transform = `translate3d(0, ${y * 0.4}px, 0) scale(${scale})`;
+      if (heroBg) {
+        const scale = Math.min(1 + y * 0.0002, 1.12);
+        heroBg.style.transform = `translate3d(0, ${y * 0.4}px, 0) scale(${scale})`;
+      }
+      if (heroWordmark) {
+        heroWordmark.style.transform = `translate3d(0, ${-y * 0.18}px, 0)`;
+      }
       ticking = false;
     };
     window.addEventListener(
