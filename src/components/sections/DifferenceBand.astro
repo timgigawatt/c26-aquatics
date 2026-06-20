@@ -1,0 +1,107 @@
+---
+/**
+ * DifferenceBand — three editorial pillars framing the C26 difference.
+ * Sits between StatsBand (navy) and TracksLadder (white) on the homepage.
+ * Visual treatment per design handoff: blue left-border accent, no card chrome.
+ */
+interface Pillar {
+  title: string;
+  body: string;
+}
+
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  pillars?: Pillar[];
+}
+
+const {
+  eyebrow = 'Why C26',
+  heading = 'The C26 difference',
+  pillars = [
+    {
+      title: 'Single location',
+      body: 'One pool, one community — no franchised satellites. Every swimmer trains in the same water, to the same standard.',
+    },
+    {
+      title: 'Consistent coaching',
+      body: 'The same career coaches, season after season. Relationships and progressions that actually compound over time.',
+    },
+    {
+      title: 'True strength & conditioning',
+      body: 'Real dryland strength and conditioning built into training — we develop athletes, not just swimmers.',
+    },
+  ],
+} = Astro.props;
+---
+<section class="difference" aria-labelledby="difference-title">
+  <div class="container">
+    <p class="difference__eyebrow">{eyebrow}</p>
+    <h2 id="difference-title" class="difference__heading">{heading}</h2>
+    <div class="difference__grid">
+      {pillars.map((p) => (
+        <article class="pillar">
+          <h3 class="pillar__title">{p.title}</h3>
+          <p class="pillar__body">{p.body}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .difference {
+    background: var(--surface-alt);
+    padding: var(--section-y) 0;
+  }
+  .difference__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--magenta-500);
+    margin: 0;
+  }
+  .difference__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(30px, 4vw, 44px);
+    line-height: 1.02;
+    letter-spacing: var(--ls-tight);
+    color: var(--navy-700);
+    margin: var(--space-2) 0 0;
+  }
+  .difference__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+    margin-top: 36px;
+  }
+  .pillar {
+    border-left: 3px solid var(--blue-500);
+    padding-left: 18px;
+  }
+  .pillar__title {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: 23px;
+    color: var(--navy-700);
+    margin: 0 0 10px;
+  }
+  .pillar__body {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--text-body);
+    margin: 0;
+  }
+
+  @media (max-width: 800px) {
+    .difference__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+  }
+</style>

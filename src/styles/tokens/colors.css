@@ -30,6 +30,11 @@
   --orange-200: #ffd9a8;
   --orange-100: #fff0db;
 
+  /* ---- Secondary accents (per design handoff) ---- */
+  --blue-500:    #2f63ef;  /* used on TracksLadder eyebrow + age pill text, DifferenceBand pillar border */
+  --blue-100:    #e4ebff;  /* age pill background */
+  --magenta-500: #c41e6f;  /* DifferenceBand eyebrow, TracksLadder card CTA text */
+
   /* ---- Neutrals (cool-leaning to sit under navy) ---- */
   --white:  #ffffff;
   --paper:  #f6f9fa;   /* default page background */

@@ -1,0 +1,159 @@
+---
+/**
+ * TracksLadder — 2×2 grid of the four program tracks.
+ * Whole card is an anchor; visual treatment per design handoff
+ * (faded ordinal rail, blue age pill, magenta CTA text).
+ */
+import { tracks as defaultTracks, type Track } from '@data/tracks';
+
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  intro?: string;
+  tracks?: Track[];
+}
+
+const {
+  eyebrow = 'Programs',
+  heading = 'Age groups & definitions',
+  intro = 'Four tracks take a swimmer from their very first lesson to competition and beyond.',
+  tracks = defaultTracks,
+} = Astro.props;
+---
+<section class="tracks" aria-labelledby="tracks-title">
+  <div class="container">
+    <p class="tracks__eyebrow">{eyebrow}</p>
+    <h2 id="tracks-title" class="tracks__heading">{heading}</h2>
+    {intro && <p class="tracks__intro">{intro}</p>}
+    <div class="tracks__grid">
+      {tracks.map((t) => (
+        <a class="track" href={t.href}>
+          <span class="track__num" aria-hidden="true">{t.num}</span>
+          <span class="track__body">
+            <span class="track__age">{t.age}</span>
+            <span class="track__title">{t.title}</span>
+            <span class="track__desc">{t.desc}</span>
+            <span class="track__cta">{t.cta}</span>
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .tracks {
+    background: var(--surface);
+    padding: var(--section-y) 0;
+  }
+  .tracks__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--blue-500);
+    margin: 0;
+  }
+  .tracks__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(30px, 4vw, 44px);
+    line-height: 1.02;
+    letter-spacing: var(--ls-tight);
+    color: var(--navy-700);
+    margin: var(--space-2) 0 0;
+  }
+  .tracks__intro {
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--text-body);
+    margin: 14px 0 0;
+    max-width: 620px;
+  }
+  .tracks__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6);
+    margin-top: 36px;
+  }
+
+  .track {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    color: inherit;
+    transition: transform var(--dur-base) var(--ease-out),
+                box-shadow var(--dur-base) var(--ease-out);
+  }
+  .track:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+  }
+  .track:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-shadow), var(--shadow-sm);
+  }
+
+  .track__num {
+    font-family: var(--font-display);
+    font-weight: var(--fw-black);
+    font-size: 34px;
+    line-height: 1;
+    color: #e2e9ed;
+    flex: none;
+    width: 34px;
+  }
+  .track__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+  .track__age {
+    align-self: flex-start;
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 11px;
+    color: var(--blue-500);
+    background: var(--blue-100);
+    border-radius: var(--r-pill);
+    padding: 3px 10px;
+  }
+  .track__title {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: 25px;
+    color: var(--navy-700);
+  }
+  .track__desc {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text-body);
+  }
+  .track__cta {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 13px;
+    color: var(--magenta-500);
+    margin-top: 2px;
+  }
+
+  @media (max-width: 720px) {
+    .tracks__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

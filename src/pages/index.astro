@@ -6,7 +6,8 @@ import ConsentBanner from '@components/layout/ConsentBanner.astro';
 import BrandIntro from '@components/widgets/BrandIntro.astro';
 import Hero from '@components/sections/Hero.astro';
 import StatsBand from '@components/sections/StatsBand.astro';
-import ProgramSplit from '@components/sections/ProgramSplit.astro';
+import DifferenceBand from '@components/sections/DifferenceBand.astro';
+import TracksLadder from '@components/sections/TracksLadder.astro';
 import CoachesGrid from '@components/sections/CoachesGrid.astro';
 import TestimonialsBand from '@components/sections/TestimonialsBand.astro';
 import ServiceAreaBand from '@components/sections/ServiceAreaBand.astro';
@@ -38,7 +39,9 @@ const orgSchema = sportsOrganizationSchema();
 
     <StatsBand />
 
-    <ProgramSplit />
+    <DifferenceBand />
+
+    <TracksLadder />
 
     <CoachesGrid
       limit={3}
