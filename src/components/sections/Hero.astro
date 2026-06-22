@@ -57,30 +57,31 @@ const {
     />
     <div class="hero__overlay" aria-hidden="true"></div>
     <div class="container hero__inner">
+      <div class="hero__brand">
+        <span class="hero__lockup">
+          <Image
+            src={krakenWhite}
+            alt=""
+            class="hero__lockup-kraken"
+            widths={[400, 560, 720]}
+            sizes="(min-width: 800px) 620px, 88vw"
+            loading="eager"
+            decoding="sync"
+          />
+          <Image
+            src={wordmarkLight}
+            alt="C26 Aquatics"
+            class="hero__lockup-wordmark"
+            widths={[400, 560, 720]}
+            sizes="(min-width: 800px) 560px, 80vw"
+            loading="eager"
+            decoding="sync"
+          />
+        </span>
+      </div>
       <div class="hero__copy">
         {eyebrow && <p class="hero__eyebrow">{eyebrow}</p>}
-        <h1 id="hero-title" class="hero__title hero__title--wordmark">
-          <span class="hero__lockup">
-            <Image
-              src={krakenWhite}
-              alt=""
-              class="hero__lockup-kraken"
-              widths={[400, 560, 720]}
-              sizes="(min-width: 800px) 620px, 88vw"
-              loading="eager"
-              decoding="sync"
-            />
-            <Image
-              src={wordmarkLight}
-              alt="C26 Aquatics"
-              class="hero__lockup-wordmark"
-              widths={[400, 560, 720]}
-              sizes="(min-width: 800px) 560px, 80vw"
-              loading="eager"
-              decoding="sync"
-            />
-          </span>
-        </h1>
+        <h1 id="hero-title" class="hero__title hero__title--home" set:html={title}></h1>
         {subtitle && <p class="hero__subtitle">{subtitle}</p>}
         {(primaryCta || secondaryCta) && (
           <div class="hero__ctas">
@@ -97,7 +98,7 @@ const {
             {secondaryCta && (
               <Button
                 href={secondaryCta.href}
-                variant="outline-light"
+                variant="outline-magenta"
                 size="lg"
               >
                 {secondaryCta.label}
@@ -167,13 +168,23 @@ const {
   }
   .hero--home .hero__inner {
     position: relative;
-    padding: var(--space-16) 0 var(--space-20);
+    padding: var(--space-16) 0;
     width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-12);
+    align-items: center;
   }
-  .hero--home .hero__copy {
-    max-width: 720px;
+  .hero--home .hero__brand {
     position: relative;
     z-index: 3;
+    display: flex;
+    justify-content: center;
+  }
+  .hero--home .hero__copy {
+    position: relative;
+    z-index: 3;
+    max-width: 560px;
   }
   .hero__bg {
     position: absolute;
@@ -194,14 +205,14 @@ const {
     background:
       linear-gradient(
         90deg,
-        rgba(2, 28, 54, 0.88) 0%,
-        rgba(2, 28, 54, 0.55) 55%,
-        rgba(2, 28, 54, 0.25) 100%
+        rgba(14, 19, 48, 0.3) 0%,
+        rgba(14, 19, 48, 0.55) 45%,
+        rgba(14, 19, 48, 0.86) 100%
       ),
       linear-gradient(
         180deg,
-        rgba(2, 28, 54, 0.2) 0%,
-        rgba(2, 28, 54, 0.55) 100%
+        rgba(14, 19, 48, 0.2) 0%,
+        rgba(14, 19, 48, 0.55) 100%
       );
     z-index: 1;
     pointer-events: none;
@@ -230,6 +241,13 @@ const {
   .hero__title :global(.hero-accent),
   .hero__title :global(.accent) {
     color: var(--orange-500);
+  }
+  .hero__title :global(.hero-accent-magenta) {
+    color: var(--magenta-400);
+  }
+  .hero__title--home {
+    font-size: clamp(40px, 5vw, 76px);
+    line-height: 0.95;
   }
   .hero__title--wordmark {
     display: block;
@@ -262,6 +280,10 @@ const {
     width: 100%;
     height: auto;
     filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.45));
+    will-change: transform;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero__lockup-wordmark { will-change: auto; }
   }
 
   .hero__subtitle {
@@ -274,7 +296,7 @@ const {
 
   .hero__ctas {
     display: flex;
-    gap: var(--space-3);
+    gap: 14px;
     flex-wrap: wrap;
   }
 
@@ -325,19 +347,31 @@ const {
     }
     .hero__image-wrap { display: none; }
     .hero--home { min-height: 460px; }
+    .hero--home .hero__inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+    .hero--home .hero__brand { justify-content: flex-start; }
   }
 </style>
 
 <script>
-  // Parallax + slow zoom: photo drifts at 0.4x scroll speed and grows
-  // subtly (capped at 1.12) so the camera feels like it's pushing in.
+  // Parallax: photo drifts at 0.4x scroll (slow-zooms up to 1.12); wordmark
+  // drifts upward at 0.18x scroll (foreground layer, moves faster than the
+  // page — feels like it's rising into the header as you scroll).
   const heroBg = document.querySelector<HTMLElement>('.hero--home .hero__bg');
-  if (heroBg && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const heroWordmark = document.querySelector<HTMLElement>('.hero--home .hero__lockup-wordmark');
+  if ((heroBg || heroWordmark) && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     let y = 0;
     let ticking = false;
     const update = () => {
-      const scale = Math.min(1 + y * 0.0002, 1.12);
-      heroBg.style.transform = `translate3d(0, ${y * 0.4}px, 0) scale(${scale})`;
+      if (heroBg) {
+        const scale = Math.min(1 + y * 0.0002, 1.12);
+        heroBg.style.transform = `translate3d(0, ${y * 0.4}px, 0) scale(${scale})`;
+      }
+      if (heroWordmark) {
+        heroWordmark.style.transform = `translate3d(0, ${-y * 0.18}px, 0)`;
+      }
       ticking = false;
     };
     window.addEventListener(

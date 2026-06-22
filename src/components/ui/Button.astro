@@ -5,7 +5,7 @@
  */
 interface Props {
   href?: string;
-  variant?: 'primary' | 'secondary' | 'ghost' | 'outline' | 'outline-light' | 'dark';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'outline' | 'outline-light' | 'outline-magenta' | 'dark';
   size?: 'sm' | 'md' | 'lg';
   external?: boolean;
   full?: boolean;
@@ -149,6 +149,16 @@ const classList = [
   .c26-btn--outline-light:hover:not([disabled]):not([aria-disabled='true']) {
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.8);
+  }
+  .c26-btn--outline-magenta {
+    background: transparent;
+    color: var(--magenta-400);
+    border-color: var(--magenta-400);
+  }
+  .c26-btn--outline-magenta:hover:not([disabled]):not([aria-disabled='true']) {
+    background: var(--magenta-400);
+    color: var(--white);
+    border-color: var(--magenta-400);
   }
   .c26-btn--ghost {
     background: transparent;

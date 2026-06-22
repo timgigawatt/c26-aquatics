@@ -16,9 +16,9 @@
   --bw-bold: 2px;   /* editorial left-rules, active tab underline */
 
   /* Shadows — cool-tinted, restrained */
-  --shadow-sm: 0 1px 2px rgba(11,31,43,.06), 0 1px 3px rgba(11,31,43,.08);
-  --shadow-md: 0 4px 12px rgba(11,31,43,.10);
-  --shadow-lg: 0 16px 40px rgba(11,31,43,.16);
+  --shadow-sm: 0 1px 2px rgba(14,19,48,.06), 0 1px 3px rgba(14,19,48,.08);
+  --shadow-md: 0 4px 12px rgba(14,19,48,.10);
+  --shadow-lg: 0 16px 40px rgba(14,19,48,.16);
   --shadow-action: 0 6px 18px rgba(243,143,31,.30);  /* glow under orange CTAs */
 
   /* Motion */

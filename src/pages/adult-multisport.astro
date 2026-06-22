@@ -1,0 +1,77 @@
+---
+import Base from '@layouts/Base.astro';
+import Header from '@components/layout/Header.astro';
+import Footer from '@components/layout/Footer.astro';
+import ConsentBanner from '@components/layout/ConsentBanner.astro';
+import Hero from '@components/sections/Hero.astro';
+import CTABand from '@components/sections/CTABand.astro';
+import { site } from '@data/site';
+import { sportsOrganizationSchema, jsonLd } from '@lib/schemas';
+
+const orgSchema = sportsOrganizationSchema();
+---
+<Base
+  title="Adult & Multisport Swimming | C26 Aquatics"
+  description="Adult learn-to-swim, fitness swimming, and triathlon / open-water training at C26 Aquatics — single-location indoor pool in the Kansas City metro."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={jsonLd(orgSchema)}></script>
+  </Fragment>
+
+  <Header />
+  <main>
+    <Hero
+      variant="page"
+      eyebrow="Adult / Multisport"
+      title="Adult swim. <span class='hero-accent'>Multisport training.</span>"
+      subtitle="Adult learn-to-swim, fitness swimming, and triathlon / open-water for multisport athletes — coached at the same indoor pool, year-round."
+      primaryCta={{ label: 'Book a first session', href: site.booking.lessons, external: true }}
+    />
+
+    <section class="intro">
+      <div class="container intro__inner">
+        <p>
+          Whether you've never put your face in the water or you're training for a
+          70.3, you'll work with the same career coaches who run our team and lesson
+          programs. Sessions are scheduled to fit adult calendars — early mornings,
+          lunch, and evenings — and capped at four swimmers per coach.
+        </p>
+        <p>
+          Open-water and triathlon-specific work covers race-pace pacing, sighting,
+          drafting, and transition skills. Fitness swimmers get individualized sets,
+          stroke feedback, and a measurable plan.
+        </p>
+        <p>
+          New here? Book a first session and we'll match you with the right coach and
+          group.
+        </p>
+      </div>
+    </section>
+
+    <CTABand
+      title="Get in the <span class='hero-accent accent'>water</span>"
+      primaryCta={{ label: 'Book a first session', href: site.booking.lessons, external: true }}
+    />
+  </main>
+  <Footer />
+  <ConsentBanner />
+</Base>
+
+<style>
+  .intro {
+    background: var(--surface);
+    padding: var(--section-y) 0;
+  }
+  .intro__inner {
+    max-width: 720px;
+  }
+  .intro p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--text-body);
+    margin: 0 0 var(--space-5);
+  }
+  .intro p:last-child {
+    margin-bottom: 0;
+  }
+</style>

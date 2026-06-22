@@ -6,7 +6,8 @@ import ConsentBanner from '@components/layout/ConsentBanner.astro';
 import BrandIntro from '@components/widgets/BrandIntro.astro';
 import Hero from '@components/sections/Hero.astro';
 import StatsBand from '@components/sections/StatsBand.astro';
-import ProgramSplit from '@components/sections/ProgramSplit.astro';
+import DifferenceBand from '@components/sections/DifferenceBand.astro';
+import TracksLadder from '@components/sections/TracksLadder.astro';
 import CoachesGrid from '@components/sections/CoachesGrid.astro';
 import TestimonialsBand from '@components/sections/TestimonialsBand.astro';
 import ServiceAreaBand from '@components/sections/ServiceAreaBand.astro';
@@ -30,29 +31,27 @@ const orgSchema = sportsOrganizationSchema();
   <main>
     <Hero
       variant="home"
-      title=""
+      title="Become a <span class=&quot;hero-accent-magenta&quot;>stronger</span> swimmer"
       subtitle="Competitive team training and learn-to-swim lessons in the Kansas City metro."
-      primaryCta={{ label: 'Explore the team', href: '/team' }}
-      secondaryCta={{ label: 'Swim lessons', href: '/swim-lessons' }}
+      primaryCta={{ label: 'Book a session', href: site.booking.lessons, external: true }}
+      secondaryCta={{ label: 'Explore programs', href: '#tracks' }}
     />
 
     <StatsBand />
 
-    <ProgramSplit />
+    <DifferenceBand />
+
+    <TracksLadder />
 
     <CoachesGrid
       limit={3}
+      compact
       eyebrow="The staff"
       heading="Meet the coaches"
       subtitle="USA Swimming–registered, SafeSport-certified coaches building swimmers across the KC metro."
+      ctaLabel="See the full coaching staff"
+      ctaHref="/coaches"
     />
-
-    <div class="container coaches-cta">
-      <a href="/coaches" class="coaches-cta__link">
-        See the full coaching staff
-        <span aria-hidden="true">&rarr;</span>
-      </a>
-    </div>
 
     <TestimonialsBand featuredOnly={true} />
 
@@ -70,28 +69,3 @@ const orgSchema = sportsOrganizationSchema();
   <ConsentBanner />
 </Base>
 
-<style>
-  .coaches-cta {
-    padding: var(--space-6) 0 var(--space-10);
-    background: var(--navy-900);
-    text-align: center;
-  }
-  .coaches-cta__link {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-family: var(--font-subhead);
-    font-weight: var(--fw-bold);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-size: 14px;
-    color: var(--teal-400);
-    border-bottom: 2px solid transparent;
-    padding-bottom: 2px;
-    transition: border-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
-  }
-  .coaches-cta__link:hover {
-    color: var(--white);
-    border-color: var(--teal-400);
-  }
-</style>

@@ -7,6 +7,8 @@
  * Headshots are runtime path strings (under /public), not bundled assets — we
  * render with a plain <img> with explicit width/height to prevent CLS.
  */
+import fs from 'node:fs';
+import path from 'node:path';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Card from '@components/ui/Card.astro';
 import Badge from '@components/ui/Badge.astro';
@@ -17,6 +19,12 @@ interface Props {
   heading?: string;
   subtitle?: string;
   tone?: 'light' | 'dark';
+  /** Compact cards: chrome-less photo + name + role only (no badges/bio).
+   *  Used on the homepage to keep the section short. */
+  compact?: boolean;
+  /** Optional "see more" link rendered inside the section, after the grid. */
+  ctaLabel?: string;
+  ctaHref?: string;
 }
 
 const {
@@ -25,6 +33,9 @@ const {
   heading = 'Coaches & bios',
   subtitle,
   tone = 'dark',
+  compact = false,
+  ctaLabel,
+  ctaHref,
 } = Astro.props;
 
 type CoachEntry = CollectionEntry<'coaches'>;
@@ -34,10 +45,24 @@ const sorted = all.sort(
 );
 const coaches = typeof limit === 'number' ? sorted.slice(0, limit) : sorted;
 
+// Headshots are placeholders until real photos land in /public/coaches. Check
+// at build time so we render a branded initials fallback instead of a broken <img>.
+const initialsOf = (name: string) =>
+  name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join('')
+    .toUpperCase();
+
 const rendered = await Promise.all(
   coaches.map(async (coach: CoachEntry) => {
     const { Content } = await coach.render();
-    return { coach, Content };
+    const hasHeadshot = fs.existsSync(
+      path.join(process.cwd(), 'public', coach.data.headshot),
+    );
+    return { coach, Content, hasHeadshot, initials: initialsOf(coach.data.name) };
   }),
 );
 ---
@@ -50,45 +75,64 @@ const rendered = await Promise.all(
     </header>
 
     <div class="coaches__grid">
-      {rendered.map(({ coach, Content }) => (
-        <article id={coach.slug} class="coach-card">
+      {rendered.map(({ coach, Content, hasHeadshot, initials }) => (
+        <article id={coach.slug} class:list={['coach-card', { 'coach-card--compact': compact }]}>
           <div class="coach-card__media">
-            <img
-              src={coach.data.headshot}
-              alt={`${coach.data.name}, ${coach.data.role}`}
-              width="600"
-              height="600"
-              loading="lazy"
-              decoding="async"
-            />
+            {hasHeadshot ? (
+              <img
+                src={coach.data.headshot}
+                alt={`${coach.data.name}, ${coach.data.role}`}
+                width="600"
+                height="600"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <div class="coach-card__placeholder" aria-hidden="true">
+                <span class="coach-card__initials">{initials}</span>
+              </div>
+            )}
           </div>
           <div class="coach-card__body">
             <h3 class="coach-card__name">{coach.data.name}</h3>
             <div class="coach-card__role">{coach.data.role}</div>
-            <div class="coach-card__badges">
-              {coach.data.usaSwimmingMember && (
-                <Badge tone={tone === 'dark' ? 'outline-light' : 'teal'} size="sm">
-                  USA Swimming
-                </Badge>
-              )}
-              {coach.data.safeSportCertified && (
-                <Badge tone={tone === 'dark' ? 'outline-light' : 'orange'} size="sm">
-                  SafeSport Certified
-                </Badge>
-              )}
-              {coach.data.credentials.slice(0, 2).map((credential) => (
-                <Badge tone={tone === 'dark' ? 'outline-light' : 'neutral'} size="sm">
-                  {credential}
-                </Badge>
-              ))}
-            </div>
-            <div class="coach-card__bio">
-              <Content />
-            </div>
+            {!compact && (
+              <div class="coach-card__badges">
+                {coach.data.usaSwimmingMember && (
+                  <Badge tone={tone === 'dark' ? 'outline-light' : 'teal'} size="sm">
+                    USA Swimming
+                  </Badge>
+                )}
+                {coach.data.safeSportCertified && (
+                  <Badge tone={tone === 'dark' ? 'outline-light' : 'orange'} size="sm">
+                    SafeSport Certified
+                  </Badge>
+                )}
+                {coach.data.credentials.slice(0, 2).map((credential) => (
+                  <Badge tone={tone === 'dark' ? 'outline-light' : 'neutral'} size="sm">
+                    {credential}
+                  </Badge>
+                ))}
+              </div>
+            )}
+            {!compact && (
+              <div class="coach-card__bio">
+                <Content />
+              </div>
+            )}
           </div>
         </article>
       ))}
     </div>
+
+    {ctaLabel && ctaHref && (
+      <div class="coaches__cta">
+        <a href={ctaHref} class="coaches__cta-link">
+          {ctaLabel}
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    )}
   </div>
 </section>
 
@@ -172,6 +216,28 @@ const rendered = await Promise.all(
     object-fit: cover;
     display: block;
   }
+  /* Branded fallback when a headshot file is missing */
+  .coach-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--navy-700) 0%, var(--navy-800) 100%);
+  }
+  .coaches--light .coach-card__placeholder {
+    background: linear-gradient(135deg, var(--mist) 0%, var(--surface-inset) 100%);
+  }
+  .coach-card__initials {
+    font-family: var(--font-display);
+    font-weight: var(--fw-black);
+    font-size: clamp(40px, 6vw, 64px);
+    letter-spacing: var(--ls-tight);
+    color: var(--teal-400);
+    opacity: 0.55;
+    user-select: none;
+  }
+  .coaches--light .coach-card__initials { color: var(--teal-600); opacity: 0.7; }
 
   .coach-card__body {
     padding: var(--space-6);
@@ -216,6 +282,53 @@ const rendered = await Promise.all(
   }
   .coach-card__bio :global(p:last-child) {
     margin-bottom: 0;
+  }
+
+  /* ----- in-section "see more" link ----- */
+  .coaches__cta {
+    margin-top: var(--space-10);
+    text-align: center;
+  }
+  .coaches__cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 14px;
+    border-bottom: 2px solid transparent;
+    padding-bottom: 2px;
+    transition:
+      border-color var(--dur-base) var(--ease-out),
+      color var(--dur-base) var(--ease-out);
+  }
+  .coaches--dark .coaches__cta-link { color: var(--teal-400); }
+  .coaches--light .coaches__cta-link { color: var(--teal-700); }
+  .coaches__cta-link:hover {
+    border-color: var(--teal-400);
+  }
+  .coaches--dark .coaches__cta-link:hover { color: var(--white); }
+  .coaches--light .coaches__cta-link:hover { color: var(--navy-700); }
+
+  /* ----- compact (homepage): chrome-less photo + name + role ----- */
+  .coach-card--compact {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    overflow: visible;
+  }
+  .coaches--dark .coach-card--compact { background: transparent; }
+  .coach-card--compact .coach-card__media {
+    aspect-ratio: 4 / 3;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+  .coach-card--compact .coach-card__body {
+    padding: var(--space-4) 0 0;
+    gap: var(--space-1);
   }
 
   @media (max-width: 900px) {

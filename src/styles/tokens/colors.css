@@ -4,23 +4,23 @@
    Bright, bold, colorful, athletic. Navy grounds, teal energizes, orange drives.
    =========================================================================== */
 :root {
-  /* ---- Navy (primary / ground) ---- */
-  --navy-wordmark: #021c36;  /* matches the wordmark PNG bg — use for surfaces hosting the raw wordmark artwork */
-  --navy-900: #0b1f2b;   /* near-black sections, footers */
-  --navy-800: #112d3d;
-  --navy-700: #183e53;   /* BASE brand navy (from logo) */
-  --navy-600: #265269;
-  --navy-500: #3a6a82;
-  --navy-300: #7ea0b1;
-  --navy-100: #d4e0e7;
+  /* ---- Navy / indigo (primary / ground) — v2 palette ---- */
+  --navy-wordmark: #0a0e26;  /* deepest indigo — Header/Footer/Hero base surfaces */
+  --navy-900: #0e1330;   /* near-black indigo sections, footers */
+  --navy-800: #161a40;   /* cards / mid-dark surfaces */
+  --navy-700: #242b6e;   /* BASE brand indigo (v2) */
+  --navy-600: #2f3a86;
+  --navy-500: #3f4ba0;
+  --navy-300: #8990d2;
+  --navy-100: #d3d5ee;
 
-  /* ---- Teal (secondary / energy) ---- */
-  --teal-700: #0a8079;
-  --teal-600: #0c9b92;
-  --teal-500: #11b3aa;   /* BASE bright teal */
-  --teal-400: #3ec9c0;
-  --teal-200: #a6e9e4;
-  --teal-100: #d8f5f2;
+  /* ---- Cyan (secondary / energy) — v2 palette (token names kept as teal-*) ---- */
+  --teal-700: #0a7886;
+  --teal-600: #0e96a8;
+  --teal-500: #18bcd0;   /* BASE cyan */
+  --teal-400: #2fd0e0;   /* bright cyan accent (v2) */
+  --teal-200: #a6e8f2;
+  --teal-100: #d6f5fa;
 
   /* ---- Orange (action / drive) ---- */
   --orange-700: #c26a09;
@@ -29,6 +29,12 @@
   --orange-400: #ffa641;
   --orange-200: #ffd9a8;
   --orange-100: #fff0db;
+
+  /* ---- Secondary accents (per design handoff) ---- */
+  --blue-500:    #2f63ef;  /* used on TracksLadder eyebrow + age pill text, DifferenceBand pillar border */
+  --blue-100:    #e4ebff;  /* age pill background */
+  --magenta-400: #e3267e;  /* brighter magenta for on-dark accents — hero headline word + outline CTA */
+  --magenta-500: #c41e6f;  /* DifferenceBand eyebrow, TracksLadder card CTA text */
 
   /* ---- Neutrals (cool-leaning to sit under navy) ---- */
   --white:  #ffffff;
