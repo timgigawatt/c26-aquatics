@@ -1,0 +1,26 @@
+---
+/**
+ * SeamHatch — a thin 45° hatch band placed immediately before a dark section,
+ * reusing the hero's stripe motif. Purely presentational; one per light→dark seam.
+ * Rule of thumb (per brand background-treatments): one divider + one texture per
+ * seam, never stacked.
+ */
+interface Props {
+  /** Band height in px. */
+  height?: number;
+}
+
+const { height = 44 } = Astro.props;
+---
+<div class="seam-hatch" aria-hidden="true" style={`--seam-h: ${height}px`}></div>
+
+<style>
+  .seam-hatch {
+    height: var(--seam-h);
+    background: repeating-linear-gradient(
+      45deg,
+      var(--hatch-a) 0 11px,
+      var(--hatch-b) 11px 22px
+    );
+  }
+</style>

@@ -6,10 +6,13 @@ import ConsentBanner from '@components/layout/ConsentBanner.astro';
 import BrandIntro from '@components/widgets/BrandIntro.astro';
 import Hero from '@components/sections/Hero.astro';
 import StatsBand from '@components/sections/StatsBand.astro';
+import MissionBand from '@components/sections/MissionBand.astro';
 import DifferenceBand from '@components/sections/DifferenceBand.astro';
 import TracksLadder from '@components/sections/TracksLadder.astro';
+import SeamHatch from '@components/ui/SeamHatch.astro';
 import CoachesGrid from '@components/sections/CoachesGrid.astro';
 import TestimonialsBand from '@components/sections/TestimonialsBand.astro';
+import LocationBand from '@components/sections/LocationBand.astro';
 import ServiceAreaBand from '@components/sections/ServiceAreaBand.astro';
 import FAQAccordion from '@components/sections/FAQAccordion.astro';
 import CTABand from '@components/sections/CTABand.astro';
@@ -39,29 +42,36 @@ const orgSchema = sportsOrganizationSchema();
 
     <StatsBand />
 
+    <MissionBand />
+
     <DifferenceBand />
 
     <TracksLadder />
 
+    <SeamHatch />
     <CoachesGrid
       limit={3}
-      compact
+      watermark="left"
       eyebrow="The staff"
-      heading="Meet the coaches"
+      heading="Coaches & bios"
       subtitle="USA Swimming–registered, SafeSport-certified coaches building swimmers across the KC metro."
       ctaLabel="See the full coaching staff"
       ctaHref="/coaches"
     />
 
-    <TestimonialsBand featuredOnly={true} />
+    <TestimonialsBand variant="feature" featuredOnly={true} />
+
+    <LocationBand />
 
     <ServiceAreaBand />
 
-    <FAQAccordion surface="home" heading="Common questions" />
+    <FAQAccordion surface="home" heading="Frequently asked" />
 
+    <SeamHatch />
     <CTABand
-      title="Ready to <span class='hero-accent accent'>get in the water?</span>"
-      primaryCta={{ label: 'Book a lesson', href: site.booking.lessons, external: true }}
+      title="Get in the <span class='hero-accent accent'>water</span>"
+      watermark="right"
+      primaryCta={{ label: 'Book your first session', href: site.booking.lessons, external: true }}
       secondaryCta={{ label: 'Team tryouts', href: '/team' }}
     />
   </main>

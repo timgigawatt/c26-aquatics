@@ -14,6 +14,10 @@
   --navy-300: #8990d2;
   --navy-100: #d3d5ee;
 
+  /* Seam-hatch stripe navies (45° divider into dark sections) */
+  --hatch-a: #1a2150;
+  --hatch-b: #26306c;
+
   /* ---- Cyan (secondary / energy) — v2 palette (token names kept as teal-*) ---- */
   --teal-700: #0a7886;
   --teal-600: #0e96a8;

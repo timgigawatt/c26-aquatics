@@ -9,9 +9,11 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { Image } from 'astro:assets';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Card from '@components/ui/Card.astro';
 import Badge from '@components/ui/Badge.astro';
+import krakenWhite from '@assets/brand/kraken-white.png';
 
 interface Props {
   limit?: number;
@@ -22,6 +24,8 @@ interface Props {
   /** Compact cards: chrome-less photo + name + role only (no badges/bio).
    *  Used on the homepage to keep the section short. */
   compact?: boolean;
+  /** Oversized kraken watermark bleeding off the named edge (dark tone only). */
+  watermark?: 'left' | 'right';
   /** Optional "see more" link rendered inside the section, after the grid. */
   ctaLabel?: string;
   ctaHref?: string;
@@ -34,6 +38,7 @@ const {
   subtitle,
   tone = 'dark',
   compact = false,
+  watermark,
   ctaLabel,
   ctaHref,
 } = Astro.props;
@@ -66,7 +71,21 @@ const rendered = await Promise.all(
   }),
 );
 ---
-<section class={`coaches coaches--${tone}`} aria-labelledby="coaches-title">
+<section
+  class:list={['coaches', `coaches--${tone}`, { 'coaches--watermarked': watermark }]}
+  aria-labelledby="coaches-title"
+>
+  {watermark && (
+    <Image
+      src={krakenWhite}
+      alt=""
+      aria-hidden="true"
+      class:list={['coaches__watermark', `coaches__watermark--${watermark}`]}
+      widths={[480, 720]}
+      sizes="60vw"
+      loading="lazy"
+    />
+  )}
   <div class="container">
     <header class="coaches__head">
       {eyebrow && <p class="coaches__eyebrow">{eyebrow}</p>}
@@ -148,6 +167,28 @@ const rendered = await Promise.all(
     background: var(--surface);
     color: var(--text-body);
   }
+
+  /* Oversized kraken watermark bleeding off-edge at very low opacity. */
+  .coaches--watermarked {
+    position: relative;
+    overflow: hidden;
+  }
+  .coaches--watermarked .container {
+    position: relative;
+    z-index: 1;
+  }
+  .coaches__watermark {
+    position: absolute;
+    bottom: -12%;
+    width: clamp(360px, 48vw, 620px);
+    height: auto;
+    opacity: 0.05;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+  .coaches__watermark--left { left: -8%; }
+  .coaches__watermark--right { right: -8%; }
 
   .coaches__head {
     max-width: 720px;
