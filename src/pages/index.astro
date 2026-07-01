@@ -17,12 +17,13 @@ import ServiceAreaBand from '@components/sections/ServiceAreaBand.astro';
 import FAQAccordion from '@components/sections/FAQAccordion.astro';
 import CTABand from '@components/sections/CTABand.astro';
 import { sportsOrganizationSchema, jsonLd } from '@lib/schemas';
+import { mission } from '@data/approach';
 
 const orgSchema = sportsOrganizationSchema();
 ---
 <Base
-  title="C26 Aquatics — Competitive Swim Team & Lessons in Kansas City"
-  description="C26 Aquatics is a Kansas City–metro competitive swim team and learn-to-swim program. USA Swimming–registered training groups and lessons for every age."
+  title="C26 Aquatics — Competitive Swim Team in Kansas City"
+  description="C26 Aquatics is a Kansas City–metro competitive swim team — one pool, one coaching staff, one standard. USA Swimming–registered training groups from developmental to elite."
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(orgSchema)}></script>
@@ -41,9 +42,33 @@ const orgSchema = sportsOrganizationSchema();
 
     <StatsBand />
 
-    <MissionBand />
+    <MissionBand
+      eyebrow="Our mission"
+      heading="Coach the person first, the swimmer second"
+      paragraphs={[
+        mission,
+        'We prioritize relationships, consistency, and intentional progress — building confident, resilient young people who learn discipline, accountability, and a love for the process.',
+      ]}
+      cta={{ label: 'Read our story', href: '/our-story' }}
+    />
 
-    <DifferenceBand />
+    <DifferenceBand
+      pillars={[
+        {
+          title: 'One home. One pool.',
+          body: 'We own our facility — every swimmer has a true home base and trains to one standard, not a rotating set of rented pools.',
+        },
+        {
+          title: 'Consistent coaching',
+          body: 'The same coaching staff who know your swimmer, their goals, and how they learn best — season after season.',
+        },
+        {
+          title: 'Individualized development',
+          body: 'Training tailored to age, ability, and long-term growth, with excellent coach-to-swimmer ratios for real feedback.',
+        },
+      ]}
+      cta={{ label: 'See the full comparison', href: '/our-approach' }}
+    />
 
     <TracksLadder />
 

@@ -10,6 +10,7 @@ import FAQAccordion from '@components/sections/FAQAccordion.astro';
 import CTABand from '@components/sections/CTABand.astro';
 import TrackTabs from '@components/widgets/TrackTabs.astro';
 import TrainingGroupsTable from '@components/widgets/TrainingGroupsTable.astro';
+import TeamEvaluations from '@components/sections/TeamEvaluations.astro';
 import StatBlock from '@components/ui/StatBlock.astro';
 import { site } from '@data/site';
 import {
@@ -73,7 +74,7 @@ const compareRows = groups.map((entry: GroupEntry) => ({
       eyebrow="Competitive team"
       title="Train. Compete. <span class='hero-accent'>Improve.</span>"
       subtitle="USA Swimming–registered training groups for committed athletes — Pre-Competitive through Senior Elite."
-      primaryCta={{ label: 'Start tryouts', href: site.booking.team, external: true }}
+      primaryCta={{ label: 'Join the Team', href: '#join' }}
     />
 
     <TrackTabs
@@ -111,11 +112,13 @@ const compareRows = groups.map((entry: GroupEntry) => ({
       </div>
     </section>
 
+    <TeamEvaluations />
+
     <FAQAccordion surface="team" heading="Team FAQs" />
 
     <CTABand
       title="Ready to <span class='hero-accent accent'>join the team?</span>"
-      primaryCta={{ label: 'Start tryouts', href: site.booking.team, external: true }}
+      primaryCta={{ label: 'Join the Team', href: site.booking.team, external: true }}
       secondaryCta={{ label: 'Meet the coaches', href: '/coaches' }}
     />
   </main>

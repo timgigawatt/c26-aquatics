@@ -1,0 +1,409 @@
+---
+/**
+ * TeamEvaluations — the evaluations & registration section on /team.
+ * Team structure, evaluation dates + per-group standards, required equipment
+ * + preferred products, and the proposed meet schedule. Data lives in
+ * src/data/evaluations.ts and src/data/meetSchedule.ts.
+ */
+import Button from '@components/ui/Button.astro';
+import { site } from '@data/site';
+import {
+  evaluationDates,
+  teamStructureNotes,
+  equipment,
+  preferredProducts,
+  equipmentNote,
+  evaluationStandards,
+} from '@data/evaluations';
+import { meetSchedule } from '@data/meetSchedule';
+---
+<section id="join" class="teameval" aria-labelledby="teameval-title">
+  <div class="container">
+    <header class="teameval__head">
+      <p class="teameval__eyebrow">Join the team</p>
+      <h2 id="teameval-title" class="teameval__heading">Evaluations &amp; registration</h2>
+      <p class="teameval__lede">
+        New swimmers are placed by a coach evaluation — no traditional cut-day tryouts.
+        Here's how membership works and what to bring.
+      </p>
+    </header>
+
+    <ul class="teameval__notes">
+      {teamStructureNotes.map((note) => (
+        <li>{note}</li>
+      ))}
+    </ul>
+
+    <!-- Evaluations -->
+    <div class="teameval__block">
+      <h3 class="teameval__block-title">Evaluations</h3>
+      <p class="teameval__dates">
+        <span class="teameval__dates-label">Evaluation week</span>
+        <span class="teameval__dates-value">{evaluationDates}</span>
+      </p>
+      <p class="teameval__block-intro">Standards by group — expand to see what each evaluation covers:</p>
+      <div class="teameval__accordion">
+        {evaluationStandards.map((s) => (
+          <details class="eval">
+            <summary class="eval__summary">
+              <span class="eval__group">{s.group}</span>
+              <span class="eval__icon" aria-hidden="true"></span>
+            </summary>
+            <ul class="eval__list">
+              {s.standards.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </details>
+        ))}
+      </div>
+    </div>
+
+    <!-- Equipment -->
+    <div class="teameval__block">
+      <h3 class="teameval__block-title">Required equipment</h3>
+      <div class="teameval__equip">
+        <div class="equip-card">
+          <h4 class="equip-card__title">Base kit</h4>
+          <p class="equip-card__groups">{equipment.base.groups.join(' · ')}</p>
+          <ul class="equip-card__items">
+            {equipment.base.items.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+        <div class="equip-card equip-card--full">
+          <h4 class="equip-card__title">Full kit</h4>
+          <p class="equip-card__groups">{equipment.advanced.groups.join(' · ')}</p>
+          <ul class="equip-card__items">
+            {equipment.advanced.items.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+      </div>
+
+      <h4 class="teameval__subtitle">Preferred products</h4>
+      <table class="teameval__products">
+        <thead>
+          <tr><th scope="col">Item</th><th scope="col">Preferred product</th></tr>
+        </thead>
+        <tbody>
+          {preferredProducts.map((p) => (
+            <tr>
+              <th scope="row">{p.item}</th>
+              <td>{p.product}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="teameval__note">{equipmentNote}</p>
+    </div>
+
+    <!-- Meet schedule -->
+    <div class="teameval__block">
+      <h3 class="teameval__block-title">Proposed meet schedule</h3>
+      <ol class="teameval__schedule">
+        {meetSchedule.map((m) => (
+          <li class="sched">
+            <span class="sched__period">{m.period}</span>
+            <span class="sched__meets">{m.meets.join(' · ')}</span>
+          </li>
+        ))}
+      </ol>
+      <p class="teameval__note">Proposed schedule — meets and dates may shift as the season firms up.</p>
+    </div>
+
+    <!-- Registration CTA -->
+    <div class="teameval__cta">
+      <Button href={site.booking.team} variant="primary" size="lg" external>
+        Join the Team
+      </Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .teameval {
+    background: var(--surface);
+    padding: var(--section-y) 0;
+  }
+  .teameval__head {
+    max-width: 720px;
+    margin-bottom: var(--space-8);
+  }
+  .teameval__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--teal-600);
+    margin: 0 0 var(--space-2);
+  }
+  .teameval__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(28px, 3.6vw, 40px);
+    line-height: 1.04;
+    letter-spacing: var(--ls-tight);
+    color: var(--navy-700);
+    margin: 0;
+  }
+  .teameval__lede {
+    margin: var(--space-3) 0 0;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--text-body);
+  }
+
+  .teameval__notes {
+    list-style: none;
+    margin: 0 0 var(--space-10);
+    padding: var(--space-6);
+    display: grid;
+    gap: var(--space-3);
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+  }
+  .teameval__notes li {
+    position: relative;
+    padding-left: var(--space-6);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text-strong);
+  }
+  .teameval__notes li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--teal-600);
+    font-weight: var(--fw-bold);
+  }
+
+  .teameval__block {
+    padding-top: var(--space-8);
+    margin-top: var(--space-8);
+    border-top: 1px solid var(--border);
+  }
+  .teameval__block-title {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: 24px;
+    color: var(--navy-700);
+    margin: 0 0 var(--space-4);
+  }
+  .teameval__block-intro {
+    font-size: 15px;
+    color: var(--text-body);
+    margin: 0 0 var(--space-4);
+  }
+
+  .teameval__dates {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-4);
+    background: var(--navy-700);
+    border-radius: var(--r-pill);
+    margin: 0 0 var(--space-5);
+  }
+  .teameval__dates-label {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: 11px;
+    color: var(--teal-400);
+  }
+  .teameval__dates-value {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: 15px;
+    color: var(--white);
+  }
+
+  /* Evaluation accordion */
+  .teameval__accordion {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .eval {
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .eval__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: 17px;
+    color: var(--navy-700);
+  }
+  .eval__summary::-webkit-details-marker { display: none; }
+  .eval__icon {
+    flex: none;
+    width: 12px;
+    height: 12px;
+    border-right: 2px solid var(--teal-600);
+    border-bottom: 2px solid var(--teal-600);
+    transform: rotate(45deg);
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+  .eval[open] .eval__icon { transform: rotate(-135deg); }
+  .eval__list {
+    margin: 0;
+    padding: 0 var(--space-5) var(--space-5) calc(var(--space-5) + 18px);
+    display: grid;
+    gap: var(--space-2);
+  }
+  .eval__list li {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text-body);
+  }
+
+  /* Equipment */
+  .teameval__equip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5);
+    margin-bottom: var(--space-8);
+  }
+  .equip-card {
+    padding: var(--space-5);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--blue-500);
+    border-radius: var(--r-md);
+    background: var(--surface-alt);
+  }
+  .equip-card--full { border-top-color: var(--orange-500); }
+  .equip-card__title {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: 18px;
+    color: var(--navy-700);
+    margin: 0 0 var(--space-1);
+  }
+  .equip-card__groups {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin: 0 0 var(--space-4);
+  }
+  .equip-card__items {
+    margin: 0;
+    padding-left: var(--space-5);
+    display: grid;
+    gap: var(--space-1);
+  }
+  .equip-card__items li {
+    font-size: 15px;
+    color: var(--text-strong);
+  }
+
+  .teameval__subtitle {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: 18px;
+    color: var(--navy-700);
+    margin: 0 0 var(--space-3);
+  }
+  .teameval__products {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    margin-bottom: var(--space-4);
+  }
+  .teameval__products th[scope='col'] {
+    text-align: left;
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: 11px;
+    color: var(--teal-700);
+    background: var(--surface-alt);
+    padding: var(--space-3) var(--space-4);
+  }
+  .teameval__products th[scope='row'] {
+    text-align: left;
+    font-weight: var(--fw-semibold);
+    color: var(--navy-700);
+    white-space: nowrap;
+  }
+  .teameval__products td,
+  .teameval__products th[scope='row'] {
+    padding: var(--space-3) var(--space-4);
+    font-size: 14px;
+    line-height: 1.45;
+    border-top: 1px solid var(--border);
+    color: var(--text-body);
+  }
+
+  .teameval__note {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  /* Meet schedule */
+  .teameval__schedule {
+    list-style: none;
+    margin: 0 0 var(--space-4);
+    padding: 0;
+    display: grid;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    overflow: hidden;
+  }
+  .sched {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-5);
+    background: var(--surface);
+  }
+  .sched__period {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 13px;
+    color: var(--navy-700);
+  }
+  .sched__meets {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-body);
+  }
+
+  .teameval__cta {
+    margin-top: var(--space-10);
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 720px) {
+    .teameval__equip { grid-template-columns: 1fr; }
+    .sched { grid-template-columns: 1fr; gap: var(--space-1); }
+    .sched__period { font-size: 12px; }
+  }
+</style>

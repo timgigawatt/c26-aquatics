@@ -13,6 +13,7 @@ interface Props {
   eyebrow?: string;
   heading?: string;
   pillars?: Pillar[];
+  cta?: { label: string; href: string };
 }
 
 const {
@@ -32,6 +33,7 @@ const {
       body: 'Real dryland strength and conditioning built into training — we develop athletes, not just swimmers.',
     },
   ],
+  cta,
 } = Astro.props;
 ---
 <section class="difference" aria-labelledby="difference-title">
@@ -46,6 +48,12 @@ const {
         </article>
       ))}
     </div>
+    {cta && (
+      <a href={cta.href} class="difference__cta">
+        {cta.label}
+        <span aria-hidden="true">&rarr;</span>
+      </a>
+    )}
   </div>
 </section>
 
@@ -53,6 +61,25 @@ const {
   .difference {
     background: var(--surface-alt);
     padding: var(--section-y) 0;
+  }
+  .difference__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: 36px;
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 14px;
+    color: var(--magenta-500);
+    border-bottom: 2px solid transparent;
+    padding-bottom: 2px;
+    transition: color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
+  }
+  .difference__cta:hover {
+    color: var(--navy-700);
+    border-color: var(--magenta-500);
   }
   .difference__eyebrow {
     font-family: var(--font-subhead);
