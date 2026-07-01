@@ -1,15 +1,17 @@
 /**
- * Headline stats shown in the StatsBand on the homepage.
- * Values are placeholders from the rebrand kit — confirm with Robbie before launch.
+ * Headline stats shown in the scrolling StatsBand ticker on the homepage.
+ * Copy per Robbie ("Website Front Page Ticker," Jun 29). Items with a `value`
+ * render as a big number + label; a bare `label` renders as a standalone phrase.
  */
 export interface Stat {
-  value: string;
+  value?: string;
   label: string;
 }
 
 export const homeStats: Stat[] = [
-  { value: '≤4', label: 'Swimmers per class' },
-  { value: '20+', label: 'Years coaching' },
-  { value: '365', label: 'Days indoor pool' },
-  { value: '100%', label: 'Certified coaches' },
+  { value: '35+', label: 'years coaching experience' },
+  { value: '500+', label: 'swimmers coached' },
+  { value: '300+', label: 'video stroke sessions' },
+  { value: '21+', label: 'states represented' },
+  { label: '4 strokes. 1 development system.' },
 ];
