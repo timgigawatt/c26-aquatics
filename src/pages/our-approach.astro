@@ -1,0 +1,266 @@
+---
+import Base from '@layouts/Base.astro';
+import Header from '@components/layout/Header.astro';
+import Footer from '@components/layout/Footer.astro';
+import ConsentBanner from '@components/layout/ConsentBanner.astro';
+import Hero from '@components/sections/Hero.astro';
+import DifferenceMatrix from '@components/sections/DifferenceMatrix.astro';
+import CoreValues from '@components/sections/CoreValues.astro';
+import SeamHatch from '@components/ui/SeamHatch.astro';
+import CTABand from '@components/sections/CTABand.astro';
+import { sportsOrganizationSchema, jsonLd } from '@lib/schemas';
+import { mission, vision, motto } from '@data/approach';
+
+const orgSchema = sportsOrganizationSchema();
+---
+<Base
+  title="Our Approach | C26 Aquatics"
+  description="How C26 Aquatics develops swimmers — purposeful, periodized training, long-term athlete development, mental wellness, and a single home pool in the Kansas City metro."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={jsonLd(orgSchema)}></script>
+  </Fragment>
+
+  <Header />
+  <main>
+    <Hero
+      variant="page"
+      eyebrow="Our Approach"
+      title="Our <span class='hero-accent'>approach</span>"
+      subtitle="Great swimmers are developed through purpose, patience, and consistency — not endless laps and accumulated yardage."
+    />
+
+    <!-- The Approach -->
+    <section class="prose-band" aria-labelledby="approach-title">
+      <div class="container prose">
+        <p class="prose__eyebrow">The C26 method</p>
+        <h2 id="approach-title" class="prose__heading">Train with purpose</h2>
+        <p>At C26 Aquatics, we believe great swimmers are developed through purpose, patience, and consistency — not endless laps and accumulated yardage. Every practice has a purpose. Every set has an objective. Every season has a plan.</p>
+        <p>Our training is built upon science-backed and proven periodization principles that allow swimmers to develop progressively over time and perform at their best when it matters most. Rather than trying to create early success at ages 11, 12, or 13, we focus on the bigger picture. Our goal is to help athletes continue improving year after year so they can reach their full potential at ages 16–18 and beyond, including opportunities at the collegiate level.</p>
+        <p>We prioritize quality over quantity. Technique, efficiency, and movement patterns matter. We spend time developing proper mechanics, body awareness, and purposeful training habits because we know that swimming fast begins with swimming well. The goal isn't simply to complete more yards than everyone else. The goal is to maximize every yard we swim.</p>
+        <p>Long-term athlete development is at the center of everything we do. As swimmers mature, our programming evolves with them. We carefully balance training stress, recovery, strength development, mobility, and skill acquisition to create sustainable progress while reducing the risk of burnout and overuse injuries.</p>
+        <p>Most importantly, we want our swimmers to love the sport. Success in swimming isn't measured solely by times on a scoreboard. It's also measured by confidence, resilience, discipline, friendships, and a lifelong appreciation for movement and competition. We aren't simply building faster swimmers — we're developing healthy, confident young people who can enjoy and benefit from swimming for years to come.</p>
+      </div>
+    </section>
+
+    <SeamHatch />
+    <section class="pullquote" aria-label="Our training philosophy">
+      <div class="container">
+        <p class="pullquote__text">Train with purpose. Develop for the long term. Peak when it matters most. Love the process.</p>
+      </div>
+    </section>
+
+    <!-- Difference Matrix -->
+    <DifferenceMatrix />
+
+    <!-- Swimming & Mental Wellness -->
+    <section class="prose-band prose-band--alt" aria-labelledby="wellness-title">
+      <div class="container prose">
+        <p class="prose__eyebrow">Swimming &amp; mental wellness</p>
+        <h2 id="wellness-title" class="prose__heading">More than a sport</h2>
+        <p>Swimming isn't just about learning strokes and improving times. Research consistently shows that regular physical activity can improve anxiety, emotional regulation, attention, and executive functioning in children and adolescents.</p>
+        <p>The unique nature of swimming makes it especially beneficial. The rhythmic breathing, repetitive movements, structured environment, and sensory experience of the water can help many children feel calmer, more focused, and more regulated. Swimming also provides predictable routines, clear expectations, and opportunities to build confidence through measurable progress.</p>
+        <p>For children with ADHD, research has found that regular exercise can significantly improve attention, emotional regulation, and symptoms of anxiety and depression. Studies examining different forms of exercise have also found that aquatic exercise may be particularly beneficial for improving attention and cognitive flexibility.</p>
+        <p>At C26 Aquatics, we've seen firsthand how swimming can become much more than a sport. It can be an outlet, a confidence builder, a source of belonging, and a place where kids discover what they are capable of achieving.</p>
+        <p class="prose__note">We don't claim that swimming replaces professional medical or psychological care. But we firmly believe that a supportive team environment, meaningful relationships with coaches, purposeful movement, and the confidence that comes from mastering new skills can positively impact a child's overall well-being. Sometimes the biggest victories in swimming have nothing to do with the clock.</p>
+      </div>
+    </section>
+
+    <!-- Mission & Vision -->
+    <section class="statements" aria-labelledby="mission-title">
+      <div class="container">
+        <div class="statement">
+          <p class="statement__eyebrow">Our mission</p>
+          <p id="mission-title" class="statement__text">{mission}</p>
+        </div>
+        <div class="statement">
+          <p class="statement__eyebrow">Our vision</p>
+          <p class="statement__text statement__text--sm">{vision}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Core Values -->
+    <CoreValues />
+
+    <section class="motto" aria-label="Team motto">
+      <div class="container">
+        <p class="motto__text">{motto}</p>
+      </div>
+    </section>
+
+    <!-- Our Home -->
+    <section id="our-home" class="prose-band" aria-labelledby="home-title">
+      <div class="container prose">
+        <p class="prose__eyebrow">Our home</p>
+        <h2 id="home-title" class="prose__heading">One facility. Everything your swimmer needs.</h2>
+        <p>C26 Aquatics is proud to call the C26 Hub, located inside the AdventHealth SportsPark at Bluhawk, our home. Unlike most swim clubs that rent pool space and move from facility to facility, we own our pool. This is our home base, and every aspect of the environment has been intentionally designed to support swimmer development.</p>
+        <p>Our private facility features a dedicated three-lane lap pool with its own entrance and parking, making drop-off and pick-up simple and convenient for families. More importantly, having our own pool gives us complete control over the training environment. We don't have to work around someone else's schedule, share deck space, or limit what we can provide to our athletes.</p>
+        <p>While our pool may not be the largest in the area, we believe that's actually one of our greatest strengths. Smaller training groups allow our coaches to see every swimmer, provide immediate feedback, and maintain exceptional coach-to-athlete ratios. Swimmers don't get lost in crowded lanes, and coaches don't have to coach from a distance. Every athlete is known, seen, and coached.</p>
+        <p>Connected directly to our pool is our 10,000-square-foot sports performance facility where swimmers participate in dryland training and swim-specific strength and conditioning. Our dryland program goes far beyond arm circles and jumping jacks — we focus on mobility, injury prevention, movement quality, strength, and power development designed specifically for the demands of swimming.</p>
+        <p>For our swimmers ages 13 and older, the facility also includes access to recovery resources typically reserved for collegiate and professional athletes, including infrared saunas, cold tubs, massage devices, and recovery compression boots. Learning how to recover, adapt, and care for their bodies is an essential part of becoming a healthy, durable athlete.</p>
+        <p class="prose__tagline">One Pool. One Home. One Standard.</p>
+      </div>
+    </section>
+
+    <!-- Beyond the Pool -->
+    <section class="prose-band prose-band--alt beyond" aria-labelledby="beyond-title">
+      <div class="container prose">
+        <p class="prose__eyebrow">Beyond the pool</p>
+        <h2 id="beyond-title" class="prose__heading">The Midwest's premier open water program</h2>
+        <p>At C26 Aquatics, we believe swimming should create opportunities that extend far beyond the lane lines. Open water swimming is one of the fastest-growing disciplines in the sport and offers athletes unique experiences that develop confidence, resilience, adaptability, and mental toughness.</p>
+        <p>Open water is also one of the areas that truly separates C26 Aquatics. Coach Robbie is widely recognized as one of the Midwest's leading open water swim coaches. Over the past decade he has coached hundreds of swimmers in open water environments and guided athletes to success at every level — top-five finishes at Open Water Zones, national-level 5K collegiate championships, professional triathlon, and everything from first-time open water races to the English Channel.</p>
+        <p>His experience extends well beyond writing workouts. Coach Robbie has spent years teaching athletes how to safely and confidently navigate open water, including sighting, drafting, race tactics, pacing, anxiety management, and adapting to real-world conditions. Whether a swimmer dreams of Open Water Zones, collegiate opportunities, the open water national team, or simply greater confidence in the water, we provide a pathway to get there.</p>
+      </div>
+    </section>
+
+    <SeamHatch />
+    <CTABand
+      title="Ready to <span class='hero-accent accent'>join the team</span>?"
+      watermark="right"
+      primaryCta={{ label: 'Join the Team', href: '/team' }}
+      secondaryCta={{ label: 'Read our story', href: '/our-story' }}
+    />
+  </main>
+  <Footer />
+  <ConsentBanner />
+</Base>
+
+<style>
+  .prose-band {
+    background: var(--surface);
+    padding: var(--section-y) 0;
+  }
+  .prose-band--alt {
+    background: var(--surface-alt);
+  }
+  .prose {
+    max-width: 760px;
+  }
+  .prose__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--teal-600);
+    margin: 0 0 var(--space-2);
+  }
+  .prose__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(28px, 3.6vw, 40px);
+    line-height: 1.04;
+    letter-spacing: var(--ls-tight);
+    color: var(--navy-700);
+    margin: 0 0 var(--space-5);
+  }
+  .prose p {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text-body);
+    margin: 0 0 var(--space-4);
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  .prose__note {
+    font-size: 15px !important;
+    color: var(--text-muted) !important;
+    border-left: 3px solid var(--border);
+    padding-left: var(--space-4);
+    margin-top: var(--space-5) !important;
+  }
+  .prose__tagline {
+    font-family: var(--font-display) !important;
+    font-weight: var(--fw-black);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-tight);
+    font-size: clamp(20px, 3vw, 28px) !important;
+    color: var(--navy-700) !important;
+    margin-top: var(--space-6) !important;
+  }
+  .beyond .prose {
+    border-left: 4px solid var(--teal-500);
+    padding-left: clamp(var(--space-5), 4vw, var(--space-8));
+    max-width: 820px;
+  }
+
+  /* Navy pull-quote */
+  .pullquote {
+    background: var(--navy-900);
+    color: var(--text-on-dark);
+    padding: var(--section-y) 0;
+  }
+  .pullquote__text {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(24px, 3.4vw, 40px);
+    line-height: 1.12;
+    letter-spacing: var(--ls-tight);
+    color: var(--white);
+    text-wrap: balance;
+  }
+
+  /* Mission / Vision statements */
+  .statements {
+    background: var(--surface);
+    padding: var(--section-y) 0;
+  }
+  .statements .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(32px, 6vw, 72px);
+    align-items: start;
+  }
+  .statement__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--magenta-500);
+    margin: 0 0 var(--space-3);
+  }
+  .statement__text {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: clamp(20px, 2.4vw, 27px);
+    line-height: 1.25;
+    color: var(--navy-700);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .statement__text--sm {
+    font-family: var(--font-body);
+    font-weight: var(--fw-regular, 400);
+    text-transform: none;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text-body);
+  }
+
+  /* Motto */
+  .motto {
+    background: var(--navy-700);
+    color: var(--text-on-dark);
+    padding: var(--section-y-tight, var(--space-12)) 0;
+  }
+  .motto__text {
+    text-align: center;
+    font-family: var(--font-display);
+    font-weight: var(--fw-black);
+    text-transform: uppercase;
+    font-size: clamp(22px, 3vw, 34px);
+    letter-spacing: var(--ls-tight);
+    color: var(--teal-400);
+    margin: 0;
+  }
+
+  @media (max-width: 800px) {
+    .statements .container { grid-template-columns: 1fr; }
+  }
+</style>
