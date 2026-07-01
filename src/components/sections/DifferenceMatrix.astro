@@ -1,0 +1,195 @@
+---
+/**
+ * DifferenceMatrix — the "Traditional Swim Clubs vs C26 Aquatics" comparison.
+ * Two-column editorial table on desktop; on narrow screens each row stacks into
+ * a labeled pair. Data from src/data/approach.ts.
+ */
+import {
+  differenceIntro,
+  differenceRows,
+  differenceSummary,
+  type DifferenceRow,
+} from '@data/approach';
+
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  intro?: string;
+  rows?: DifferenceRow[];
+  summary?: string;
+  tagline?: string;
+}
+
+const {
+  eyebrow = 'Why C26',
+  heading = 'The C26 difference',
+  intro = differenceIntro,
+  rows = differenceRows,
+  summary = differenceSummary,
+  tagline = 'One Home. One Pool. One Standard.',
+} = Astro.props;
+---
+<section class="diffmatrix" aria-labelledby="diffmatrix-title">
+  <div class="container">
+    <p class="diffmatrix__eyebrow">{eyebrow}</p>
+    <h2 id="diffmatrix-title" class="diffmatrix__heading">{heading}</h2>
+    {intro && <p class="diffmatrix__intro">{intro}</p>}
+
+    <div class="dm" role="table" aria-label="Traditional swim clubs compared with C26 Aquatics">
+      <div class="dm__head dm__head--trad" role="columnheader">Traditional Swim Clubs</div>
+      <div class="dm__head dm__head--c26" role="columnheader">C26 Aquatics</div>
+      {rows.map((r) => (
+        <Fragment>
+          <div class="dm__cell dm__cell--trad" role="cell">
+            <span class="dm__label">Traditional Swim Clubs</span>
+            {r.traditional}
+          </div>
+          <div class="dm__cell dm__cell--c26" role="cell">
+            <span class="dm__label">C26 Aquatics</span>
+            <span class="dm__check" aria-hidden="true">✓</span>
+            <span>{r.c26}</span>
+          </div>
+        </Fragment>
+      ))}
+    </div>
+
+    <div class="dm__summary">
+      <p class="dm__summary-text">{summary}</p>
+      <p class="dm__tagline">{tagline}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .diffmatrix {
+    background: var(--surface);
+    padding: var(--section-y) 0;
+  }
+  .diffmatrix__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--magenta-500);
+    margin: 0;
+  }
+  .diffmatrix__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(30px, 4vw, 44px);
+    line-height: 1.02;
+    letter-spacing: var(--ls-tight);
+    color: var(--navy-700);
+    margin: var(--space-2) 0 0;
+  }
+  .diffmatrix__intro {
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--text-body);
+    margin: 14px 0 0;
+    max-width: 680px;
+  }
+
+  .dm {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    margin-top: 36px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+  .dm__head {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 16px;
+    padding: var(--space-4) var(--space-5);
+  }
+  .dm__head--trad {
+    background: var(--surface-alt);
+    color: var(--text-muted);
+  }
+  .dm__head--c26 {
+    background: var(--navy-700);
+    color: var(--white);
+  }
+  .dm__cell {
+    padding: var(--space-4) var(--space-5);
+    font-size: 15px;
+    line-height: 1.5;
+    background: var(--surface);
+  }
+  .dm__cell--trad {
+    color: var(--text-muted);
+  }
+  .dm__cell--c26 {
+    color: var(--text-strong);
+    background: var(--teal-50, #eefbfa);
+    display: flex;
+    gap: var(--space-2);
+    align-items: flex-start;
+  }
+  .dm__check {
+    color: var(--teal-600);
+    font-weight: var(--fw-bold);
+    flex: none;
+    line-height: 1.5;
+  }
+  .dm__label {
+    display: none;
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: 11px;
+    color: var(--teal-700);
+    margin-bottom: var(--space-1);
+  }
+
+  .dm__summary {
+    margin-top: var(--space-8);
+    max-width: 760px;
+  }
+  .dm__summary-text {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-body);
+    margin: 0;
+  }
+  .dm__tagline {
+    font-family: var(--font-display);
+    font-weight: var(--fw-black);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-tight);
+    font-size: clamp(20px, 3vw, 28px);
+    color: var(--navy-700);
+    margin: var(--space-5) 0 0;
+  }
+
+  @media (max-width: 720px) {
+    .dm {
+      grid-template-columns: 1fr;
+    }
+    .dm__head {
+      display: none;
+    }
+    .dm__cell {
+      display: flex;
+      flex-direction: column;
+    }
+    .dm__cell--c26 {
+      flex-direction: column;
+    }
+    .dm__cell--c26 .dm__check {
+      display: none;
+    }
+    .dm__label {
+      display: block;
+    }
+  }
+</style>

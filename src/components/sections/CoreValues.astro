@@ -1,0 +1,99 @@
+---
+/**
+ * CoreValues — card grid of the eight C26 core values. Data from
+ * src/data/approach.ts. Sits within the Mission/Vision/Values block on
+ * /our-approach.
+ */
+import { coreValues, type CoreValue } from '@data/approach';
+
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  values?: CoreValue[];
+}
+
+const {
+  eyebrow = 'What we stand for',
+  heading = 'Our core values',
+  values = coreValues,
+} = Astro.props;
+---
+<section class="values" aria-labelledby="values-title">
+  <div class="container">
+    <p class="values__eyebrow">{eyebrow}</p>
+    <h2 id="values-title" class="values__heading">{heading}</h2>
+
+    <ul class="values__grid">
+      {values.map((v) => (
+        <li class="value">
+          <h3 class="value__title">{v.title}</h3>
+          <p class="value__body">{v.body}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .values {
+    background: var(--surface-alt);
+    padding: var(--section-y) 0;
+  }
+  .values__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--teal-600);
+    margin: 0;
+  }
+  .values__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(30px, 4vw, 44px);
+    line-height: 1.02;
+    letter-spacing: var(--ls-tight);
+    color: var(--navy-700);
+    margin: var(--space-2) 0 0;
+  }
+  .values__grid {
+    list-style: none;
+    margin: 36px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+  .value {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--teal-500);
+    border-radius: var(--r-md);
+    padding: var(--space-5);
+    box-shadow: var(--shadow-sm);
+  }
+  .value__title {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: 18px;
+    line-height: 1.1;
+    color: var(--navy-700);
+    margin: 0 0 var(--space-2);
+  }
+  .value__body {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text-body);
+    margin: 0;
+  }
+
+  @media (max-width: 1000px) {
+    .values__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 560px) {
+    .values__grid { grid-template-columns: 1fr; }
+  }
+</style>

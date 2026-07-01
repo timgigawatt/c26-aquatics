@@ -1,9 +1,11 @@
 ---
 /**
- * StatsBand — dark navy strip of headline stats sitting under the hero.
+ * StatsBand — navy strip of headline stats under the hero, rendered as a
+ * continuously scrolling ticker. The row is duplicated so the loop wraps
+ * seamlessly; the duplicate is aria-hidden. Pauses on hover/focus, and under
+ * `prefers-reduced-motion` it collapses to a static, centered, wrapped row.
  * Pulls from src/data/stats.ts by default; pass `stats` to override per-page.
  */
-import StatBlock from '@components/ui/StatBlock.astro';
 import { homeStats, type Stat } from '@data/stats';
 
 interface Props {
@@ -13,33 +15,101 @@ interface Props {
 
 const { stats = homeStats, ariaLabel = 'Program highlights' } = Astro.props;
 ---
-<section class="stats-band" aria-label={ariaLabel}>
-  <div class="container stats-band__inner">
-    {stats.map((stat) => (
-      <StatBlock value={stat.value} label={stat.label} tone="dark" />
-    ))}
+<section class="ticker" aria-label={ariaLabel}>
+  <div class="ticker__viewport">
+    <div class="ticker__track">
+      {[false, true].map((isClone) => (
+        <ul class="ticker__row" aria-hidden={isClone ? 'true' : undefined}>
+          {stats.map((stat) => (
+            <li class="ticker__item">
+              {stat.value && <span class="ticker__value">{stat.value}</span>}
+              <span class="ticker__label">{stat.label}</span>
+              <span class="ticker__sep" aria-hidden="true">✦</span>
+            </li>
+          ))}
+        </ul>
+      ))}
+    </div>
   </div>
 </section>
 
 <style>
-  .stats-band {
+  .ticker {
     background: var(--navy-900);
     color: var(--text-on-dark);
     border-top: 1px solid rgba(255, 255, 255, 0.04);
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   }
-  .stats-band__inner {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: var(--space-6);
-    padding: var(--space-12) 0;
+  .ticker__viewport {
+    overflow: hidden;
+    padding: var(--space-6) 0;
+  }
+  .ticker__track {
+    display: flex;
+    width: max-content;
+    animation: ticker-marquee 42s linear infinite;
+  }
+  .ticker__viewport:hover .ticker__track,
+  .ticker__viewport:focus-within .ticker__track {
+    animation-play-state: paused;
+  }
+  .ticker__row {
+    display: flex;
+    align-items: baseline;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: none;
+  }
+  .ticker__item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    padding: 0 var(--space-6);
+    white-space: nowrap;
+  }
+  .ticker__value {
+    font-family: var(--font-display);
+    font-weight: var(--fw-black);
+    font-size: clamp(24px, 3vw, 34px);
+    line-height: 1;
+    color: var(--teal-400);
+    letter-spacing: var(--ls-tight);
+  }
+  .ticker__label {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 14px;
+    color: var(--text-on-dark);
+  }
+  .ticker__sep {
+    margin-left: var(--space-6);
+    font-size: 12px;
+    color: var(--magenta-500);
+    transform: translateY(-1px);
+  }
+  .ticker__item:nth-child(even) .ticker__sep {
+    color: var(--teal-500);
   }
 
-  @media (max-width: 720px) {
-    .stats-band__inner {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: var(--space-8) var(--space-6);
-      padding: var(--space-10) 0;
+  @keyframes ticker-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ticker__viewport { padding: var(--space-8) 0; }
+    .ticker__track {
+      animation: none;
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: center;
     }
+    .ticker__row[aria-hidden='true'] { display: none; }
+    .ticker__row { flex-wrap: wrap; justify-content: center; row-gap: var(--space-4); }
+    /* Drop the trailing separator when items wrap freely. */
+    .ticker__item:last-child .ticker__sep { display: none; }
   }
 </style>

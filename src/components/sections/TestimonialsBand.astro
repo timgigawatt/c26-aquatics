@@ -2,8 +2,12 @@
 /**
  * TestimonialsBand — two formats:
  *   variant="grid"    (default) 3-up quote cards on a paper background.
- *   variant="feature"           one dramatic centered pull-quote on a navy band.
- * Big stylized opening quote mark in teal; italic quote; author + role beneath.
+ *   variant="feature"           an auto-rotating pull-quote on a navy band.
+ *
+ * Feature rotator: every featured quote is rendered in the DOM (crawlable, and
+ * the first shows with no JS). A grid-stack overlaps the slides so height =
+ * tallest quote; JS cross-fades between them, pauses on hover/focus, and honors
+ * prefers-reduced-motion (no auto-advance; dot navigation still works).
  */
 import { getCollection, type CollectionEntry } from 'astro:content';
 
@@ -32,20 +36,40 @@ const sorted = filtered.sort(
   (a: TestimonialEntry, b: TestimonialEntry) => a.data.order - b.data.order,
 );
 const testimonials = typeof limit === 'number' ? sorted.slice(0, limit) : sorted;
-const feature = testimonials[0];
+const hasFeature = testimonials.length > 0;
 ---
-{variant === 'feature' && feature ? (
-  <section class="feature-quote" aria-labelledby="testimonials-title">
+{variant === 'feature' && hasFeature ? (
+  <section class="feature-quote" aria-labelledby="testimonials-title" data-testimonial-rotator>
     <div class="container">
       <h2 id="testimonials-title" class="sr-only">{heading}</h2>
-      <figure class="fq">
-        <span class="fq__mark" aria-hidden="true">&ldquo;</span>
-        <blockquote class="fq__text">{feature.data.quote}</blockquote>
-        <figcaption class="fq__cite">
-          <span class="fq__author">{feature.data.author}</span>
-          <span class="fq__role">{feature.data.role}</span>
-        </figcaption>
-      </figure>
+      <div class="fq-stack">
+        {testimonials.map((t: TestimonialEntry, i: number) => (
+          <figure class="fq" data-slide data-active={i === 0 ? 'true' : 'false'} aria-hidden={i === 0 ? undefined : 'true'}>
+            <span class="fq__mark" aria-hidden="true">&ldquo;</span>
+            <blockquote class="fq__text">{t.data.quote}</blockquote>
+            <figcaption class="fq__cite">
+              <span class="fq__author">{t.data.author}</span>
+              <span class="fq__role">{t.data.role}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+
+      {testimonials.length > 1 && (
+        <div class="fq-dots" role="tablist" aria-label="Choose a testimonial">
+          {testimonials.map((t: TestimonialEntry, i: number) => (
+            <button
+              type="button"
+              role="tab"
+              class="fq-dot"
+              data-dot={i}
+              aria-selected={i === 0 ? 'true' : 'false'}
+              tabindex={i === 0 ? 0 : -1}
+              aria-label={`Show testimonial ${i + 1} of ${testimonials.length}`}
+            ></button>
+          ))}
+        </div>
+      )}
     </div>
   </section>
 ) : (
@@ -72,19 +96,101 @@ const feature = testimonials[0];
   </section>
 )}
 
+<script>
+  function initRotator(root: HTMLElement) {
+    const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-slide]'));
+    const dots = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-dot]'));
+    if (slides.length < 2) return;
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let index = 0;
+    let timer: number | undefined;
+
+    const show = (next: number) => {
+      index = (next + slides.length) % slides.length;
+      slides.forEach((slide, i) => {
+        const active = i === index;
+        slide.dataset.active = active ? 'true' : 'false';
+        if (active) slide.removeAttribute('aria-hidden');
+        else slide.setAttribute('aria-hidden', 'true');
+      });
+      dots.forEach((dot, i) => {
+        const active = i === index;
+        dot.setAttribute('aria-selected', active ? 'true' : 'false');
+        dot.tabIndex = active ? 0 : -1;
+      });
+    };
+
+    const start = () => {
+      if (reduce) return;
+      stop();
+      timer = window.setInterval(() => show(index + 1), 6500);
+    };
+    const stop = () => {
+      if (timer) window.clearInterval(timer);
+      timer = undefined;
+    };
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        show(i);
+        start();
+      });
+      dot.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          show(index + 1);
+          dots[index].focus();
+          start();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          show(index - 1);
+          dots[index].focus();
+          start();
+        }
+      });
+    });
+
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', start);
+    root.addEventListener('focusin', stop);
+    root.addEventListener('focusout', start);
+
+    start();
+  }
+
+  document
+    .querySelectorAll<HTMLElement>('[data-testimonial-rotator]')
+    .forEach((el) => initRotator(el));
+</script>
+
 <style>
-  /* ---------- feature: single navy pull-quote ---------- */
+  /* ---------- feature: rotating navy pull-quote ---------- */
   .feature-quote {
     background: var(--navy-700);
     color: var(--text-on-dark);
     padding: var(--section-y) 0;
   }
-  .fq {
-    margin: 0;
+  .fq-stack {
+    display: grid;
     max-width: 900px;
     margin-inline: auto;
+  }
+  .fq {
+    grid-area: 1 / 1;
+    margin: 0;
     text-align: center;
     position: relative;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 600ms var(--ease-out), visibility 0s linear 600ms;
+  }
+  .fq[data-active='true'] {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity 600ms var(--ease-out);
   }
   .fq__mark {
     display: block;
@@ -126,6 +232,37 @@ const feature = testimonials[0];
     font-size: 14px;
     color: var(--text-on-dark-muted);
   }
+
+  .fq-dots {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+  }
+  .fq-dot {
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    border-radius: var(--r-pill);
+    border: 1px solid var(--teal-400);
+    background: transparent;
+    cursor: pointer;
+    transition: background var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+  }
+  .fq-dot:hover { background: rgba(255, 255, 255, 0.25); }
+  .fq-dot[aria-selected='true'] {
+    background: var(--teal-400);
+    transform: scale(1.15);
+  }
+  .fq-dot:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fq { transition: none; }
+  }
+
   .sr-only {
     position: absolute;
     width: 1px;
