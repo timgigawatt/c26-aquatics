@@ -47,7 +47,9 @@ function isCurrent(href: string): boolean {
             <a
               href={item.href}
               class="c26-mm__link"
-              aria-current={isCurrent(item.href) ? 'page' : undefined}
+              aria-current={!item.external && isCurrent(item.href) ? 'page' : undefined}
+              target={item.external ? '_blank' : undefined}
+              rel={item.external ? 'noopener noreferrer' : undefined}
             >
               {item.label}
             </a>

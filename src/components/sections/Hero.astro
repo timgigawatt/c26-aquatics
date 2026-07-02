@@ -111,7 +111,18 @@ const {
   </section>
 ) : (
   <section class="hero hero--page" aria-labelledby="hero-title">
-    <div class="container hero__inner">
+    <Image
+      src={krakenWhite}
+      alt=""
+      class="hero__watermark"
+      width={380}
+      height={380}
+      densities={[1, 2]}
+      loading="eager"
+      decoding="async"
+    />
+    <div class="hero__overlay hero__overlay--page" aria-hidden="true"></div>
+    <div class={`container hero__inner${image ? ' hero__inner--split' : ''}`}>
       <div class="hero__copy">
         {eyebrow && <p class="hero__eyebrow hero__eyebrow--page">{eyebrow}</p>}
         <h1 id="hero-title" class="hero__title hero__title--page" set:html={title}></h1>
@@ -129,7 +140,7 @@ const {
               </Button>
             )}
             {secondaryCta && (
-              <Button href={secondaryCta.href} variant="outline" size="lg">
+              <Button href={secondaryCta.href} variant="outline-magenta" size="lg">
                 {secondaryCta.label}
               </Button>
             )}
@@ -300,33 +311,71 @@ const {
     flex-wrap: wrap;
   }
 
-  /* ----- page variant ----- */
+  /* ----- page variant: striped-kraken header band ----- */
   .hero--page {
-    background: linear-gradient(180deg, var(--paper) 0%, var(--mist) 100%);
+    position: relative;
+    /* 45° navy stripe pair — the standardized interior page header treatment. */
+    background: repeating-linear-gradient(
+      45deg,
+      var(--hatch-a) 0 11px,
+      var(--hatch-b) 11px 22px
+    );
     padding: var(--space-16) 0;
-    color: var(--text-body);
+    color: var(--text-on-dark);
+  }
+  /* White kraken watermark, pinned right and vertically centered. */
+  .hero--page .hero__watermark {
+    position: absolute;
+    top: 50%;
+    right: -40px;
+    width: 380px;
+    height: auto;
+    transform: translateY(-50%);
+    opacity: 0.08;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .hero__overlay--page {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(14, 19, 48, 0.35),
+      rgba(14, 19, 48, 0.62)
+    );
+    z-index: 2;
+    pointer-events: none;
   }
   .hero--page .hero__inner {
+    position: relative;
+    z-index: 3;
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--space-12);
     align-items: center;
+  }
+  .hero--page .hero__inner--split {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   }
   .hero--page .hero__copy {
     max-width: 640px;
   }
-  .hero__eyebrow--page { color: var(--teal-600); }
+  .hero__eyebrow--page { color: var(--teal-400); }
   .hero__title--page {
-    color: var(--navy-700);
+    color: var(--white);
     font-size: clamp(40px, 6vw, 72px);
     line-height: 0.92;
   }
+  .hero__title--page :global(.hero-accent),
+  .hero__title--page :global(.accent) {
+    color: var(--magenta-400);
+  }
   .hero__subtitle--page {
-    color: var(--text-body);
+    color: rgba(255, 255, 255, 0.85);
     margin: var(--space-5) 0 var(--space-8);
     font-size: 19px;
     line-height: 1.5;
-    max-width: 440px;
+    max-width: 520px;
   }
   .hero__image-wrap {
     width: 100%;
