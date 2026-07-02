@@ -2,6 +2,16 @@
 name: "Robbie Bruce"
 role: "High Performance Director"
 headshot: "/coaches/robbie-bruce.jpg"
+tagline: "Better technique creates better swimmers."
+specialty: "Open Water"
+groups:
+  - "High School Prep"
+  - "Pre-Senior"
+highlights:
+  - "One of the Midwest's leading open water coaches"
+  - "Athletes to top-five finishes at Open Water Zones"
+  - "Coached swimmers to national 5K championships & pro triathlon"
+  - "Guided athletes from first open water race to the English Channel"
 credentials:
   - "Open Water Specialist"
   - "USA Swimming Registered Coach"

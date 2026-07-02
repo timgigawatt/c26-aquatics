@@ -6,6 +6,16 @@ const coaches = defineCollection({
     name: z.string(),
     role: z.string(),
     headshot: z.string(),
+    // One-line hook shown on the card face (the personality line, pulled
+    // from the bio). Keeps the collapsed card scannable.
+    tagline: z.string().optional(),
+    // Training groups this coach leads — rendered as scannable chips.
+    groups: z.array(z.string()).default([]),
+    // Signature focus (e.g. "Open Water", "Strength Program").
+    specialty: z.string().optional(),
+    // Career highlights surfaced as a bullet list inside the bio dialog —
+    // the résumé facts otherwise buried in the prose.
+    highlights: z.array(z.string()).default([]),
     credentials: z.array(z.string()).default([]),
     usaSwimmingMember: z.boolean().default(false),
     safeSportCertified: z.boolean().default(false),

@@ -2,6 +2,15 @@
 name: "Alexa Turpen"
 role: "Head Age Group Coach"
 headshot: "/coaches/alexa-turpen.jpg"
+tagline: "Balancing fun, discipline, and development for every young swimmer."
+specialty: "Backstroke & IM"
+groups:
+  - "Pre-Competitive"
+  - "Age Group"
+highlights:
+  - "Swam for the Kansas City Blazers & Arizona State Club Swim"
+  - "Specialist in 100/200 backstroke, 200 IM & sprint free"
+  - "B.S. in Biological Sciences, Arizona State University"
 credentials:
   - "USA Swimming Registered Coach"
   - "U.S. Center for SafeSport Certified"

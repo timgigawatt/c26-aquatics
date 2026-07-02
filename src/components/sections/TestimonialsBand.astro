@@ -103,22 +103,45 @@ const hasFeature = testimonials.length > 0;
     if (slides.length < 2) return;
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Sequential fade: the current quote fades out, then the next fades in.
+    // Must match the CSS opacity transition on `.fq`.
+    const FADE_MS = 450;
     let index = 0;
     let timer: number | undefined;
+    let fadeTimer: number | undefined;
 
     const show = (next: number) => {
-      index = (next + slides.length) % slides.length;
-      slides.forEach((slide, i) => {
-        const active = i === index;
-        slide.dataset.active = active ? 'true' : 'false';
-        if (active) slide.removeAttribute('aria-hidden');
-        else slide.setAttribute('aria-hidden', 'true');
-      });
+      const target = (next + slides.length) % slides.length;
+      if (target === index) return;
+      index = target;
+
+      // Move dot selection immediately so the control feels responsive.
       dots.forEach((dot, i) => {
         const active = i === index;
         dot.setAttribute('aria-selected', active ? 'true' : 'false');
         dot.tabIndex = active ? 0 : -1;
       });
+
+      // Fade out whatever is currently showing.
+      slides.forEach((slide, i) => {
+        if (i !== index && slide.dataset.active === 'true') {
+          slide.dataset.active = 'false';
+          slide.setAttribute('aria-hidden', 'true');
+        }
+      });
+
+      const reveal = () => {
+        slides[index].dataset.active = 'true';
+        slides[index].removeAttribute('aria-hidden');
+      };
+
+      window.clearTimeout(fadeTimer);
+      if (reduce) {
+        reveal();
+      } else {
+        // Wait for the fade-out to finish before fading the next one in.
+        fadeTimer = window.setTimeout(reveal, FADE_MS);
+      }
     };
 
     const start = () => {
@@ -184,13 +207,13 @@ const hasFeature = testimonials.length > 0;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity 600ms var(--ease-out), visibility 0s linear 600ms;
+    transition: opacity 450ms var(--ease-out), visibility 0s linear 450ms;
   }
   .fq[data-active='true'] {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    transition: opacity 600ms var(--ease-out);
+    transition: opacity 450ms var(--ease-out);
   }
   .fq__mark {
     display: block;

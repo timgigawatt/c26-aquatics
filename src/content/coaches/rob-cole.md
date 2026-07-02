@@ -2,6 +2,19 @@
 name: "Rob Cole"
 role: "Head Coach & Program Director"
 headshot: "/coaches/rob-cole.jpg"
+tagline: "Every swimmer matters — from novice to elite, there's a place to thrive."
+specialty: "Strength Program"
+groups:
+  - "Age Group"
+  - "Junior"
+  - "Pre-Senior"
+  - "High School Prep"
+  - "Senior Elite"
+highlights:
+  - "40+ years coaching — 30+ as a club coach"
+  - "USA Swimming Zone Distance Camp Director & Coach"
+  - "Coached National Top 10, Junior National finalists & Olympic Trials qualifiers"
+  - "Led high school programs to 11 state championships & 30 league titles"
 credentials:
   - "40+ Years Coaching"
   - "USA Swimming Registered Coach"

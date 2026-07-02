@@ -2,6 +2,16 @@
 name: "Nick Fisher"
 role: "Assistant Coach"
 headshot: "/coaches/nick-fisher.jpg"
+tagline: "Personal growth, confidence, and a genuine love for the sport."
+specialty: "Breaststroke & Freestyle"
+groups:
+  - "Age Group"
+  - "Junior"
+  - "Pre-Senior"
+highlights:
+  - "In the sport since age six"
+  - "Nearly four years of coaching experience"
+  - "Student at Johnson County Community College"
 credentials:
   - "USA Swimming Registered Coach"
   - "U.S. Center for SafeSport Certified"
