@@ -1,0 +1,44 @@
+---
+/**
+ * SeamAngle — a slanted exit edge where a dark section hands off to a light
+ * one. The band is filled with the dark section's color and clipped along a
+ * shallow diagonal, echoing the brand's 45° stripe motif. Counterpart to
+ * SeamHatch (which marks light→dark entries). Rule of thumb: one divider per
+ * seam, never stacked — the exposed triangle shows the page background, so
+ * use it only where the following section matches --surface-alt.
+ */
+interface Props {
+  /** CSS color of the dark section this seam exits. */
+  color?: string;
+  /** Band height in px. */
+  height?: number;
+  /** Which side the dark edge slopes down toward. */
+  direction?: 'down-left' | 'down-right';
+}
+
+const {
+  color = 'var(--navy-700)',
+  height = 52,
+  direction = 'down-left',
+} = Astro.props;
+---
+<div
+  class={`seam-angle seam-angle--${direction}`}
+  aria-hidden="true"
+  style={`--seam-c: ${color}; --seam-h: ${height}px`}
+></div>
+
+<style>
+  .seam-angle {
+    height: var(--seam-h);
+    /* Overlap the section above by 1px to avoid a hairline gap at some zooms. */
+    margin-top: -1px;
+    background: var(--seam-c);
+  }
+  .seam-angle--down-left {
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+  }
+  .seam-angle--down-right {
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+  }
+</style>

@@ -10,6 +10,7 @@ import MissionBand from '@components/sections/MissionBand.astro';
 import DifferenceMatrix from '@components/sections/DifferenceMatrix.astro';
 import TracksLadder from '@components/sections/TracksLadder.astro';
 import SeamHatch from '@components/ui/SeamHatch.astro';
+import SeamAngle from '@components/ui/SeamAngle.astro';
 import CoachesGrid from '@components/sections/CoachesGrid.astro';
 import TestimonialsBand from '@components/sections/TestimonialsBand.astro';
 import LocationBand from '@components/sections/LocationBand.astro';
@@ -71,6 +72,7 @@ const orgSchema = sportsOrganizationSchema();
     />
 
     <TestimonialsBand variant="feature" featuredOnly={true} />
+    <SeamAngle color="var(--navy-700)" />
 
     <LocationBand />
 

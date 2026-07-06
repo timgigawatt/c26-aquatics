@@ -179,7 +179,8 @@ const {
   }
   .hero--home .hero__inner {
     position: relative;
-    padding: var(--space-16) 0;
+    /* Extra bottom room: the StatsBand card straddles the hero's bottom edge. */
+    padding: var(--space-16) 0 calc(var(--space-16) + var(--space-6));
     width: 100%;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);

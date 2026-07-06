@@ -1,7 +1,7 @@
 ---
 /**
- * StatsBand — navy strip of headline stats under the hero, rendered as a
- * continuously scrolling ticker. The row is duplicated so the loop wraps
+ * StatsBand — navy card of headline stats that straddles the hero's bottom
+ * edge (negative top margin), rendered as a continuously scrolling ticker. The row is duplicated so the loop wraps
  * seamlessly; the duplicate is aria-hidden. Pauses on hover/focus, and under
  * `prefers-reduced-motion` it collapses to a static, centered, wrapped row.
  * Pulls from src/data/stats.ts by default; pass `stats` to override per-page.
@@ -16,29 +16,43 @@ interface Props {
 const { stats = homeStats, ariaLabel = 'Program highlights' } = Astro.props;
 ---
 <section class="ticker" aria-label={ariaLabel}>
-  <div class="ticker__viewport">
-    <div class="ticker__track">
-      {[false, true].map((isClone) => (
-        <ul class="ticker__row" aria-hidden={isClone ? 'true' : undefined}>
-          {stats.map((stat) => (
-            <li class="ticker__item">
-              {stat.value && <span class="ticker__value">{stat.value}</span>}
-              <span class="ticker__label">{stat.label}</span>
-              <span class="ticker__sep" aria-hidden="true">✦</span>
-            </li>
+  <div class="container">
+    <div class="ticker__card">
+      <div class="ticker__viewport">
+        <div class="ticker__track">
+          {[false, true].map((isClone) => (
+            <ul class="ticker__row" aria-hidden={isClone ? 'true' : undefined}>
+              {stats.map((stat) => (
+                <li class="ticker__item">
+                  {stat.value && <span class="ticker__value">{stat.value}</span>}
+                  <span class="ticker__label">{stat.label}</span>
+                  <span class="ticker__sep" aria-hidden="true">✦</span>
+                </li>
+              ))}
+            </ul>
           ))}
-        </ul>
-      ))}
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
+  /* The band straddles the hero's bottom edge: pulled up by --straddle so the
+     card sits half on the dark hero, half on the light run that follows. */
   .ticker {
-    background: var(--navy-900);
+    --straddle: 40px;
+    position: relative;
+    z-index: 2;
+    margin-top: calc(-1 * var(--straddle));
     color: var(--text-on-dark);
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+  .ticker__card {
+    background: var(--navy-800);
+    border-top: 3px solid var(--teal-400);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
   }
   .ticker__viewport {
     overflow: hidden;
