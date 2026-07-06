@@ -14,7 +14,7 @@ import krakenNavy from '@assets/brand/kraken-navy.svg';
 import { sportsOrganizationSchema, jsonLd } from '@lib/schemas';
 import { site } from '@data/site';
 import { publicPhoto } from '@lib/photos';
-import { mission, vision, openWaterCredentials } from '@data/approach';
+import { mission, vision, openWaterCredentials, coachingSystem } from '@data/approach';
 
 const orgSchema = sportsOrganizationSchema();
 const hubPoolPhoto = publicPhoto('/photos/hub-pool');
@@ -36,6 +36,25 @@ const openWaterPhoto = publicPhoto('/photos/open-water');
       title="Our <span class='hero-accent'>approach</span>"
       subtitle="Great swimmers are developed through purpose, patience, and consistency — not endless laps and accumulated yardage."
     />
+
+    <!-- The C26 coaching system — six things every practice includes -->
+    <NumberedPrinciples
+      id="coaching-system"
+      tone="alt"
+      eyebrow="The C26 coaching system"
+      heading="Our coaches don't supervise workouts. They coach."
+      intro={[
+        'At C26 Aquatics, every coach teaches from the same coaching philosophy.',
+        'Every drill, every set, every conversation, and every practice is intentionally designed to develop not only faster swimmers — but more confident athletes and better people.',
+        'That means every practice includes:',
+      ]}
+      items={coachingSystem}
+    >
+      <div slot="outro" class="coaching-outro">
+        <p class="coaching-outro__lead">Most swim clubs measure success by attendance and race results. We believe race results are simply the outcome of hundreds of meaningful coaching moments. Our responsibility is to win those moments every single day.</p>
+        <p class="coaching-outro__text">Every coach at C26 Aquatics is trained within this system. Regardless of which coach is leading a lane on a given day, families can expect the same standard of instruction, communication, accountability, and care.</p>
+      </div>
+    </NumberedPrinciples>
 
     <!-- The C26 method — four numbered principles -->
     <NumberedPrinciples />
@@ -182,6 +201,28 @@ const openWaterPhoto = publicPhoto('/photos/open-water');
 </Base>
 
 <style>
+  /* Coaching system outro — emphasized closing block */
+  .coaching-outro {
+    max-width: 760px;
+    border-left: 5px solid var(--teal-500);
+    padding-left: clamp(var(--space-6), 4vw, var(--space-10, 40px));
+  }
+  .coaching-outro__lead {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: clamp(20px, 2.4vw, 27px);
+    line-height: 1.25;
+    color: var(--navy-700);
+    margin: 0 0 var(--space-4);
+    text-wrap: balance;
+  }
+  .coaching-outro__text {
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: var(--text-body);
+    margin: 0;
+  }
+
   /* Navy pull-quote */
   .pullquote {
     background: var(--navy-900);

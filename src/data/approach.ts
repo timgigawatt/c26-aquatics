@@ -49,6 +49,44 @@ export const principles: Principle[] = [
 ];
 
 /**
+ * The C26 coaching system — the six things every practice includes. Rendered
+ * as numbered cards by NumberedPrinciples.astro on /our-approach (a matched
+ * pair with `principles` above); titles feed the homepage teaser strip.
+ */
+export const coachingSystem: Principle[] = [
+  {
+    n: '01',
+    title: 'Teach',
+    body: 'Every swimmer receives technical instruction throughout practice — not just corrections when something goes wrong. We explain why. We demonstrate how. We help swimmers understand what they are trying to accomplish.',
+  },
+  {
+    n: '02',
+    title: 'Observe',
+    body: 'Our coaches are constantly watching — not simply counting intervals. We look for movement patterns, habits, body position, breathing, timing, confidence, and effort. Small adjustments made daily become major improvements over time.',
+  },
+  {
+    n: '03',
+    title: 'Correct',
+    body: 'Immediate feedback matters. Because of our smaller coach-to-swimmer ratios, corrections happen in real time. Instead of repeating poor habits for months, swimmers receive consistent coaching every practice.',
+  },
+  {
+    n: '04',
+    title: 'Reinforce',
+    body: "When swimmers make improvements, we recognize them. Confidence grows when athletes know what they're doing well. Positive reinforcement creates athletes who enjoy the process of getting better.",
+  },
+  {
+    n: '05',
+    title: 'Challenge',
+    body: 'Every swimmer deserves to be challenged — but at the appropriate level. Practices are designed to stretch athletes beyond their comfort zone without overwhelming them. We meet swimmers where they are while preparing them for where they want to go.',
+  },
+  {
+    n: '06',
+    title: 'Connect',
+    body: 'Relationships matter. Great coaching begins with trust. We intentionally build relationships with every swimmer so they know they are valued beyond their performances.',
+  },
+];
+
+/**
  * Coach Robbie's marquee open-water results, shown as a credential chip row in
  * the "Beyond the pool" band on /our-approach. Condensed from the page prose.
  */

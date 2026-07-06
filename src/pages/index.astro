@@ -20,7 +20,7 @@ import CTABand from '@components/sections/CTABand.astro';
 import { sportsOrganizationSchema, jsonLd } from '@lib/schemas';
 import { site } from '@data/site';
 import { publicPhoto } from '@lib/photos';
-import { mission } from '@data/approach';
+import { mission, coachingSystem } from '@data/approach';
 
 const orgSchema = sportsOrganizationSchema();
 ---
@@ -59,7 +59,20 @@ const orgSchema = sportsOrganizationSchema();
     <DifferenceMatrix
       condensed
       cta={{ label: 'See the full comparison', href: '/our-approach#difference' }}
-    />
+    >
+      <div slot="after-rows" class="coach-teaser">
+        <p class="coach-teaser__line">Six things every C26 practice includes — from every coach, in every group.</p>
+        <ul class="coach-teaser__words" aria-label="The C26 coaching system">
+          {coachingSystem.map((c) => (
+            <li class="coach-teaser__word">{c.title}</li>
+          ))}
+        </ul>
+        <a class="coach-teaser__cta" href="/our-approach/#coaching-system">
+          See how we coach
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    </DifferenceMatrix>
 
     <TracksLadder />
 
@@ -94,4 +107,58 @@ const orgSchema = sportsOrganizationSchema();
   <Footer />
   <ConsentBanner />
 </Base>
+
+<style>
+  /* Coaching-system teaser inside the Why C26 section */
+  .coach-teaser {
+    margin-top: var(--space-8);
+  }
+  .coach-teaser__line {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--text-body);
+    margin: 0 0 var(--space-4);
+  }
+  .coach-teaser__words {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+  .coach-teaser__word {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 13px;
+    color: var(--teal-700);
+    background: var(--surface);
+    border: 1px solid var(--teal-400);
+    border-radius: var(--r-pill);
+    padding: 8px 18px;
+  }
+  .coach-teaser__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-5);
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 14px;
+    color: var(--teal-700);
+    border-bottom: 2px solid transparent;
+    padding-bottom: 2px;
+    transition:
+      color var(--dur-base) var(--ease-out),
+      border-color var(--dur-base) var(--ease-out);
+  }
+  .coach-teaser__cta:hover {
+    color: var(--navy-700);
+    border-bottom-color: var(--teal-500);
+  }
+</style>
 

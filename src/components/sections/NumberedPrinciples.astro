@@ -1,35 +1,54 @@
 ---
 /**
- * NumberedPrinciples — the four commitments of the C26 method as big-number
- * principle cards (2×2 on desktop, single column under ~860px). Replaces the
- * old "Train with purpose" prose wall on /our-approach. Data from
- * src/data/approach.ts. Numbers 01/02 render teal, 03/04 orange (by index).
+ * NumberedPrinciples — big-number principle cards (2 columns on desktop,
+ * single column under ~860px). Used for the four commitments of the C26
+ * method and the six-item C26 coaching system on /our-approach. Data from
+ * src/data/approach.ts. Number accents alternate teal/orange by row pair
+ * (01/02 teal, 03/04 orange, 05/06 teal, …).
+ *
+ * `intro` accepts a string or string[] (rendered as separate paragraphs);
+ * an optional named `outro` slot renders below the grid.
  */
 import { principles, type Principle } from '@data/approach';
 
 interface Props {
+  /** Anchor id for deep links; also namespaces the heading id. */
+  id?: string;
   eyebrow?: string;
   heading?: string;
-  intro?: string;
+  intro?: string | string[];
   items?: Principle[];
+  /** 'alt' renders on var(--surface-alt) instead of var(--surface). */
+  tone?: 'default' | 'alt';
 }
 
 const {
+  id,
   eyebrow = 'The C26 method',
   heading = 'Train with purpose',
   intro = 'Every practice has a purpose. Every set has an objective. Every season has a plan. Our whole philosophy comes down to four commitments we make to every swimmer.',
   items = principles,
+  tone = 'default',
 } = Astro.props;
+
+const introParas = Array.isArray(intro) ? intro : [intro];
+const headingId = id ? `${id}-title` : 'principles-title';
 ---
-<section class="principles" aria-labelledby="principles-title">
+<section
+  id={id}
+  class:list={['principles', { 'principles--alt': tone === 'alt' }]}
+  aria-labelledby={headingId}
+>
   <div class="container">
     <p class="principles__eyebrow">{eyebrow}</p>
-    <h2 id="principles-title" class="principles__heading">{heading}</h2>
-    <p class="principles__intro">{intro}</p>
+    <h2 id={headingId} class="principles__heading">{heading}</h2>
+    {introParas.map((p) => (
+      <p class="principles__intro">{p}</p>
+    ))}
 
     <ul class="principles__grid">
       {items.map((p, i) => (
-        <li class="principle" data-accent={i < 2 ? 'teal' : 'orange'}>
+        <li class="principle" data-accent={Math.floor(i / 2) % 2 === 0 ? 'teal' : 'orange'}>
           <span class="principle__num" aria-hidden="true">{p.n}</span>
           <div class="principle__body">
             <h3 class="principle__title">{p.title}</h3>
@@ -38,6 +57,12 @@ const {
         </li>
       ))}
     </ul>
+
+    {Astro.slots.has('outro') && (
+      <div class="principles__outro">
+        <slot name="outro" />
+      </div>
+    )}
   </div>
 </section>
 
@@ -45,6 +70,10 @@ const {
   .principles {
     background: var(--surface);
     padding: var(--section-y) 0;
+    scroll-margin-top: 96px;
+  }
+  .principles--alt {
+    background: var(--surface-alt);
   }
   .principles__eyebrow {
     font-family: var(--font-subhead);
@@ -71,6 +100,13 @@ const {
     color: var(--text-body);
     margin: 0;
     max-width: 680px;
+  }
+  .principles__intro + .principles__intro {
+    margin-top: var(--space-3);
+  }
+
+  .principles__outro {
+    margin-top: 56px;
   }
 
   .principles__grid {

@@ -77,6 +77,8 @@ const introText = intro ?? (condensed ? undefined : differenceIntro);
       </div>
     </div>
 
+    <slot name="after-rows" />
+
     <div class="dm__summary">
       {!condensed && <p class="dm__summary-text">{summary}</p>}
       <p class="dm__tagline">{tagline}</p>
