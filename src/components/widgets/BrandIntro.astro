@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import krakenWhite from '@assets/brand/kraken-white.png';
+import krakenWhite from '@assets/brand/kraken-white.svg';
 import wordmarkNavy from '@assets/brand/wordmark-navy.png';
 ---
 <script is:inline>
@@ -20,13 +20,12 @@ import wordmarkNavy from '@assets/brand/wordmark-navy.png';
   <div class="c26-intro__flash c26-intro__flash--sw"></div>
   <div class="c26-intro__flash c26-intro__flash--se"></div>
   <div class="c26-intro__lockup">
-    <Image
-      src={krakenWhite}
+    <img
+      src={krakenWhite.src}
       alt=""
       class="c26-intro__kraken"
       width={560}
       height={560}
-      densities={[1, 2]}
       loading="eager"
       decoding="sync"
     />

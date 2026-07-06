@@ -3,9 +3,8 @@
  * CTABand — full-bleed final-call section.
  * `title` is rendered with `set:html` so accent spans (e.g. orange highlight words) work.
  */
-import { Image } from 'astro:assets';
 import Button from '@components/ui/Button.astro';
-import krakenWhite from '@assets/brand/kraken-white.png';
+import krakenWhite from '@assets/brand/kraken-white.svg';
 
 interface CTA {
   label: string;
@@ -39,13 +38,11 @@ const {
   aria-labelledby="cta-band-title"
 >
   {watermark && (
-    <Image
-      src={krakenWhite}
+    <img
+      src={krakenWhite.src}
       alt=""
       aria-hidden="true"
       class:list={['cta-band__watermark', `cta-band__watermark--${watermark}`]}
-      widths={[480, 720]}
-      sizes="60vw"
       loading="lazy"
     />
   )}

@@ -7,8 +7,7 @@
  * No real founders photo yet — pass `image` (a runtime path under /public) to use
  * one; otherwise we render a branded kraken placeholder so the section ships.
  */
-import { Image } from 'astro:assets';
-import krakenWhite from '@assets/brand/kraken-white.png';
+import krakenWhite from '@assets/brand/kraken-white.svg';
 
 interface Props {
   eyebrow?: string;
@@ -60,12 +59,10 @@ const {
         />
       ) : (
         <div class="mission__placeholder" role="img" aria-label="Founders / story photo — coming soon">
-          <Image
-            src={krakenWhite}
+          <img
+            src={krakenWhite.src}
             alt=""
             class="mission__placeholder-kraken"
-            widths={[320, 480]}
-            sizes="(max-width: 800px) 60vw, 30vw"
             loading="lazy"
           />
           <span class="mission__placeholder-label">Founders / story photo</span>

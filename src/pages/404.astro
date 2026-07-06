@@ -1,10 +1,9 @@
 ---
-import { Image } from 'astro:assets';
 import Base from '@layouts/Base.astro';
 import Header from '@components/layout/Header.astro';
 import Footer from '@components/layout/Footer.astro';
 import Button from '@components/ui/Button.astro';
-import krakenOrange from '@assets/brand/kraken-orange.png';
+import krakenOrange from '@assets/brand/kraken-orange.svg';
 ---
 <Base
   title="Page not found | C26 Aquatics"
@@ -13,8 +12,8 @@ import krakenOrange from '@assets/brand/kraken-orange.png';
   <Header />
   <main class="notfound">
     <div class="container notfound__inner">
-      <Image
-        src={krakenOrange}
+      <img
+        src={krakenOrange.src}
         alt=""
         class="notfound__kraken"
         width={180}

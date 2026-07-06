@@ -7,8 +7,7 @@
  * Address/venue/amenities come from `site.address` + `site.place`. Hours render
  * only once `site.place.hours` is filled in (still TODO — confirm with client).
  */
-import { Image } from 'astro:assets';
-import krakenNavy from '@assets/brand/kraken-navy.png';
+import krakenNavy from '@assets/brand/kraken-navy.svg';
 import { site } from '@data/site';
 
 interface Props {
@@ -90,12 +89,10 @@ const {
         />
       ) : (
         <div class="location__placeholder" role="img" aria-label="Facility map / exterior photo — coming soon">
-          <Image
-            src={krakenNavy}
+          <img
+            src={krakenNavy.src}
             alt=""
             class="location__placeholder-kraken"
-            widths={[320, 480]}
-            sizes="(max-width: 800px) 60vw, 40vw"
             loading="lazy"
           />
           <span class="location__placeholder-label">Facility map / exterior</span>

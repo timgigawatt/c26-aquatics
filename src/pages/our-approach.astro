@@ -10,7 +10,7 @@ import DifferenceMatrix from '@components/sections/DifferenceMatrix.astro';
 import CoreValues from '@components/sections/CoreValues.astro';
 import SeamHatch from '@components/ui/SeamHatch.astro';
 import CTABand from '@components/sections/CTABand.astro';
-import krakenNavy from '@assets/brand/kraken-navy.png';
+import krakenNavy from '@assets/brand/kraken-navy.svg';
 import { sportsOrganizationSchema, jsonLd } from '@lib/schemas';
 import { site } from '@data/site';
 import { publicPhoto } from '@lib/photos';
@@ -101,12 +101,10 @@ const openWaterPhoto = publicPhoto('/photos/open-water');
             />
           ) : (
             <>
-              <Image
-                src={krakenNavy}
+              <img
+                src={krakenNavy.src}
                 alt=""
                 class="feature__placeholder-kraken"
-                widths={[320, 480]}
-                sizes="(max-width: 860px) 90vw, 45vw"
                 loading="lazy"
               />
               <span class="feature__placeholder-label">Facility photo — C26 Hub pool</span>
@@ -158,12 +156,10 @@ const openWaterPhoto = publicPhoto('/photos/open-water');
             />
           ) : (
             <>
-              <Image
-                src={krakenNavy}
+              <img
+                src={krakenNavy.src}
                 alt=""
                 class="feature__placeholder-kraken"
-                widths={[320, 480]}
-                sizes="(max-width: 860px) 90vw, 45vw"
                 loading="lazy"
               />
               <span class="feature__placeholder-label">Open water action photo</span>

@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import krakenWhite from '@assets/brand/kraken-white.png';
+import krakenWhite from '@assets/brand/kraken-white.svg';
 import wordmark from '@assets/brand/wordmark-navy.png';
 import { footerLinks } from '@data/nav';
 import { site } from '@data/site';
@@ -13,13 +13,12 @@ const cityList = serviceArea.map((c) => `${c.name}, ${c.state}`).join(' · ');
   <div class="c26-footer__inner">
     <div class="c26-footer__col c26-footer__col--brand">
       <a href="/" class="c26-footer__brand" aria-label={`${site.name} home`}>
-        <Image
-          src={krakenWhite}
+        <img
+          src={krakenWhite.src}
           alt=""
           class="c26-footer__kraken"
           width={76}
           height={76}
-          densities={[1, 2]}
           loading="lazy"
           decoding="async"
         />

@@ -9,11 +9,10 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { Image } from 'astro:assets';
 import { getCollection, getEntries, type CollectionEntry } from 'astro:content';
 import Card from '@components/ui/Card.astro';
 import Badge from '@components/ui/Badge.astro';
-import krakenWhite from '@assets/brand/kraken-white.png';
+import krakenWhite from '@assets/brand/kraken-white.svg';
 
 interface Props {
   limit?: number;
@@ -82,13 +81,11 @@ const rendered = await Promise.all(
   aria-labelledby="coaches-title"
 >
   {watermark && (
-    <Image
-      src={krakenWhite}
+    <img
+      src={krakenWhite.src}
       alt=""
       aria-hidden="true"
       class:list={['coaches__watermark', `coaches__watermark--${watermark}`]}
-      widths={[480, 720]}
-      sizes="60vw"
       loading="lazy"
     />
   )}
