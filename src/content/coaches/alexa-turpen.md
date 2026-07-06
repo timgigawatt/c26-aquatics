@@ -14,9 +14,8 @@ highlights:
   - "B.S. in Biological Sciences, Arizona State University"
 credentials:
   - "USA Swimming Registered Coach"
-  - "U.S. Center for SafeSport Certified"
 usaSwimmingMember: true
-safeSportCertified: true
+safeSportCertified: false
 order: 3
 ---
 

@@ -54,9 +54,6 @@ export const site = {
     team: 'https://momence.com/C26-Hub-LLC/product/Swim-Team-Evaluation-and-Placement-Fee%3A-%24100.00/500138',
   },
 
-  // Compliance / governance link
-  safeSportUrl: 'https://uscenterforsafesport.org',
-
   // GA4 — set via env var or hardcode once provisioned
   // TODO: replace with real measurement ID
   ga4MeasurementId: 'G-XXXXXXXXXX',

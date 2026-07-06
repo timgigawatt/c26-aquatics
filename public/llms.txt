@@ -7,7 +7,7 @@
 - [Home](https://c26aquatics.com/): Overview of the two programs (competitive team and swim lessons), coaches, service area, and quick answers to common questions.
 - [Team](https://c26aquatics.com/team): The competitive swim team — training groups by age and ability, coaching philosophy, results, and how to join.
 - [Swim Lessons](https://c26aquatics.com/swim-lessons): Learn-to-swim program for all ages — infant/parent classes, kids, teens, adults; group, semi-private, and private formats.
-- [Coaches](https://c26aquatics.com/coaches): Full coaching roster with credentials, including USA Swimming membership and U.S. Center for SafeSport certification.
+- [Coaches](https://c26aquatics.com/coaches): Full coaching roster with credentials, including USA Swimming membership.
 - [About](https://c26aquatics.com/about): Story, philosophy, and service area covering the Kansas City metro.
 - [FAQ](https://c26aquatics.com/faq): Frequently asked questions across team, lessons, and logistics.
 

@@ -17,9 +17,8 @@ highlights:
 credentials:
   - "40+ Years Coaching"
   - "USA Swimming Registered Coach"
-  - "U.S. Center for SafeSport Certified"
 usaSwimmingMember: true
-safeSportCertified: true
+safeSportCertified: false
 order: 1
 ---
 

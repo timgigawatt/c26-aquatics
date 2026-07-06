@@ -14,9 +14,8 @@ highlights:
   - "Student at Johnson County Community College"
 credentials:
   - "USA Swimming Registered Coach"
-  - "U.S. Center for SafeSport Certified"
 usaSwimmingMember: true
-safeSportCertified: true
+safeSportCertified: false
 order: 4
 ---
 

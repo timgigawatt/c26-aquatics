@@ -17,9 +17,8 @@ highlights:
 credentials:
   - "Open Water Specialist"
   - "USA Swimming Registered Coach"
-  - "U.S. Center for SafeSport Certified"
 usaSwimmingMember: true
-safeSportCertified: true
+safeSportCertified: false
 order: 2
 ---
 

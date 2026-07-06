@@ -1,5 +1,3 @@
-import { site } from '@data/site';
-
 export interface NavItem {
   label: string;
   href: string;
@@ -13,7 +11,6 @@ export const primaryNav: readonly NavItem[] = [
   { label: 'Our Story', href: '/our-story' },
   { label: 'Coaches', href: '/coaches' },
   { label: 'FAQ', href: '/faq' },
-  { label: 'Safe Sport', href: site.safeSportUrl, external: true },
 ] as const;
 
 export const footerLinks: readonly NavItem[] = [
