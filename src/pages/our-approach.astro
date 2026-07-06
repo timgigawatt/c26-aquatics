@@ -12,9 +12,12 @@ import SeamHatch from '@components/ui/SeamHatch.astro';
 import CTABand from '@components/sections/CTABand.astro';
 import krakenNavy from '@assets/brand/kraken-navy.png';
 import { sportsOrganizationSchema, jsonLd } from '@lib/schemas';
+import { publicPhoto } from '@lib/photos';
 import { mission, vision, openWaterCredentials } from '@data/approach';
 
 const orgSchema = sportsOrganizationSchema();
+const hubPoolPhoto = publicPhoto('/photos/hub-pool');
+const openWaterPhoto = publicPhoto('/photos/open-water');
 ---
 <Base
   title="Our Approach | C26 Aquatics"
@@ -81,16 +84,33 @@ const orgSchema = sportsOrganizationSchema();
     <!-- Our home -->
     <section id="our-home" class="feature feature--alt" aria-labelledby="home-title">
       <div class="container feature__inner">
-        <div class="feature__media" role="img" aria-label="Facility photo — the C26 Hub pool">
-          <Image
-            src={krakenNavy}
-            alt=""
-            class="feature__placeholder-kraken"
-            widths={[320, 480]}
-            sizes="(max-width: 860px) 90vw, 45vw"
-            loading="lazy"
-          />
-          <span class="feature__placeholder-label">Facility photo — C26 Hub pool</span>
+        <div
+          class="feature__media"
+          role={hubPoolPhoto ? undefined : 'img'}
+          aria-label={hubPoolPhoto ? undefined : 'Facility photo — the C26 Hub pool'}
+        >
+          {hubPoolPhoto ? (
+            <Image
+              src={hubPoolPhoto}
+              alt="The three-lane lap pool at the C26 Hub"
+              width="800"
+              height="600"
+              class="feature__photo"
+              loading="lazy"
+            />
+          ) : (
+            <>
+              <Image
+                src={krakenNavy}
+                alt=""
+                class="feature__placeholder-kraken"
+                widths={[320, 480]}
+                sizes="(max-width: 860px) 90vw, 45vw"
+                loading="lazy"
+              />
+              <span class="feature__placeholder-label">Facility photo — C26 Hub pool</span>
+            </>
+          )}
         </div>
         <div class="feature__copy">
           <p class="feature__eyebrow">Our home</p>
@@ -121,16 +141,33 @@ const orgSchema = sportsOrganizationSchema();
             Read the full story
           </a>
         </div>
-        <div class="feature__media" role="img" aria-label="Open water action photo">
-          <Image
-            src={krakenNavy}
-            alt=""
-            class="feature__placeholder-kraken"
-            widths={[320, 480]}
-            sizes="(max-width: 860px) 90vw, 45vw"
-            loading="lazy"
-          />
-          <span class="feature__placeholder-label">Open water action photo</span>
+        <div
+          class="feature__media"
+          role={openWaterPhoto ? undefined : 'img'}
+          aria-label={openWaterPhoto ? undefined : 'Open water action photo'}
+        >
+          {openWaterPhoto ? (
+            <Image
+              src={openWaterPhoto}
+              alt="C26 swimmers competing in an open water race"
+              width="800"
+              height="600"
+              class="feature__photo"
+              loading="lazy"
+            />
+          ) : (
+            <>
+              <Image
+                src={krakenNavy}
+                alt=""
+                class="feature__placeholder-kraken"
+                widths={[320, 480]}
+                sizes="(max-width: 860px) 90vw, 45vw"
+                loading="lazy"
+              />
+              <span class="feature__placeholder-label">Open water action photo</span>
+            </>
+          )}
         </div>
       </div>
     </section>
@@ -370,6 +407,11 @@ const orgSchema = sportsOrganizationSchema();
     width: 42%;
     height: auto;
     opacity: 0.12;
+  }
+  .feature__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   .feature__placeholder-label {
     position: absolute;
