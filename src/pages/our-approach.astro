@@ -63,6 +63,21 @@ const orgSchema = sportsOrganizationSchema();
     <!-- Core Values -->
     <CoreValues />
 
+    <!-- Swimming & well-being -->
+    <section id="well-being" class="wellbeing" aria-labelledby="wellbeing-title">
+      <div class="container wellbeing__inner">
+        <p class="wellbeing__eyebrow">Beyond the scoreboard</p>
+        <h2 id="wellbeing-title" class="wellbeing__heading">More than a sport</h2>
+        <p class="wellbeing__text">Swimming isn't just about learning strokes and improving times. Research consistently shows that regular physical activity can improve anxiety, emotional regulation, attention, and executive functioning in children and adolescents.</p>
+        <p class="wellbeing__text">The unique nature of swimming makes it especially beneficial. The rhythmic breathing, repetitive movements, structured environment, and sensory experience of the water can help many children feel calmer, more focused, and more regulated. Swimming also provides predictable routines, clear expectations, and opportunities to build confidence through measurable progress.</p>
+        <p class="wellbeing__text">For children with ADHD, research has found that regular exercise can significantly improve attention, emotional regulation, and symptoms of anxiety and depression. Studies examining different forms of exercise have also found that aquatic exercise may be particularly beneficial for improving attention and cognitive flexibility.</p>
+        <p class="wellbeing__text">At C26 Aquatics, we've seen firsthand how swimming can become much more than a sport. It can be an outlet, a confidence builder, a source of belonging, and a place where kids discover what they are capable of achieving.</p>
+        <aside class="wellbeing__note">
+          <p>Swimming is not a replacement for professional medical or psychological care. But we firmly believe that a supportive team environment, meaningful relationships with coaches, purposeful movement, and the confidence that comes from mastering new skills can positively impact a child's overall well-being.</p>
+        </aside>
+      </div>
+    </section>
+
     <!-- Our home -->
     <section id="our-home" class="feature feature--alt" aria-labelledby="home-title">
       <div class="container feature__inner">
@@ -192,6 +207,54 @@ const orgSchema = sportsOrganizationSchema();
     font-size: 16px;
     line-height: 1.65;
     color: var(--text-body);
+  }
+
+  /* Swimming & well-being */
+  .wellbeing {
+    background: var(--surface);
+    padding: var(--section-y) 0;
+  }
+  .wellbeing__inner {
+    max-width: 860px;
+    margin-inline: auto;
+  }
+  .wellbeing__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--teal-600);
+    margin: 0 0 var(--space-2);
+  }
+  .wellbeing__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(26px, 3vw, 34px);
+    line-height: 1.04;
+    letter-spacing: var(--ls-tight);
+    color: var(--navy-700);
+    margin: 0 0 var(--space-4);
+  }
+  .wellbeing__text {
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: var(--text-body);
+    margin: 0 0 var(--space-4);
+  }
+  .wellbeing__note {
+    margin-top: var(--space-6);
+    padding: var(--space-4) var(--space-5);
+    border-left: 3px solid var(--teal-500);
+    background: var(--surface-alt);
+    border-radius: var(--r-md);
+  }
+  .wellbeing__note p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-muted);
   }
 
   /* Feature bands (Our home / Beyond the pool) */
