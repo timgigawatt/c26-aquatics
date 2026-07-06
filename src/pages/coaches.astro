@@ -12,6 +12,7 @@ import {
   coachesListSchema,
   jsonLd,
 } from '@lib/schemas';
+import { site } from '@data/site';
 
 type CoachEntry = CollectionEntry<'coaches'>;
 
@@ -58,7 +59,7 @@ const coachListSchema = coachesListSchema(coachesForSchema);
 
     <CTABand
       title="Train with the <span class='hero-accent accent'>best</span>"
-      primaryCta={{ label: 'Join the Team', href: '/team' }}
+      primaryCta={{ label: 'Join the Team', href: site.booking.team, external: true }}
       secondaryCta={{ label: 'Read our approach', href: '/our-approach' }}
     />
   </main>

@@ -12,6 +12,7 @@ import {
   aboutPageSchema,
   jsonLd,
 } from '@lib/schemas';
+import { site } from '@data/site';
 
 const orgSchema = sportsOrganizationSchema();
 const aboutSchema = aboutPageSchema();
@@ -77,7 +78,7 @@ const aboutSchema = aboutPageSchema();
     <CTABand
       title="Come <span class='hero-accent accent'>swim with us</span>"
       watermark="left"
-      primaryCta={{ label: 'Join the Team', href: '/team' }}
+      primaryCta={{ label: 'Join the Team', href: site.booking.team, external: true }}
       secondaryCta={{ label: 'Read our approach', href: '/our-approach' }}
     />
   </main>

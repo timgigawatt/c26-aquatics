@@ -18,6 +18,7 @@ import ServiceAreaBand from '@components/sections/ServiceAreaBand.astro';
 import FAQAccordion from '@components/sections/FAQAccordion.astro';
 import CTABand from '@components/sections/CTABand.astro';
 import { sportsOrganizationSchema, jsonLd } from '@lib/schemas';
+import { site } from '@data/site';
 import { publicPhoto } from '@lib/photos';
 import { mission } from '@data/approach';
 
@@ -38,7 +39,7 @@ const orgSchema = sportsOrganizationSchema();
       variant="home"
       title="Become a <span class=&quot;hero-accent-magenta&quot;>stronger</span> swimmer"
       subtitle="Competitive swim training in the Kansas City metro — one pool, one coaching staff, one standard."
-      primaryCta={{ label: 'Join the Team', href: '/team' }}
+      primaryCta={{ label: 'Join the Team', href: site.booking.team, external: true }}
       secondaryCta={{ label: 'Explore training groups', href: '#tracks' }}
     />
 
@@ -86,7 +87,7 @@ const orgSchema = sportsOrganizationSchema();
     <CTABand
       title="Get in the <span class='hero-accent accent'>water</span>"
       watermark="right"
-      primaryCta={{ label: 'Join the Team', href: '/team' }}
+      primaryCta={{ label: 'Join the Team', href: site.booking.team, external: true }}
       secondaryCta={{ label: 'Read our approach', href: '/our-approach' }}
     />
   </main>

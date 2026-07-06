@@ -12,6 +12,7 @@ import SeamHatch from '@components/ui/SeamHatch.astro';
 import CTABand from '@components/sections/CTABand.astro';
 import krakenNavy from '@assets/brand/kraken-navy.png';
 import { sportsOrganizationSchema, jsonLd } from '@lib/schemas';
+import { site } from '@data/site';
 import { publicPhoto } from '@lib/photos';
 import { mission, vision, openWaterCredentials } from '@data/approach';
 
@@ -176,7 +177,7 @@ const openWaterPhoto = publicPhoto('/photos/open-water');
     <CTABand
       title="Ready to <span class='hero-accent accent'>join the team</span>?"
       watermark="right"
-      primaryCta={{ label: 'Join the Team', href: '/team' }}
+      primaryCta={{ label: 'Join the Team', href: site.booking.team, external: true }}
       secondaryCta={{ label: 'Read our story', href: '/our-story' }}
     />
   </main>

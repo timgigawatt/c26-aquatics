@@ -49,10 +49,9 @@ export const site = {
    * Update once the booking system / public URLs are confirmed.
    */
   booking: {
-    // TODO: real registration URL — the Stripe / product link for team
-    // evaluations that Robbie still owes. Wired to the "Join the Team" CTAs
-    // and the /team evaluations section.
-    team: 'https://example.com/c26-team-tryout',
+    // Momence product page for the team evaluation & placement fee. Wired to
+    // every "Join the Team" CTA and the /team evaluations section.
+    team: 'https://momence.com/C26-Hub-LLC/product/Swim-Team-Evaluation-and-Placement-Fee%3A-%24100.00/500138',
   },
 
   // Compliance / governance link
