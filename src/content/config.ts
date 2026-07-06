@@ -1,4 +1,4 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection, reference, z } from 'astro:content';
 
 const coaches = defineCollection({
   type: 'content',
@@ -9,10 +9,12 @@ const coaches = defineCollection({
     // One-line hook shown on the card face (the personality line, pulled
     // from the bio). Keeps the collapsed card scannable.
     tagline: z.string().optional(),
-    // Training groups this coach leads — rendered as scannable chips.
-    groups: z.array(z.string()).default([]),
-    // Signature focus (e.g. "Open Water", "Strength Program").
-    specialty: z.string().optional(),
+    // Training groups this coach leads, as validated references — array order
+    // is the chip display order. Each chip links to /team#<slug>.
+    groups: z.array(reference('training-groups')).default([]),
+    // Non-group programs (e.g. "Strength", "Open Water") — unlinked chips
+    // rendered after the group chips.
+    programs: z.array(z.string()).default([]),
     // Career highlights surfaced as a bullet list inside the bio dialog —
     // the résumé facts otherwise buried in the prose.
     highlights: z.array(z.string()).default([]),

@@ -10,7 +10,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { Image } from 'astro:assets';
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, getEntries, type CollectionEntry } from 'astro:content';
 import Card from '@components/ui/Card.astro';
 import Badge from '@components/ui/Badge.astro';
 import krakenWhite from '@assets/brand/kraken-white.png';
@@ -67,7 +67,13 @@ const rendered = await Promise.all(
     const hasHeadshot = fs.existsSync(
       path.join(process.cwd(), 'public', coach.data.headshot),
     );
-    return { coach, Content, hasHeadshot, initials: initialsOf(coach.data.name) };
+    // Resolve group references (frontmatter order preserved) so chips show the
+    // group's real name and link to its tab on /team.
+    const groups = (await getEntries(coach.data.groups)).map((entry) => ({
+      name: entry.data.name,
+      href: `/team#${entry.slug}`,
+    }));
+    return { coach, Content, groups, hasHeadshot, initials: initialsOf(coach.data.name) };
   }),
 );
 ---
@@ -94,7 +100,7 @@ const rendered = await Promise.all(
     </header>
 
     <div class="coaches__grid">
-      {rendered.map(({ coach, Content, hasHeadshot, initials }) => (
+      {rendered.map(({ coach, groups, hasHeadshot, initials }) => (
         <article id={coach.slug} class:list={['coach-card', { 'coach-card--compact': compact }]}>
           <div class="coach-card__media">
             {hasHeadshot ? (
@@ -118,17 +124,13 @@ const rendered = await Promise.all(
             {!compact && coach.data.tagline && (
               <p class="coach-card__tagline">{coach.data.tagline}</p>
             )}
-            {!compact && (coach.data.specialty || coach.data.groups.length > 0) && (
+            {!compact && (groups.length > 0 || coach.data.programs.length > 0) && (
               <div class="coach-card__facts">
-                {coach.data.specialty && (
-                  <Badge tone={tone === 'dark' ? 'teal' : 'teal'} size="sm">
-                    {coach.data.specialty}
-                  </Badge>
-                )}
-                {coach.data.groups.map((group) => (
-                  <Badge tone={tone === 'dark' ? 'outline-light' : 'neutral'} size="sm">
-                    {group}
-                  </Badge>
+                {groups.map((group) => (
+                  <a class="coach-chip" href={group.href}>{group.name}</a>
+                ))}
+                {coach.data.programs.map((program) => (
+                  <Badge tone="teal" size="sm">{program}</Badge>
                 ))}
               </div>
             )}
@@ -149,7 +151,7 @@ const rendered = await Promise.all(
       ))}
     </div>
 
-    {!compact && rendered.map(({ coach, Content, hasHeadshot, initials }) => (
+    {!compact && rendered.map(({ coach, Content, groups, hasHeadshot, initials }) => (
       <dialog id={`bio-${coach.slug}`} class="coach-dialog" aria-labelledby={`bio-${coach.slug}-name`}>
         <div class="coach-dialog__inner">
           <button
@@ -187,6 +189,19 @@ const rendered = await Promise.all(
           </div>
 
           <div class="coach-dialog__body">
+            {(groups.length > 0 || coach.data.programs.length > 0) && (
+              <div class="coach-dialog__facts">
+                <h4 class="coach-dialog__facts-title">Groups &amp; programs</h4>
+                <div class="coach-card__facts">
+                  {groups.map((group) => (
+                    <a class="coach-chip" href={group.href}>{group.name}</a>
+                  ))}
+                  {coach.data.programs.map((program) => (
+                    <Badge tone="teal" size="sm">{program}</Badge>
+                  ))}
+                </div>
+              </div>
+            )}
             <div class="coach-dialog__bio">
               <Content />
             </div>
@@ -408,11 +423,67 @@ const rendered = await Promise.all(
   .coaches--dark .coach-card__tagline { color: var(--text-on-dark-muted); }
   .coaches--light .coach-card__tagline { color: var(--text-body); }
 
-  /* Scannable specialty + groups chips */
+  /* Scannable groups + programs chips */
   .coach-card__facts {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
+  }
+
+  /* Group chip — a link to the group's tab on /team, styled to sit beside the
+   * Badge program chips. Base style is for light surfaces (dialog, light tone);
+   * dark cards get an outline-light override below. */
+  .coach-chip {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: var(--r-pill);
+    white-space: nowrap;
+    background: var(--surface-inset);
+    color: var(--text-body);
+    border: 1px solid var(--border);
+    text-decoration: none;
+    transition:
+      color var(--dur-base) var(--ease-out),
+      border-color var(--dur-base) var(--ease-out);
+  }
+  .coach-chip:hover {
+    color: var(--teal-700);
+    border-color: var(--teal-500);
+  }
+  .coach-chip:focus-visible {
+    outline: 2px solid var(--teal-500);
+    outline-offset: 2px;
+  }
+  .coaches--dark .coach-card .coach-chip {
+    background: transparent;
+    color: var(--text-on-dark-muted);
+    border-color: var(--border-on-dark);
+  }
+  .coaches--dark .coach-card .coach-chip:hover {
+    color: var(--white);
+    border-color: var(--teal-400);
+  }
+
+  /* "Groups & programs" row at the top of the bio dialog */
+  .coach-dialog__facts {
+    margin-bottom: var(--space-5);
+    padding-bottom: var(--space-5);
+    border-bottom: 1px solid var(--border);
+  }
+  .coach-dialog__facts-title {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: 13px;
+    color: var(--teal-700);
+    margin: 0 0 var(--space-3);
   }
 
   /* "Full bio" trigger — sits at the card foot, pushed down so cards align */

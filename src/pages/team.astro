@@ -1,4 +1,6 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { micromark } from 'micromark';
 import Base from '@layouts/Base.astro';
@@ -20,6 +22,7 @@ import {
 } from '@lib/schemas';
 
 type GroupEntry = CollectionEntry<'training-groups'>;
+type CoachEntry = CollectionEntry<'coaches'>;
 
 const orgSchema = sportsOrganizationSchema();
 const teamSchema = sportsTeamSchema();
@@ -29,6 +32,37 @@ const groups = (await getCollection('training-groups')).sort(
 );
 
 const usd = (n: number) => (n % 1 === 0 ? `$${n}` : `$${n.toFixed(2)}`);
+
+// Reverse the coach → groups relation: each track lists the coaches whose
+// frontmatter references it, sorted by coach `order` (head coach first).
+const allCoaches = (await getCollection('coaches')).sort(
+  (a: CoachEntry, b: CoachEntry) => a.data.order - b.data.order,
+);
+
+const initialsOf = (name: string) =>
+  name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join('')
+    .toUpperCase();
+
+const coachesForGroup = (slug: string) =>
+  allCoaches
+    .filter((coach: CoachEntry) =>
+      coach.data.groups.some((ref) => ref.slug === slug),
+    )
+    .map((coach: CoachEntry) => ({
+      slug: coach.slug,
+      name: coach.data.name,
+      role: coach.data.role,
+      headshot: coach.data.headshot,
+      hasHeadshot: fs.existsSync(
+        path.join(process.cwd(), 'public', coach.data.headshot),
+      ),
+      initials: initialsOf(coach.data.name),
+    }));
 
 const tracks = groups.map((entry: GroupEntry) => ({
   slug: entry.slug,
@@ -44,6 +78,7 @@ const tracks = groups.map((entry: GroupEntry) => ({
     { label: 'Per hour', value: usd(entry.data.costPerHour) },
   ],
   scheduleOptions: entry.data.scheduleOptions,
+  coaches: coachesForGroup(entry.slug),
 }));
 
 const compareRows = groups.map((entry: GroupEntry) => ({
