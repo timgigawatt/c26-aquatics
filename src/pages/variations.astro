@@ -116,9 +116,9 @@ function cssGradient(stops: Stop[]) {
         <p class="variations__intro">
           The composed lockup in the base brand indigo, then five gradient treatments of
           the magenta / teal / indigo triad — each shown on the kraken mark and the C26
-          AQUATICS wordmark (gradient replacing its usual two-tone), on light and dark.
-          Reply with a variation number. Note: the wordmark's white letters are only
-          visible on the dark tiles.
+          AQUATICS wordmark (gradient replacing its usual two-tone) on light and dark,
+          plus the composed lockup on dark. Reply with a variation number. Note: the
+          wordmark's white letters are only visible on the dark tiles.
         </p>
       </header>
 
@@ -222,6 +222,26 @@ function cssGradient(stops: Stop[]) {
                     </div>
                     <figcaption class="tile__label">Wordmark · {bg}</figcaption>
                   </figure>
+
+                  {bg === 'dark' && (
+                    <figure class="tile tile--dark">
+                      <div class="lockup" role="img" aria-label={`Lockup — ${v.name} on dark`}>
+                        <svg class="lockup__kraken" viewBox={kraken.viewBox} aria-hidden="true">
+                          {gradientDef(`grad-${v.slug}-lockup`)}
+                          <use href="#art-kraken" fill={`url(#grad-${v.slug}-lockup)`} />
+                        </svg>
+                        <img
+                          class="lockup__wordmark"
+                          src={wordmarkSrc}
+                          alt=""
+                          width="612"
+                          height="408"
+                          loading="lazy"
+                        />
+                      </div>
+                      <figcaption class="tile__label">Lockup · dark</figcaption>
+                    </figure>
+                  )}
                 </>
               );
             })}
@@ -318,10 +338,10 @@ function cssGradient(stops: Stop[]) {
     border: 1px solid var(--border);
   }
 
-  /* Kraken and wordmark, light pair then dark pair. */
+  /* Kraken and wordmark light pair, dark pair, then the lockup on dark. */
   .variation__grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: var(--space-4);
     margin-top: var(--space-5);
   }
