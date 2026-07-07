@@ -20,7 +20,7 @@ export const tracks: Track[] = [
     age: '5–8 yrs',
     desc: 'Learn to Love Swimming — foundation skills, water comfort, and strong technical habits in a fun, supportive environment.',
     cta: 'View group →',
-    href: '/team',
+    href: '/team#pre-competitive',
   },
   {
     num: '02',
@@ -28,7 +28,7 @@ export const tracks: Track[] = [
     age: '7–12 yrs',
     desc: 'Learn to Train — the first stage of structured training and a full understanding of all four strokes.',
     cta: 'View group →',
-    href: '/team',
+    href: '/team#novice-age-group',
   },
   {
     num: '03',
@@ -36,7 +36,7 @@ export const tracks: Track[] = [
     age: '9–14 yrs',
     desc: 'Train to Improve — refined technique, IM development, and intentional performance work.',
     cta: 'View group →',
-    href: '/team',
+    href: '/team#advanced-age-group',
   },
   {
     num: '04',
@@ -44,7 +44,7 @@ export const tracks: Track[] = [
     age: '9–14 yrs',
     desc: 'Train to Compete — time standards, championship prep, and advancement into higher-level competition.',
     cta: 'View group →',
-    href: '/team',
+    href: '/team#junior-olympic',
   },
   {
     num: '05',
@@ -52,7 +52,7 @@ export const tracks: Track[] = [
     age: '11–14 yrs',
     desc: 'Train to Excel — the blueprint to senior performance across District, State, Zone, and Sectional competition.',
     cta: 'View group →',
-    href: '/team',
+    href: '/team#pre-senior',
   },
   {
     num: '06',
@@ -60,7 +60,7 @@ export const tracks: Track[] = [
     age: '14–18 yrs',
     desc: 'Train with Purpose — efficient, results-focused training that balances school, activities, and life.',
     cta: 'View group →',
-    href: '/team',
+    href: '/team#high-school-prep',
   },
   {
     num: '07',
@@ -68,6 +68,6 @@ export const tracks: Track[] = [
     age: '13–18 yrs',
     desc: 'Train to Perform — the pinnacle of the pathway, aimed at the highest levels of senior and collegiate swimming.',
     cta: 'View group →',
-    href: '/team',
+    href: '/team#senior-elite',
   },
 ];

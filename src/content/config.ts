@@ -65,6 +65,14 @@ const faqs = defineCollection({
       .array(z.enum(['home', 'team', 'faq']))
       .min(1),
     order: z.number(),
+    // Optional CTA button rendered after the answer. `href: "booking.team"`
+    // resolves to `site.booking.team` so the URL stays single-sourced.
+    cta: z
+      .object({
+        label: z.string(),
+        href: z.string(),
+      })
+      .optional(),
   }),
 });
 

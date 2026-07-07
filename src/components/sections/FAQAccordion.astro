@@ -10,6 +10,8 @@
  */
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { markdownToPlainText } from '@lib/markdown';
+import Button from '@components/ui/Button.astro';
+import { site } from '@data/site';
 
 type Surface = 'home' | 'team' | 'faq';
 type Category = 'team' | 'logistics' | 'general';
@@ -62,6 +64,13 @@ const jsonLd = {
   })),
 };
 
+// Frontmatter CTAs can name a `site.booking` key instead of a raw URL so the
+// booking link stays single-sourced in site.ts.
+function resolveCtaHref(href: string): string {
+  if (href === 'booking.team') return site.booking.team;
+  return href;
+}
+
 const categoryLabels: Record<Category, string> = {
   team: 'Team',
   logistics: 'Logistics',
@@ -104,6 +113,13 @@ if (groupByCategory) {
                     </summary>
                     <div class="faq__answer">
                       <Content />
+                      {entry.data.cta && (
+                        <div class="faq__cta">
+                          <Button href={resolveCtaHref(entry.data.cta.href)} variant="primary">
+                            {entry.data.cta.label}
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   </details>
                 ))}
@@ -121,6 +137,13 @@ if (groupByCategory) {
             </summary>
             <div class="faq__answer">
               <Content />
+              {entry.data.cta && (
+                <div class="faq__cta">
+                  <Button href={resolveCtaHref(entry.data.cta.href)} variant="primary">
+                    {entry.data.cta.label}
+                  </Button>
+                </div>
+              )}
             </div>
           </details>
         ))}
@@ -263,6 +286,7 @@ if (groupByCategory) {
     line-height: 1.6;
     color: var(--text-body);
   }
+  .faq__cta { margin-top: var(--space-4); }
   .faq__answer :global(p) { margin: 0 0 var(--space-3); }
   .faq__answer :global(p:last-child) { margin-bottom: 0; }
   .faq__answer :global(ul),
