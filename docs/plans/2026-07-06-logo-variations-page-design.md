@@ -30,7 +30,7 @@ One card per variation. Each card:
 
 - Header: variation number, name, and the hex stops (so the client can say
   "we like #3" unambiguously), plus a one-line note.
-- A 2×2 tile grid: **kraken icon** and **full lockup**, each shown on a
+- A 2×2 tile grid: **kraken icon** and **wordmark**, each shown on a
   light tile and a navy (`--navy-900`) tile — gradients read very
   differently on dark.
 
@@ -43,8 +43,7 @@ Minimal page chrome: simple heading, no Header/Footer components.
   attributes (the source SVGs are single-fill via `.st0`), returns
   `{ viewBox, inner }`. Bare paths then inherit `fill` from an ancestor.
 - **Artwork sources:** `src/assets/brand/kraken-navy.svg` (icon, viewBox
-  `107 0 400 400`) and `public/logo_bg_transparent.svg` (lockup, viewBox
-  `0 0 612 400`).
+  `107 0 400 400`) and `public/logo_text_transparent.png` (wordmark).
 - **Page weight:** each SVG is ~33KB of paths. The paths are emitted once
   each inside a hidden zero-size `<svg>` as `<g id="art-kraken">` /
   `<g id="art-lockup">`; every tile is a small
@@ -58,8 +57,14 @@ Minimal page chrome: simple heading, no Header/Footer components.
 - **noindex:** `<meta name="robots" content="noindex, nofollow" />` via
   Base's `head` slot.
 
-## Known caveat
+## Known caveats
 
-The lockup SVG fills text and mark with one color, so the gradient runs
-across the text too — normal for a gradient logo treatment, called out to
-the client on the page.
+- **No mark+text lockup asset exists.** Every "text" file in the repo
+  (`logo_text*.png`, `wordmark-*.png`) is the wordmark alone, and
+  `logo_bg_transparent.svg` — despite its 270 paths — is just a more
+  detailed cut of the kraken, no letterforms. The page therefore shows the
+  kraken (vector, SVG gradient) and the wordmark. As a raster, the wordmark
+  gets its gradient via CSS `mask-image` over the transparent PNG's alpha
+  channel — same 135° angle and stops as the SVG gradients.
+- The gradient replaces the wordmark's usual two-tone orange/white in
+  these previews — called out to the client on the page.

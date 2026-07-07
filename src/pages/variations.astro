@@ -2,14 +2,18 @@
 /**
  * /variations — private client-review page of logo gradient explorations.
  * Deliberately unlinked (no Header/Footer/nav) and noindexed; share by URL.
- * Artwork paths are emitted once as hidden <g> defs and referenced per tile
- * with <use>, so five variations × four tiles stay lightweight.
+ *
+ * Two artworks per variation: the kraken mark (vector — paths emitted once
+ * as a hidden <g> def, referenced per tile with <use> and gradient-filled)
+ * and the C26 AQUATICS wordmark, which only exists as a raster — the
+ * gradient is applied by masking a CSS gradient through the transparent
+ * PNG's alpha channel.
  */
 import Base from '@layouts/Base.astro';
 import { loadLogoArt } from '@lib/logoArt';
 
 const kraken = loadLogoArt('src/assets/brand/kraken-navy.svg');
-const lockup = loadLogoArt('public/logo_bg_transparent.svg');
+const wordmarkSrc = '/logo_text_transparent.png';
 
 interface Stop {
   color: string;
@@ -75,11 +79,6 @@ const variations: Variation[] = [
   },
 ];
 
-const artworks = [
-  { key: 'kraken', label: 'Kraken', art: kraken },
-  { key: 'lockup', label: 'Full lockup', art: lockup },
-] as const;
-
 /**
  * Diagonal (top-left → bottom-right) gradient line spanning the artwork's
  * viewBox, in userSpaceOnUse coordinates. The default objectBoundingBox
@@ -90,6 +89,11 @@ function gradientLine(viewBox: string) {
   const [x, y, w, h] = viewBox.split(/\s+/).map(Number);
   return { x1: x, y1: y, x2: x + w, y2: y + h };
 }
+
+/** The same diagonal gradient as a CSS value, for the masked wordmark tiles. */
+function cssGradient(stops: Stop[]) {
+  return `linear-gradient(135deg, ${stops.map((s) => `${s.color} ${s.offset}`).join(', ')})`;
+}
 ---
 <Base
   title="Logo Variations — C26 Aquatics"
@@ -99,10 +103,9 @@ function gradientLine(viewBox: string) {
     <meta name="robots" content="noindex, nofollow" />
   </Fragment>
 
-  <!-- Artwork paths, emitted once and referenced per tile via <use>. -->
+  <!-- Kraken paths, emitted once and referenced per tile via <use>. -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <g id="art-kraken" set:html={kraken.inner} />
-    <g id="art-lockup" set:html={lockup.inner} />
   </svg>
 
   <main class="variations">
@@ -112,9 +115,9 @@ function gradientLine(viewBox: string) {
         <h1 class="variations__heading">Logo color explorations</h1>
         <p class="variations__intro">
           Five gradient treatments of the magenta / teal / indigo triad, each shown on the
-          kraken mark and the full lockup, on light and dark. Reply with a variation number.
-          Note: the gradient runs across the whole artwork — text included — which is normal
-          for a gradient logo treatment.
+          kraken mark and the C26 AQUATICS wordmark, on light and dark. Reply with a
+          variation number. Note: in these previews the gradient replaces the wordmark's
+          usual two-tone orange/white — the whole lockup reads as one gradient.
         </p>
       </header>
 
@@ -137,41 +140,49 @@ function gradientLine(viewBox: string) {
           </div>
 
           <div class="variation__grid">
-            {artworks.map(({ key, label, art }) => {
-              const line = gradientLine(art.viewBox);
-              const gradId = `grad-${v.slug}-${key}`;
+            {(['light', 'dark'] as const).map((bg) => {
+              const line = gradientLine(kraken.viewBox);
+              const gradId = `grad-${v.slug}-kraken-${bg}`;
               return (
-                <>
-                  {(['light', 'dark'] as const).map((bg) => (
-                    <figure class:list={['tile', `tile--${bg}`]}>
-                      <svg
-                        class:list={['tile__art', `tile__art--${key}`]}
-                        viewBox={art.viewBox}
-                        role="img"
-                        aria-label={`${label} — ${v.name} on ${bg}`}
+                <figure class:list={['tile', `tile--${bg}`]}>
+                  <svg
+                    class="tile__art"
+                    viewBox={kraken.viewBox}
+                    role="img"
+                    aria-label={`Kraken — ${v.name} on ${bg}`}
+                  >
+                    <defs>
+                      <linearGradient
+                        id={gradId}
+                        gradientUnits="userSpaceOnUse"
+                        x1={line.x1}
+                        y1={line.y1}
+                        x2={line.x2}
+                        y2={line.y2}
                       >
-                        <defs>
-                          <linearGradient
-                            id={`${gradId}-${bg}`}
-                            gradientUnits="userSpaceOnUse"
-                            x1={line.x1}
-                            y1={line.y1}
-                            x2={line.x2}
-                            y2={line.y2}
-                          >
-                            {v.stops.map((s) => (
-                              <stop offset={s.offset} stop-color={s.color} />
-                            ))}
-                          </linearGradient>
-                        </defs>
-                        <use href={`#art-${key}`} fill={`url(#${gradId}-${bg})`} />
-                      </svg>
-                      <figcaption class="tile__label">{label} · {bg}</figcaption>
-                    </figure>
-                  ))}
-                </>
+                        {v.stops.map((s) => (
+                          <stop offset={s.offset} stop-color={s.color} />
+                        ))}
+                      </linearGradient>
+                    </defs>
+                    <use href="#art-kraken" fill={`url(#${gradId})`} />
+                  </svg>
+                  <figcaption class="tile__label">Kraken · {bg}</figcaption>
+                </figure>
               );
             })}
+            {(['light', 'dark'] as const).map((bg) => (
+              <figure class:list={['tile', `tile--${bg}`]}>
+                <div
+                  class="tile__wordmark"
+                  role="img"
+                  aria-label={`Wordmark — ${v.name} on ${bg}`}
+                  style={`background-image:${cssGradient(v.stops)}`}
+                >
+                </div>
+                <figcaption class="tile__label">Wordmark · {bg}</figcaption>
+              </figure>
+            ))}
           </div>
         </section>
       ))}
@@ -291,6 +302,20 @@ function gradientLine(viewBox: string) {
     width: 100%;
     height: auto;
     display: block;
+  }
+  /* Wordmark exists only as a raster — paint the gradient through its alpha. */
+  .tile__wordmark {
+    width: 100%;
+    aspect-ratio: 612 / 408;
+    background-size: 100% 100%;
+    -webkit-mask-image: url('/logo_text_transparent.png');
+    mask-image: url('/logo_text_transparent.png');
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
   }
   .tile__label {
     font-family: var(--font-subhead);
