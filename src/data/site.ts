@@ -31,7 +31,7 @@ export const site = {
   // Venue context surfaced in the LocationBand + org JSON-LD.
   place: {
     venue: 'Bluhawk',
-    amenities: ['Indoor pool', 'Sauna'],
+    amenities: [],
     mapsUrl:
       'https://www.google.com/maps/search/?api=1&query=Bluhawk+16201+Shawnee+Dr+Suite+126+Overland+Park+KS+66223',
     // TODO: confirm full weekly hours with the client (Google shows "Closes 8 PM").

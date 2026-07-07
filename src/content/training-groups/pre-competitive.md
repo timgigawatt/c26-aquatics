@@ -2,7 +2,7 @@
 name: "Pre-Competitive"
 ageRange: "5–8 yrs"
 groupSize: 30
-suggestedPractices: "2×/week"
+suggestedPractices: "1–3×/week"
 monthlyHours: 11
 monthlyCost: 170
 costPerHour: 18.57
