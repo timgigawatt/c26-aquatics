@@ -114,13 +114,50 @@ function cssGradient(stops: Stop[]) {
         <p class="variations__eyebrow">C26 Aquatics · For review</p>
         <h1 class="variations__heading">Logo color explorations</h1>
         <p class="variations__intro">
-          Five gradient treatments of the magenta / teal / indigo triad, each shown three
-          ways on light and dark: the kraken mark, the C26 AQUATICS wordmark (gradient
-          replacing its usual two-tone), and a composed lockup — gradient kraken with the
-          original orange-and-white wordmark in front. Reply with a variation number.
-          Note: the wordmark's white letters are only visible on the dark tiles.
+          The composed lockup in the base brand indigo, then five gradient treatments of
+          the magenta / teal / indigo triad — each shown on the kraken mark and the C26
+          AQUATICS wordmark (gradient replacing its usual two-tone), on light and dark.
+          Reply with a variation number. Note: the wordmark's white letters are only
+          visible on the dark tiles.
         </p>
       </header>
+
+      <section class="variation" aria-labelledby="v-lockup">
+        <div class="variation__head">
+          <h2 id="v-lockup" class="variation__name">Composed lockup · Brand indigo</h2>
+          <p class="variation__note">
+            The kraken in the base brand indigo with the original orange-and-white
+            wordmark set at two-thirds height.
+          </p>
+          <p class="variation__stops">
+            <span class="variation__stop">
+              <span class="variation__swatch" style="background:#242b6e" aria-hidden="true"></span>
+              #242b6e
+            </span>
+          </p>
+        </div>
+
+        <div class="variation__grid variation__grid--lockup">
+          {(['light', 'dark'] as const).map((bg) => (
+            <figure class:list={['tile', `tile--${bg}`]}>
+              <div class="lockup" role="img" aria-label={`Lockup — brand indigo on ${bg}`}>
+                <svg class="lockup__kraken" viewBox={kraken.viewBox} aria-hidden="true">
+                  <use href="#art-kraken" fill="#242b6e" />
+                </svg>
+                <img
+                  class="lockup__wordmark"
+                  src={wordmarkSrc}
+                  alt=""
+                  width="612"
+                  height="408"
+                  loading="lazy"
+                />
+              </div>
+              <figcaption class="tile__label">Lockup · {bg}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
 
       {variations.map((v, i) => (
         <section class="variation" aria-labelledby={`v-${v.slug}`}>
@@ -144,7 +181,6 @@ function cssGradient(stops: Stop[]) {
             {(['light', 'dark'] as const).map((bg) => {
               const line = gradientLine(kraken.viewBox);
               const krakenGradId = `grad-${v.slug}-kraken-${bg}`;
-              const lockupGradId = `grad-${v.slug}-lockup-${bg}`;
               const gradientDef = (id: string) => (
                 <defs>
                   <linearGradient
@@ -185,24 +221,6 @@ function cssGradient(stops: Stop[]) {
                     >
                     </div>
                     <figcaption class="tile__label">Wordmark · {bg}</figcaption>
-                  </figure>
-
-                  <figure class:list={['tile', `tile--${bg}`]}>
-                    <div class="lockup" role="img" aria-label={`Lockup — ${v.name} on ${bg}`}>
-                      <svg class="lockup__kraken" viewBox={kraken.viewBox} aria-hidden="true">
-                        {gradientDef(lockupGradId)}
-                        <use href="#art-kraken" fill={`url(#${lockupGradId})`} />
-                      </svg>
-                      <img
-                        class="lockup__wordmark"
-                        src={wordmarkSrc}
-                        alt=""
-                        width="612"
-                        height="408"
-                        loading="lazy"
-                      />
-                    </div>
-                    <figcaption class="tile__label">Lockup · {bg}</figcaption>
                   </figure>
                 </>
               );
@@ -300,12 +318,16 @@ function cssGradient(stops: Stop[]) {
     border: 1px solid var(--border);
   }
 
-  /* Light row (kraken · wordmark · lockup), then the same on dark. */
+  /* Kraken and wordmark, light pair then dark pair. */
   .variation__grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--space-4);
     margin-top: var(--space-5);
+  }
+  .variation__grid--lockup {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 760px;
   }
   .tile {
     margin: 0;
@@ -342,14 +364,12 @@ function cssGradient(stops: Stop[]) {
     -webkit-mask-position: center;
     mask-position: center;
   }
-  /* Composed lockup: gradient kraken behind, original two-tone wordmark in front. */
+  /* Composed lockup: indigo kraken behind, original two-tone wordmark in front,
+     centered at two-thirds height. */
   .lockup {
     position: relative;
     width: 100%;
     aspect-ratio: 1 / 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
   .lockup__kraken {
     position: absolute;
@@ -358,7 +378,10 @@ function cssGradient(stops: Stop[]) {
     height: 100%;
   }
   .lockup__wordmark {
-    position: relative;
+    position: absolute;
+    left: 50%;
+    top: 66.7%;
+    transform: translate(-50%, -50%);
     width: 82%;
     height: auto;
   }
