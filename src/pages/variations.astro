@@ -1,0 +1,317 @@
+---
+/**
+ * /variations — private client-review page of logo gradient explorations.
+ * Deliberately unlinked (no Header/Footer/nav) and noindexed; share by URL.
+ * Artwork paths are emitted once as hidden <g> defs and referenced per tile
+ * with <use>, so five variations × four tiles stay lightweight.
+ */
+import Base from '@layouts/Base.astro';
+import { loadLogoArt } from '@lib/logoArt';
+
+const kraken = loadLogoArt('src/assets/brand/kraken-navy.svg');
+const lockup = loadLogoArt('public/logo_bg_transparent.svg');
+
+interface Stop {
+  color: string;
+  offset: string;
+}
+interface Variation {
+  slug: string;
+  name: string;
+  note: string;
+  stops: Stop[];
+}
+
+const variations: Variation[] = [
+  {
+    slug: 'mti',
+    name: 'Magenta → Teal → Indigo',
+    note: 'The requested direction — brand magenta into cyan, settling on the base indigo.',
+    stops: [
+      { color: '#c41e6f', offset: '0%' },
+      { color: '#18bcd0', offset: '50%' },
+      { color: '#242b6e', offset: '100%' },
+    ],
+  },
+  {
+    slug: 'imt',
+    name: 'Indigo → Magenta → Teal',
+    note: 'Same three colors, reordered — indigo anchors the top, teal carries the finish.',
+    stops: [
+      { color: '#242b6e', offset: '0%' },
+      { color: '#c41e6f', offset: '50%' },
+      { color: '#18bcd0', offset: '100%' },
+    ],
+  },
+  {
+    slug: 'tim',
+    name: 'Teal → Indigo → Magenta',
+    note: 'Third rotation of the stop order — coolest read up top, warmest at the base.',
+    stops: [
+      { color: '#18bcd0', offset: '0%' },
+      { color: '#242b6e', offset: '50%' },
+      { color: '#c41e6f', offset: '100%' },
+    ],
+  },
+  {
+    slug: 'vivid',
+    name: 'Vivid',
+    note: 'Variation 1 with saturated, brightened stops for a punchier, sportier read.',
+    stops: [
+      { color: '#ff2d8f', offset: '0%' },
+      { color: '#2fd0e0', offset: '50%' },
+      { color: '#4550c9', offset: '100%' },
+    ],
+  },
+  {
+    slug: 'subtle',
+    name: 'Subtle',
+    note: 'Desaturated stops compressed toward the middle for a quieter, more corporate feel.',
+    stops: [
+      { color: '#a84d7e', offset: '20%' },
+      { color: '#4d9fae', offset: '50%' },
+      { color: '#3d4378', offset: '80%' },
+    ],
+  },
+];
+
+const artworks = [
+  { key: 'kraken', label: 'Kraken', art: kraken },
+  { key: 'lockup', label: 'Full lockup', art: lockup },
+] as const;
+
+/**
+ * Diagonal (top-left → bottom-right) gradient line spanning the artwork's
+ * viewBox, in userSpaceOnUse coordinates. The default objectBoundingBox
+ * units would scale the gradient to each individual path's bounding box —
+ * giving every tentacle its own full gradient — so we pin it to user space.
+ */
+function gradientLine(viewBox: string) {
+  const [x, y, w, h] = viewBox.split(/\s+/).map(Number);
+  return { x1: x, y1: y, x2: x + w, y2: y + h };
+}
+---
+<Base
+  title="Logo Variations — C26 Aquatics"
+  description="C26 Aquatics logo color explorations for review."
+>
+  <Fragment slot="head">
+    <meta name="robots" content="noindex, nofollow" />
+  </Fragment>
+
+  <!-- Artwork paths, emitted once and referenced per tile via <use>. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <g id="art-kraken" set:html={kraken.inner} />
+    <g id="art-lockup" set:html={lockup.inner} />
+  </svg>
+
+  <main class="variations">
+    <div class="container">
+      <header class="variations__head">
+        <p class="variations__eyebrow">C26 Aquatics · For review</p>
+        <h1 class="variations__heading">Logo color explorations</h1>
+        <p class="variations__intro">
+          Five gradient treatments of the magenta / teal / indigo triad, each shown on the
+          kraken mark and the full lockup, on light and dark. Reply with a variation number.
+          Note: the gradient runs across the whole artwork — text included — which is normal
+          for a gradient logo treatment.
+        </p>
+      </header>
+
+      {variations.map((v, i) => (
+        <section class="variation" aria-labelledby={`v-${v.slug}`}>
+          <div class="variation__head">
+            <h2 id={`v-${v.slug}`} class="variation__name">
+              <span class="variation__num">{String(i + 1).padStart(2, '0')}</span>
+              {v.name}
+            </h2>
+            <p class="variation__note">{v.note}</p>
+            <p class="variation__stops">
+              {v.stops.map((s) => (
+                <span class="variation__stop">
+                  <span class="variation__swatch" style={`background:${s.color}`} aria-hidden="true"></span>
+                  {s.color}
+                </span>
+              ))}
+            </p>
+          </div>
+
+          <div class="variation__grid">
+            {artworks.map(({ key, label, art }) => {
+              const line = gradientLine(art.viewBox);
+              const gradId = `grad-${v.slug}-${key}`;
+              return (
+                <>
+                  {(['light', 'dark'] as const).map((bg) => (
+                    <figure class:list={['tile', `tile--${bg}`]}>
+                      <svg
+                        class:list={['tile__art', `tile__art--${key}`]}
+                        viewBox={art.viewBox}
+                        role="img"
+                        aria-label={`${label} — ${v.name} on ${bg}`}
+                      >
+                        <defs>
+                          <linearGradient
+                            id={`${gradId}-${bg}`}
+                            gradientUnits="userSpaceOnUse"
+                            x1={line.x1}
+                            y1={line.y1}
+                            x2={line.x2}
+                            y2={line.y2}
+                          >
+                            {v.stops.map((s) => (
+                              <stop offset={s.offset} stop-color={s.color} />
+                            ))}
+                          </linearGradient>
+                        </defs>
+                        <use href={`#art-${key}`} fill={`url(#${gradId}-${bg})`} />
+                      </svg>
+                      <figcaption class="tile__label">{label} · {bg}</figcaption>
+                    </figure>
+                  ))}
+                </>
+              );
+            })}
+          </div>
+        </section>
+      ))}
+    </div>
+  </main>
+</Base>
+
+<style>
+  .variations {
+    background: var(--surface-alt);
+    min-height: 100vh;
+    padding: var(--space-10) 0 var(--space-12);
+  }
+
+  .variations__head {
+    max-width: 680px;
+    margin-bottom: var(--space-10);
+  }
+  .variations__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--teal-600);
+    margin: 0 0 var(--space-2);
+  }
+  .variations__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(30px, 4vw, 44px);
+    line-height: 1.02;
+    letter-spacing: var(--ls-tight);
+    color: var(--navy-700);
+    margin: 0 0 var(--space-4);
+  }
+  .variations__intro {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-body);
+    margin: 0;
+  }
+
+  .variation {
+    margin-top: var(--space-10);
+  }
+  .variation__head {
+    max-width: 680px;
+  }
+  .variation__name {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(22px, 3vw, 30px);
+    letter-spacing: var(--ls-tight);
+    color: var(--navy-700);
+    margin: 0 0 var(--space-2);
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+  }
+  .variation__num {
+    font-weight: var(--fw-black);
+    color: var(--teal-500);
+  }
+  .variation__note {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text-body);
+    margin: 0 0 var(--space-3);
+  }
+  .variation__stops {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin: 0;
+    font-family: var(--font-mono, monospace);
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .variation__stop {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .variation__swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .variation__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-5);
+  }
+  .tile {
+    margin: 0;
+    border-radius: var(--r-md);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .tile--light {
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+  .tile--dark {
+    background: var(--navy-900);
+  }
+  .tile__art {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .tile__label {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .tile--dark .tile__label {
+    color: var(--teal-400);
+  }
+
+  @media (max-width: 960px) {
+    .variation__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 520px) {
+    .variation__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

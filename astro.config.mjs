@@ -19,10 +19,10 @@ function inlineSitemap({ changefreq = 'monthly', priority = 0.7 } = {}) {
         const lastmod = new Date().toISOString();
 
         const urls = pages
-          // Drop status-code pages from sitemap
+          // Drop status-code pages and private/unlinked pages from sitemap
           .filter((p) => {
             const clean = p.pathname.replace(/\/+$/, '');
-            return clean !== '404' && clean !== '500';
+            return clean !== '404' && clean !== '500' && clean !== 'variations';
           })
           .map((p) => {
             // Astro emits e.g. "", "team/", "about/", "swim-lessons/"
