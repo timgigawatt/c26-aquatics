@@ -24,6 +24,8 @@ interface Props {
   /** Compact cards: chrome-less photo + name + role only (no badges/bio).
    *  Used on the homepage to keep the section short. */
   compact?: boolean;
+  /** Grid columns on desktop. 4 fits the whole staff on one row. */
+  columns?: 3 | 4;
   /** Oversized kraken watermark bleeding off the named edge (dark tone only). */
   watermark?: 'left' | 'right';
   /** Optional "see more" link rendered inside the section, after the grid. */
@@ -38,6 +40,7 @@ const {
   subtitle,
   tone = 'dark',
   compact = false,
+  columns = 3,
   watermark,
   ctaLabel,
   ctaHref,
@@ -98,7 +101,7 @@ const rendered = await Promise.all(
       {subtitle && <p class="coaches__subtitle">{subtitle}</p>}
     </header>
 
-    <div class="coaches__grid">
+    <div class:list={['coaches__grid', `coaches__grid--${columns}`]}>
       {rendered.map(({ coach, groups, hasHeadshot, initials }) => (
         <article id={coach.slug} class:list={['coach-card', { 'coach-card--compact': compact }]}>
           <div class="coach-card__media">
@@ -338,6 +341,10 @@ const rendered = await Promise.all(
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--space-6);
+  }
+  .coaches__grid--4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-5);
   }
 
   .coach-card {
