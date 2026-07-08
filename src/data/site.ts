@@ -13,10 +13,9 @@ export const site = {
   url: 'https://c26aquatics.com',
 
   contact: {
-    // TODO: confirm real values before launch
-    email: 'info@c26aquatics.com',
-    phone: '+1-913-555-0100',
-    phoneDisplay: '(913) 555-0100',
+    email: 'info@c26hub.com',
+    phone: '+1-913-213-6966',
+    phoneDisplay: '(913) 213-6966',
   },
 
   // Physical home — inside the Bluhawk development in south Overland Park.
