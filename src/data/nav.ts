@@ -11,6 +11,7 @@ export const primaryNav: readonly NavItem[] = [
   { label: 'Our Story', href: '/our-story' },
   { label: 'Coaches', href: '/coaches' },
   { label: 'FAQ', href: '/faq' },
+  { label: 'Contact', href: '/contact' },
 ] as const;
 
 export const footerLinks: readonly NavItem[] = [
@@ -20,4 +21,5 @@ export const footerLinks: readonly NavItem[] = [
   { label: 'Our Story', href: '/our-story' },
   { label: 'Coaches', href: '/coaches' },
   { label: 'FAQ', href: '/faq' },
+  { label: 'Contact', href: '/contact' },
 ] as const;

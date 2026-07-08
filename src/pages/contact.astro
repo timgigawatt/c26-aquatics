@@ -1,0 +1,342 @@
+---
+import Base from '@layouts/Base.astro';
+import Header from '@components/layout/Header.astro';
+import Footer from '@components/layout/Footer.astro';
+import ConsentBanner from '@components/layout/ConsentBanner.astro';
+import Hero from '@components/sections/Hero.astro';
+import Button from '@components/ui/Button.astro';
+import {
+  sportsOrganizationSchema,
+  contactPageSchema,
+  jsonLd,
+} from '@lib/schemas';
+import { site } from '@data/site';
+
+const orgSchema = sportsOrganizationSchema();
+const pageSchema = contactPageSchema();
+
+const { streetAddress, addressLocality, addressRegion, postalCode } = site.address;
+const addressLine = `${streetAddress}, ${addressLocality}, ${addressRegion} ${postalCode}`;
+const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(
+  `Bluhawk ${addressLine}`,
+)}&output=embed`;
+
+// Kept in sync with the site's current offerings — lessons/multisport pages
+// are retired, so the form only asks about the team.
+const interests = ['Joining the team', 'Team evaluation', 'Something else'];
+---
+<Base
+  title="Contact | C26 Aquatics"
+  description="Get in touch with C26 Aquatics — one pool, one coaching staff in south Overland Park. Send us a message and a coach replies within one business day."
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={jsonLd(orgSchema)}></script>
+    <script type="application/ld+json" set:html={jsonLd(pageSchema)}></script>
+  </Fragment>
+
+  <Header />
+  <main>
+    <Hero
+      variant="page"
+      eyebrow="Contact"
+      title="One pool. <span class='hero-accent'>One standard.</span>"
+      subtitle="Everything happens under one roof — no satellites, no rotating rental lanes. Every swimmer trains in the same water with the same staff."
+    />
+
+    <section class="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title" class="sr-only">Contact details and message form</h2>
+      <div class="container contact__grid">
+        <div class="contact__details">
+          <h3 class="contact__heading">Find us</h3>
+          <dl class="contact__facts">
+            <div class="contact__fact">
+              <dt>Address</dt>
+              <dd>{addressLine}</dd>
+            </div>
+            {site.place.hours && (
+              <div class="contact__fact">
+                <dt>Hours</dt>
+                <dd>{site.place.hours}</dd>
+              </div>
+            )}
+            <div class="contact__fact">
+              <dt>Phone</dt>
+              <dd><a href={`tel:${site.contact.phone}`}>{site.contact.phoneDisplay}</a></dd>
+            </div>
+            <div class="contact__fact">
+              <dt>Email</dt>
+              <dd><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></dd>
+            </div>
+          </dl>
+          <iframe
+            class="contact__map"
+            src={mapEmbedUrl}
+            title={`Map to C26 Aquatics at ${addressLine}`}
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen
+          ></iframe>
+        </div>
+
+        <div class="contact__card">
+          <h3 class="contact__heading">Send us a message</h3>
+          <p class="contact__note">A coach — not a call center — replies within one business day.</p>
+
+          <div id="sent" class="contact__sent" hidden>
+            <p class="contact__sent-title">Message sent</p>
+            <p class="contact__sent-text">Thanks — we'll get back to you within one business day.</p>
+          </div>
+
+          <form
+            id="contact-form"
+            class="contact__form"
+            name="contact"
+            method="POST"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+          >
+            <input type="hidden" name="form-name" value="contact" />
+            <p class="contact__hp" aria-hidden="true">
+              <label>Don't fill this out: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+            </p>
+            <div class="contact__row">
+              <label class="contact__field">
+                <span class="contact__label">Name</span>
+                <input name="name" placeholder="Your name" required autocomplete="name" />
+              </label>
+              <label class="contact__field">
+                <span class="contact__label">Email</span>
+                <input name="email" type="email" placeholder="you@email.com" required autocomplete="email" />
+              </label>
+            </div>
+            <label class="contact__field">
+              <span class="contact__label">I'm interested in</span>
+              <select name="interest">
+                {interests.map((opt) => <option>{opt}</option>)}
+              </select>
+            </label>
+            <label class="contact__field">
+              <span class="contact__label">Message</span>
+              <textarea
+                name="message"
+                rows="5"
+                placeholder="Tell us about your swimmer, goals, or questions"
+                required
+              ></textarea>
+            </label>
+            <Button type="submit" variant="primary" size="lg">Send message</Button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <ConsentBanner />
+</Base>
+
+<script>
+  // AJAX-submit to Netlify Forms so the success state stays inline. Without
+  // JS the form still POSTs and Netlify shows its default success page.
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const body = new URLSearchParams(new FormData(form) as unknown as Record<string, string>);
+    try {
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      form.hidden = true;
+      const sent = document.getElementById('sent');
+      if (sent) sent.hidden = false;
+    } catch {
+      // Fall back to a native submit so Netlify handles it server-side.
+      form.submit();
+    }
+  });
+</script>
+
+<style>
+  .contact {
+    background: var(--surface);
+    padding: var(--section-y) 0;
+  }
+  .contact__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: var(--space-10);
+    align-items: start;
+  }
+
+  .contact__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-tight);
+    font-size: clamp(28px, 3.5vw, 38px);
+    color: var(--navy-700);
+    margin: 0;
+  }
+
+  .contact__facts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin: var(--space-6) 0 0;
+  }
+  .contact__fact {
+    display: flex;
+    gap: var(--space-3);
+    align-items: baseline;
+  }
+  .contact__fact dt {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: 12px;
+    color: var(--teal-700);
+    width: 80px;
+    flex: none;
+  }
+  .contact__fact dd {
+    margin: 0;
+    font-size: 16px;
+    color: var(--text-strong);
+  }
+  .contact__fact a {
+    color: var(--blue-500);
+  }
+
+  .contact__map {
+    display: block;
+    width: 100%;
+    height: 260px;
+    border: 0;
+    border-radius: var(--r-lg);
+    margin-top: var(--space-8);
+  }
+
+  .contact__card {
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: var(--space-8);
+  }
+  .contact__note {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text-muted);
+    margin: var(--space-3) 0 0;
+  }
+
+  .contact__sent {
+    margin-top: var(--space-6);
+    border-left: 3px solid var(--teal-400);
+    background: var(--surface);
+    border-radius: 0 var(--r-md) var(--r-md) 0;
+    padding: var(--space-4) var(--space-5);
+  }
+  .contact__sent-title {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: 22px;
+    color: var(--navy-700);
+    margin: 0;
+  }
+  .contact__sent-text {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text-body);
+    margin: var(--space-2) 0 0;
+  }
+
+  .contact__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+    align-items: flex-start;
+  }
+  .contact__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    width: 100%;
+  }
+  .contact__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+  }
+  .contact__label {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 12px;
+    color: var(--navy-700);
+  }
+  .contact__form input,
+  .contact__form select,
+  .contact__form textarea {
+    font-family: var(--font-body, inherit);
+    font-size: 15px;
+    color: var(--text-strong);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-xs);
+    padding: 11px 12px;
+    outline: none;
+    width: 100%;
+  }
+  .contact__form textarea {
+    resize: vertical;
+  }
+  .contact__form input:focus,
+  .contact__form select:focus,
+  .contact__form textarea:focus {
+    border-color: var(--teal-500);
+    box-shadow: 0 0 0 3px var(--focus-ring, rgba(47, 208, 224, 0.25));
+  }
+
+  /* Honeypot — visually gone, still in the POST body for Netlify. */
+  .contact__hp {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    margin: 0;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (max-width: 900px) {
+    .contact__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 600px) {
+    .contact__card {
+      padding: var(--space-5);
+    }
+    .contact__row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

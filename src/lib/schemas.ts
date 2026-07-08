@@ -120,6 +120,17 @@ export function aboutPageSchema() {
   };
 }
 
+/** ContactPage for /contact */
+export function contactPageSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: `Contact — ${site.name}`,
+    url: absUrl('/contact'),
+    about: { '@id': `${SITE_URL}/#organization` },
+  };
+}
+
 interface FaqInput {
   question: string;
   answerPlainText: string;
