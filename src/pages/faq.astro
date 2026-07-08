@@ -6,7 +6,6 @@ import ConsentBanner from '@components/layout/ConsentBanner.astro';
 import Hero from '@components/sections/Hero.astro';
 import FAQAccordion from '@components/sections/FAQAccordion.astro';
 import CTABand from '@components/sections/CTABand.astro';
-import { site } from '@data/site';
 import { sportsOrganizationSchema, jsonLd } from '@lib/schemas';
 
 const orgSchema = sportsOrganizationSchema();
@@ -38,7 +37,7 @@ const orgSchema = sportsOrganizationSchema();
     <CTABand
       title="Didn’t see your <span class='hero-accent accent'>question?</span>"
       subtitle="Reach out — we’re happy to help."
-      primaryCta={{ label: 'Email us', href: `mailto:${site.contact.email}` }}
+      primaryCta={{ label: 'Ask Us', href: '/contact' }}
     />
   </main>
   <Footer />
