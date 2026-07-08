@@ -114,7 +114,9 @@ const rendered = await Promise.all(
             ) : (
               <div class="coach-card__placeholder" aria-hidden="true">
                 <img src={krakenGradient.src} alt="" loading="lazy" decoding="async" />
-                <span class="coach-card__initials">{initials}</span>
+                <span class="coach-card__initials">
+                  <span class="coach-card__initials-first">{initials[0]}</span>{initials.slice(1)}
+                </span>
               </div>
             )}
           </div>
@@ -171,7 +173,9 @@ const rendered = await Promise.all(
               ) : (
                 <div class="coach-dialog__placeholder" aria-hidden="true">
                   <img src={krakenGradient.src} alt="" loading="lazy" decoding="async" />
-                  <span class="coach-card__initials">{initials}</span>
+                  <span class="coach-card__initials">
+                    <span class="coach-card__initials-first">{initials[0]}</span>{initials.slice(1)}
+                  </span>
                 </div>
               )}
             </div>
@@ -384,10 +388,8 @@ const rendered = await Promise.all(
     opacity: 0.55; /* recede behind the initials */
   }
   /* Initials sit where the wordmark sits in the lockup — centered at
-   * two-thirds height — and carry the same teal → indigo → magenta
-   * gradient as the kraken, clipped through the glyphs. A drop-shadow
-   * (not text-shadow, which would bleed through the transparent fill)
-   * lifts them off the artwork. */
+   * two-thirds height — and echo its coloring: orange first letter,
+   * white after (like the orange C / white 26). */
   .coach-card__initials {
     position: absolute;
     left: 50%;
@@ -397,12 +399,12 @@ const rendered = await Promise.all(
     font-weight: var(--fw-black);
     font-size: clamp(40px, 6vw, 64px);
     letter-spacing: var(--ls-tight);
-    background-image: linear-gradient(135deg, #18bcd0 0%, #242b6e 50%, #c41e6f 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    filter: drop-shadow(0 2px 10px rgba(14, 19, 48, 0.9));
+    color: var(--white);
+    text-shadow: 0 2px 14px rgba(14, 19, 48, 0.85);
     user-select: none;
+  }
+  .coach-card__initials-first {
+    color: var(--orange-500);
   }
 
   .coach-card__body {
