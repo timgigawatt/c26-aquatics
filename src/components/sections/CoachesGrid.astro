@@ -383,18 +383,25 @@ const rendered = await Promise.all(
     object-fit: contain;
     opacity: 0.55; /* recede behind the initials */
   }
+  /* Initials sit where the wordmark sits in the lockup — centered at
+   * two-thirds height — and carry the same teal → indigo → magenta
+   * gradient as the kraken, clipped through the glyphs. A drop-shadow
+   * (not text-shadow, which would bleed through the transparent fill)
+   * lifts them off the artwork. */
   .coach-card__initials {
     position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    left: 50%;
+    top: 66.7%;
+    transform: translate(-50%, -50%);
     font-family: var(--font-display);
     font-weight: var(--fw-black);
     font-size: clamp(40px, 6vw, 64px);
     letter-spacing: var(--ls-tight);
-    color: var(--white);
-    text-shadow: 0 2px 18px rgba(14, 19, 48, 0.85);
+    background-image: linear-gradient(135deg, #18bcd0 0%, #242b6e 50%, #c41e6f 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 2px 10px rgba(14, 19, 48, 0.9));
     user-select: none;
   }
 
