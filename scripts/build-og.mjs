@@ -1,13 +1,17 @@
 // Build brand imagery: OG card, favicon, and apple-touch-icon.
 //
 // Inputs (do not modify):
-//   src/assets/brand/kraken-white.png   (400x400 RGBA, white kraken silhouette)
-//   src/assets/brand/wordmark-navy.png  (1536x1024 RGB, "C26 AQUATICS" on #021c36)
+//   src/assets/brand/kraken-gradient.svg  (kraken with the approved teal →
+//                                          indigo → magenta gradient baked in)
+//   src/assets/brand/kraken-white.svg     (white kraken, used for the icons)
+//   public/logo_text_transparent.png      (612x408 RGBA orange/white wordmark)
 //
 // Outputs:
-//   public/og-default.png       (1200x630 PNG, default Open Graph card)
-//   public/favicon.png          (32x32 PNG, white kraken on #021c36)
-//   public/apple-touch-icon.png (180x180 PNG, white kraken on #021c36, inset)
+//   public/og-default.png       (1200x630 PNG — the "Lockup · dark" from
+//                                /variations: gradient kraken on navy-900,
+//                                wordmark overlaid at two-thirds height)
+//   public/favicon.png          (32x32 PNG, white kraken on navy)
+//   public/apple-touch-icon.png (180x180 PNG, white kraken on navy, inset)
 //
 // Run: npm run build:og
 
@@ -23,12 +27,21 @@ const repoRoot = path.resolve(__dirname, '..');
 const BRAND_DIR = path.join(repoRoot, 'src/assets/brand');
 const PUBLIC_DIR = path.join(repoRoot, 'public');
 
-const KRAKEN_WHITE = path.join(BRAND_DIR, 'kraken-white.png');
-const WORDMARK = path.join(BRAND_DIR, 'wordmark-navy.png');
+const KRAKEN_GRADIENT = path.join(BRAND_DIR, 'kraken-gradient.svg');
+const KRAKEN_WHITE = path.join(BRAND_DIR, 'kraken-white.svg');
+const WORDMARK = path.join(PUBLIC_DIR, 'logo_text_transparent.png');
 
-// Navy that matches the wordmark's solid background. This lets the wordmark
-// composite seamlessly onto our canvas without a visible rectangle edge.
-const NAVY = { r: 0x02, g: 0x1c, b: 0x36, alpha: 1 };
+// navy-900 — the "Lockup · dark" tile background from /variations.
+const NAVY = { r: 0x0e, g: 0x13, b: 0x30, alpha: 1 };
+
+/** Rasterize an SVG at `size` px square. The sources are 400px; density
+ *  scales librsvg's render so we never upscale a soft bitmap. */
+async function renderSvg(file, size) {
+  return sharp(file, { density: Math.ceil((72 * size) / 400) })
+    .resize(size, size, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .png()
+    .toBuffer();
+}
 
 async function ensureDir(dir) {
   await fs.mkdir(dir, { recursive: true });
@@ -38,53 +51,31 @@ async function buildOgCard() {
   const W = 1200;
   const H = 630;
 
-  // Layout: kraken occupies the upper portion of the canvas (prominent and
-  // fully visible). The "C26 AQUATICS" wordmark sits at the bottom on its
-  // own line so the kraken never sits on top of the text.
-  const BOTTOM_PADDING = 56;        // breathing room below the wordmark
-  const KRAKEN_WORDMARK_GAP = 32;   // space between kraken and wordmark
-  const TOP_PADDING = 40;
+  // The composed lockup from /variations, centered on the card: a square
+  // gradient kraken with the wordmark overlaid at 82% width, its center
+  // sitting at two-thirds of the lockup's height.
+  const LOCKUP = 560;
+  const lockupLeft = Math.round((W - LOCKUP) / 2);
+  const lockupTop = Math.round((H - LOCKUP) / 2);
 
-  // Trim the solid navy padding around the wordmark so it composites cleanly
-  // onto the navy canvas with no visible rectangle seam.
-  const wordmarkTargetWidth = 640;
+  const kraken = await renderSvg(KRAKEN_GRADIENT, LOCKUP);
+
+  const wordmarkWidth = Math.round(LOCKUP * 0.82);
   const wordmark = await sharp(WORDMARK)
-    .trim({ background: { r: 0x02, g: 0x1c, b: 0x36 }, threshold: 20 })
-    .resize({ width: wordmarkTargetWidth })
+    .resize({ width: wordmarkWidth })
     .png()
     .toBuffer();
   const wordmarkMeta = await sharp(wordmark).metadata();
 
-  // Kraken fills whatever vertical space is left after we reserve the
-  // wordmark area at the bottom. Bound it so it never grows wider than
-  // the canvas at narrow aspect ratios.
-  const krakenAvailableHeight =
-    H - TOP_PADDING - wordmarkMeta.height - KRAKEN_WORDMARK_GAP - BOTTOM_PADDING;
-  const krakenSize = Math.min(krakenAvailableHeight, 460);
-
-  const kraken = await sharp(KRAKEN_WHITE)
-    .resize(krakenSize, krakenSize, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-    .png()
-    .toBuffer();
-
-  const krakenLeft = Math.round((W - krakenSize) / 2);
-  const krakenTop = TOP_PADDING + Math.round((krakenAvailableHeight - krakenSize) / 2);
   const wordmarkLeft = Math.round((W - wordmarkMeta.width) / 2);
-  const wordmarkTop = H - BOTTOM_PADDING - wordmarkMeta.height;
-
-  const canvas = sharp({
-    create: {
-      width: W,
-      height: H,
-      channels: 4,
-      background: NAVY
-    }
-  });
+  const wordmarkTop = Math.round(lockupTop + LOCKUP * 0.667 - wordmarkMeta.height / 2);
 
   const out = path.join(PUBLIC_DIR, 'og-default.png');
-  await canvas
+  await sharp({
+    create: { width: W, height: H, channels: 4, background: NAVY }
+  })
     .composite([
-      { input: kraken, left: krakenLeft, top: krakenTop },
+      { input: kraken, left: lockupLeft, top: lockupTop },
       { input: wordmark, left: wordmarkLeft, top: wordmarkTop }
     ])
     .png()
@@ -98,21 +89,12 @@ async function buildIcon({ outName, size, krakenScale }) {
   // White kraken centered on navy square, with `krakenScale` of the canvas
   // size devoted to the kraken (rest is padding).
   const krakenPx = Math.round(size * krakenScale);
-  const kraken = await sharp(KRAKEN_WHITE)
-    .resize(krakenPx, krakenPx, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-    .png()
-    .toBuffer();
-
+  const kraken = await renderSvg(KRAKEN_WHITE, krakenPx);
   const offset = Math.round((size - krakenPx) / 2);
 
   const out = path.join(PUBLIC_DIR, outName);
   await sharp({
-    create: {
-      width: size,
-      height: size,
-      channels: 4,
-      background: NAVY
-    }
+    create: { width: size, height: size, channels: 4, background: NAVY }
   })
     .composite([{ input: kraken, left: offset, top: offset }])
     .png()

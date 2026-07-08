@@ -1,7 +1,10 @@
 ---
-import { Image } from 'astro:assets';
-import krakenWhite from '@assets/brand/kraken-white.svg';
-import wordmarkNavy from '@assets/brand/wordmark-navy.png';
+import krakenGradient from '@assets/brand/kraken-gradient.svg';
+
+// The approved "Lockup · dark" from /variations: gradient kraken (teal →
+// indigo → magenta) on navy-900 with the original orange/white wordmark
+// overlaid at two-thirds height.
+const wordmarkSrc = '/logo_text_transparent.png';
 ---
 <script is:inline>
   try {
@@ -21,7 +24,7 @@ import wordmarkNavy from '@assets/brand/wordmark-navy.png';
   <div class="c26-intro__flash c26-intro__flash--se"></div>
   <div class="c26-intro__lockup">
     <img
-      src={krakenWhite.src}
+      src={krakenGradient.src}
       alt=""
       class="c26-intro__kraken"
       width={560}
@@ -29,12 +32,12 @@ import wordmarkNavy from '@assets/brand/wordmark-navy.png';
       loading="eager"
       decoding="sync"
     />
-    <Image
-      src={wordmarkNavy}
+    <img
+      src={wordmarkSrc}
       alt=""
       class="c26-intro__wordmark"
-      width={720}
-      height={480}
+      width={612}
+      height={408}
       loading="eager"
       decoding="sync"
     />
@@ -122,7 +125,7 @@ import wordmarkNavy from '@assets/brand/wordmark-navy.png';
     position: fixed;
     inset: 0;
     z-index: 100;
-    background: #021c36;
+    background: #0e1330; /* navy-900 — the Lockup · dark tile background */
     overflow: hidden;
     cursor: pointer;
     transition: opacity 200ms ease-out;
@@ -202,8 +205,8 @@ import wordmarkNavy from '@assets/brand/wordmark-navy.png';
   .c26-intro__wordmark {
     position: absolute;
     left: 50%;
-    top: 50%;
-    width: 86%;
+    top: 66.7%; /* lockup composition: wordmark at two-thirds height */
+    width: 82%;
     height: auto;
     transform: translate(-50%, -50%);
     object-fit: contain;
