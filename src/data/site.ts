@@ -13,7 +13,7 @@ export const site = {
   url: 'https://c26aquatics.com',
 
   contact: {
-    email: 'info@c26hub.com',
+    email: 'robbie@c26hub.com',
     phone: '+1-913-213-6966',
     phoneDisplay: '(913) 213-6966',
   },
