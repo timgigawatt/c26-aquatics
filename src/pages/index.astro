@@ -3,7 +3,6 @@ import Base from '@layouts/Base.astro';
 import Header from '@components/layout/Header.astro';
 import Footer from '@components/layout/Footer.astro';
 import ConsentBanner from '@components/layout/ConsentBanner.astro';
-import BrandIntro from '@components/widgets/BrandIntro.astro';
 import Hero from '@components/sections/Hero.astro';
 import StatsBand from '@components/sections/StatsBand.astro';
 import MissionBand from '@components/sections/MissionBand.astro';
@@ -32,7 +31,6 @@ const orgSchema = sportsOrganizationSchema();
     <script type="application/ld+json" set:html={jsonLd(orgSchema)}></script>
   </Fragment>
 
-  <BrandIntro />
   <Header />
   <main>
     <Hero
