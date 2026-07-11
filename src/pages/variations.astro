@@ -392,18 +392,18 @@ function cssGradient(stops: Stop[]) {
   }
   /* Composed lockup: indigo kraken behind, original two-tone wordmark in front,
      centered at two-thirds height. */
+  /* Match the cropped viewBox's aspect so the mark renders at the same size
+     as the standalone kraken tiles, wordmark layered over its lower third. */
   .lockup {
     position: relative;
     width: 100%;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 294 / 372;
   }
-  /* The mark's 612×400 viewBox letterboxes inside the square tile; raise it
-     so the wordmark clears the dense center of the artwork. */
   .lockup__kraken {
     position: absolute;
-    inset: 0 0 22% 0;
+    inset: 0;
     width: 100%;
-    height: 78%;
+    height: 100%;
   }
   .lockup__wordmark {
     position: absolute;
