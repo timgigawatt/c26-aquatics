@@ -12,7 +12,7 @@
 import Base from '@layouts/Base.astro';
 import { loadLogoArt } from '@lib/logoArt';
 
-const kraken = loadLogoArt('src/assets/brand/kraken-navy.svg');
+const kraken = loadLogoArt('public/logo_bg_transparent_5.svg');
 const wordmarkSrc = '/logo_text_transparent.png';
 
 interface Stop {
@@ -391,16 +391,18 @@ function cssGradient(stops: Stop[]) {
     width: 100%;
     aspect-ratio: 1 / 1;
   }
+  /* The mark's 612×400 viewBox letterboxes inside the square tile; raise it
+     so the wordmark clears the dense center of the artwork. */
   .lockup__kraken {
     position: absolute;
-    inset: 0;
+    inset: 0 0 22% 0;
     width: 100%;
-    height: 100%;
+    height: 78%;
   }
   .lockup__wordmark {
     position: absolute;
     left: 50%;
-    top: 66.7%;
+    top: 74%;
     transform: translate(-50%, -50%);
     width: 82%;
     height: auto;
