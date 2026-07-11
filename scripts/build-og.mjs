@@ -34,10 +34,11 @@ const WORDMARK = path.join(PUBLIC_DIR, 'logo_text_transparent.png');
 // navy-900 — the "Lockup · dark" tile background from /variations.
 const NAVY = { r: 0x0e, g: 0x13, b: 0x30, alpha: 1 };
 
-/** Rasterize an SVG at `size` px square. The sources are 400px; density
- *  scales librsvg's render so we never upscale a soft bitmap. */
+/** Rasterize an SVG at `size` px square. The sources are 294x372 (portrait,
+ *  height-bound inside the square); density scales librsvg's render so we
+ *  never upscale a soft bitmap. */
 async function renderSvg(file, size) {
-  return sharp(file, { density: Math.ceil((72 * size) / 400) })
+  return sharp(file, { density: Math.ceil((72 * size) / 372) })
     .resize(size, size, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
     .png()
     .toBuffer();
@@ -51,16 +52,16 @@ async function buildOgCard() {
   const W = 1200;
   const H = 630;
 
-  // The composed lockup from /variations, centered on the card: a square
-  // gradient kraken with the wordmark overlaid at 82% width, its center
-  // sitting at two-thirds of the lockup's height.
+  // The composed lockup from /variations, centered on the card: the
+  // gradient kraken with the wordmark overlaid at 92% width, its center
+  // sitting at 74% of the lockup's height.
   const LOCKUP = 560;
   const lockupLeft = Math.round((W - LOCKUP) / 2);
   const lockupTop = Math.round((H - LOCKUP) / 2);
 
   const kraken = await renderSvg(KRAKEN_GRADIENT, LOCKUP);
 
-  const wordmarkWidth = Math.round(LOCKUP * 0.82);
+  const wordmarkWidth = Math.round(LOCKUP * 0.92);
   const wordmark = await sharp(WORDMARK)
     .resize({ width: wordmarkWidth })
     .png()
@@ -68,7 +69,7 @@ async function buildOgCard() {
   const wordmarkMeta = await sharp(wordmark).metadata();
 
   const wordmarkLeft = Math.round((W - wordmarkMeta.width) / 2);
-  const wordmarkTop = Math.round(lockupTop + LOCKUP * 0.667 - wordmarkMeta.height / 2);
+  const wordmarkTop = Math.round(lockupTop + LOCKUP * 0.74 - wordmarkMeta.height / 2);
 
   const out = path.join(PUBLIC_DIR, 'og-default.png');
   await sharp({
