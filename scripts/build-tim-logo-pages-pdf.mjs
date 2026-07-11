@@ -149,16 +149,16 @@ const html = `<!doctype html>
     mask-position: center;
   }
 
-  /* Composed lockup: gradient kraken behind, wordmark centered at
-     two-thirds height (same geometry as /variations). */
-  .lockup { position: relative; height: 7.6in; aspect-ratio: 1 / 1; }
+  /* Composed lockup: gradient kraken behind, wordmark centered at 74%
+     height at 92% width (same geometry as /variations). */
+  .lockup { position: relative; height: 7.6in; aspect-ratio: 294 / 372; }
   .lockup__kraken { position: absolute; inset: 0; width: 100%; height: 100%; }
   .lockup__wordmark {
     position: absolute;
     left: 50%;
-    top: 66.7%;
+    top: 74%;
     transform: translate(-50%, -50%);
-    width: 82%;
+    width: 92%;
     height: auto;
   }
 </style>
