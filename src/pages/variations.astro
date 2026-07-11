@@ -12,7 +12,13 @@
 import Base from '@layouts/Base.astro';
 import { loadLogoArt } from '@lib/logoArt';
 
-const kraken = loadLogoArt('public/logo_bg_transparent_5.svg');
+// The source canvas (612×400) is mostly padding — the artwork's measured
+// bounding box is ~{x:170, y:26, w:274, h:353}; crop to it (plus a small
+// margin) so the mark fills the tiles.
+const kraken = {
+  ...loadLogoArt('public/logo_bg_transparent_5.svg'),
+  viewBox: '160 16 294 372',
+};
 const wordmarkSrc = '/logo_text_transparent.png';
 
 interface Stop {
