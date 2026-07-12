@@ -3,22 +3,34 @@
  * /variations — private client-review page of logo gradient explorations.
  * Deliberately unlinked (no Header/Footer/nav) and noindexed; share by URL.
  *
+ * Three candidate kraken marks (option_1/2/3.svg) are reviewed at once: a
+ * sticky Option 1/2/3 toggle sets data-option on <main>, and every tile
+ * renders one artwork per mark with CSS showing only the selected one — no
+ * JS re-plumbing of viewBoxes or gradients, and the page defaults to
+ * Option 1 without script.
+ *
  * Two artworks per variation: the kraken mark (vector — paths emitted once
- * as a hidden <g> def, referenced per tile with <use> and gradient-filled)
- * and the C26 AQUATICS wordmark, which only exists as a raster — the
- * gradient is applied by masking a CSS gradient through the transparent
- * PNG's alpha channel.
+ * per option as hidden <g> defs, referenced per tile with <use> and
+ * gradient-filled) and the C26 AQUATICS wordmark, which only exists as a
+ * raster — the gradient is applied by masking a CSS gradient through the
+ * transparent PNG's alpha channel.
  */
 import Base from '@layouts/Base.astro';
 import { loadLogoArt } from '@lib/logoArt';
 
-// The source canvas (612×400) is mostly padding — the artwork's measured
-// bounding box is ~{x:170, y:26, w:274, h:353}; crop to it (plus a small
-// margin) so the mark fills the tiles.
-const kraken = {
-  ...loadLogoArt('public/logo_bg_transparent_5.svg'),
-  viewBox: '160 16 294 372',
-};
+// Each source canvas is mostly padding — viewBoxes are cropped to the
+// artwork's measured bounds (headless-Chrome getBBox over the stripped
+// paths) plus a ~10-unit margin. Option 1 also has a few stray editing
+// scraps far off-canvas (x ≈ -240..-172); the cropped viewBox clips them.
+//   option_1 bbox: x 0.6   y 196.8  w 536.1  h 421.0
+//   option_2 bbox: x 26.4  y 165.7  w 557.2  h 689.5
+//   option_3 bbox: x 42.0  y 240.4  w 530.4  h 535.4
+const marks = [
+  { key: 'o1', label: 'Option 1', src: 'public/option_1.svg', viewBox: '-9 187 556 441' },
+  { key: 'o2', label: 'Option 2', src: 'public/option_2.svg', viewBox: '16 156 577 710' },
+  { key: 'o3', label: 'Option 3', src: 'public/option_3.svg', viewBox: '32 230 550 556' },
+].map((m) => ({ ...m, inner: loadLogoArt(m.src).inner }));
+
 const wordmarkSrc = '/logo_text_transparent.png';
 
 interface Stop {
@@ -96,6 +108,12 @@ function gradientLine(viewBox: string) {
   return { x1: x, y1: y, x2: x + w, y2: y + h };
 }
 
+/** The viewBox's aspect ratio as a CSS value, for per-option lockup sizing. */
+function aspect(viewBox: string) {
+  const [, , w, h] = viewBox.split(/\s+/).map(Number);
+  return `${w} / ${h}`;
+}
+
 /** The same diagonal gradient as a CSS value, for the masked wordmark tiles. */
 function cssGradient(stops: Stop[]) {
   return `linear-gradient(135deg, ${stops.map((s) => `${s.color} ${s.offset}`).join(', ')})`;
@@ -109,24 +127,38 @@ function cssGradient(stops: Stop[]) {
     <meta name="robots" content="noindex, nofollow" />
   </Fragment>
 
-  <!-- Kraken paths, emitted once and referenced per tile via <use>. -->
+  <!-- Kraken paths, emitted once per option and referenced per tile via <use>. -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-    <g id="art-kraken" set:html={kraken.inner} />
+    {marks.map((m) => <g id={`art-kraken-${m.key}`} set:html={m.inner} />)}
   </svg>
 
-  <main class="variations">
+  <main class="variations" data-option="o1">
     <div class="container">
       <header class="variations__head">
         <p class="variations__eyebrow">C26 Aquatics · For review</p>
         <h1 class="variations__heading">Logo color explorations</h1>
         <p class="variations__intro">
-          The composed lockup in the base brand indigo, then five gradient treatments of
-          the magenta / teal / indigo triad — each shown on the kraken mark and the C26
-          AQUATICS wordmark (gradient replacing its usual two-tone) on light and dark,
-          plus the composed lockup on dark. Reply with a variation number. Note: the
-          wordmark's white letters are only visible on the dark tiles.
+          Three candidate kraken marks — use the Option 1 / 2 / 3 toggle to switch which
+          one every tile shows. For each: the composed lockup in the base brand indigo,
+          then five gradient treatments of the magenta / teal / indigo triad — shown on
+          the kraken mark and the C26 AQUATICS wordmark (gradient replacing its usual
+          two-tone) on light and dark, plus the composed lockup on dark. Reply with a
+          mark option <strong>and</strong> a variation number. Note: the wordmark's
+          white letters are only visible on the dark tiles.
         </p>
       </header>
+
+      <div class="mark-toggle" role="group" aria-label="Kraken mark option">
+        <span class="mark-toggle__caption">Mark</span>
+        {marks.map((m, i) => (
+          <button
+            type="button"
+            class="mark-toggle__btn"
+            data-option={m.key}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+          >{m.label}</button>
+        ))}
+      </div>
 
       <section class="variation" aria-labelledby="v-lockup">
         <div class="variation__head">
@@ -146,19 +178,26 @@ function cssGradient(stops: Stop[]) {
         <div class="variation__grid variation__grid--lockup">
           {(['light', 'dark'] as const).map((bg) => (
             <figure class:list={['tile', `tile--${bg}`]}>
-              <div class="lockup" role="img" aria-label={`Lockup — brand indigo on ${bg}`}>
-                <svg class="lockup__kraken" viewBox={kraken.viewBox} aria-hidden="true">
-                  <use href="#art-kraken" fill="#242b6e" />
-                </svg>
-                <img
-                  class="lockup__wordmark"
-                  src={wordmarkSrc}
-                  alt=""
-                  width="612"
-                  height="408"
-                  loading="lazy"
-                />
-              </div>
+              {marks.map((m) => (
+                <div
+                  class={`lockup art art--${m.key}`}
+                  style={`aspect-ratio:${aspect(m.viewBox)}`}
+                  role="img"
+                  aria-label={`Lockup — ${m.label}, brand indigo on ${bg}`}
+                >
+                  <svg class="lockup__kraken" viewBox={m.viewBox} aria-hidden="true">
+                    <use href={`#art-kraken-${m.key}`} fill="#242b6e" />
+                  </svg>
+                  <img
+                    class="lockup__wordmark"
+                    src={wordmarkSrc}
+                    alt=""
+                    width="612"
+                    height="408"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
               <figcaption class="tile__label">Lockup · {bg}</figcaption>
             </figure>
           ))}
@@ -185,36 +224,42 @@ function cssGradient(stops: Stop[]) {
 
           <div class="variation__grid">
             {(['light', 'dark'] as const).map((bg) => {
-              const line = gradientLine(kraken.viewBox);
-              const krakenGradId = `grad-${v.slug}-kraken-${bg}`;
-              const gradientDef = (id: string) => (
-                <defs>
-                  <linearGradient
-                    id={id}
-                    gradientUnits="userSpaceOnUse"
-                    x1={line.x1}
-                    y1={line.y1}
-                    x2={line.x2}
-                    y2={line.y2}
-                  >
-                    {v.stops.map((s) => (
-                      <stop offset={s.offset} stop-color={s.color} />
-                    ))}
-                  </linearGradient>
-                </defs>
-              );
+              const gradientDef = (id: string, viewBox: string) => {
+                const line = gradientLine(viewBox);
+                return (
+                  <defs>
+                    <linearGradient
+                      id={id}
+                      gradientUnits="userSpaceOnUse"
+                      x1={line.x1}
+                      y1={line.y1}
+                      x2={line.x2}
+                      y2={line.y2}
+                    >
+                      {v.stops.map((s) => (
+                        <stop offset={s.offset} stop-color={s.color} />
+                      ))}
+                    </linearGradient>
+                  </defs>
+                );
+              };
               return (
                 <>
                   <figure class:list={['tile', `tile--${bg}`]}>
-                    <svg
-                      class="tile__art"
-                      viewBox={kraken.viewBox}
-                      role="img"
-                      aria-label={`Kraken — ${v.name} on ${bg}`}
-                    >
-                      {gradientDef(krakenGradId)}
-                      <use href="#art-kraken" fill={`url(#${krakenGradId})`} />
-                    </svg>
+                    {marks.map((m) => {
+                      const gradId = `grad-${v.slug}-kraken-${bg}-${m.key}`;
+                      return (
+                        <svg
+                          class={`tile__art art art--${m.key}`}
+                          viewBox={m.viewBox}
+                          role="img"
+                          aria-label={`Kraken ${m.label} — ${v.name} on ${bg}`}
+                        >
+                          {gradientDef(gradId, m.viewBox)}
+                          <use href={`#art-kraken-${m.key}`} fill={`url(#${gradId})`} />
+                        </svg>
+                      );
+                    })}
                     <figcaption class="tile__label">Kraken · {bg}</figcaption>
                   </figure>
 
@@ -231,20 +276,27 @@ function cssGradient(stops: Stop[]) {
 
                   {bg === 'dark' && (
                     <figure class="tile tile--dark">
-                      <div class="lockup" role="img" aria-label={`Lockup — ${v.name} on dark`}>
-                        <svg class="lockup__kraken" viewBox={kraken.viewBox} aria-hidden="true">
-                          {gradientDef(`grad-${v.slug}-lockup`)}
-                          <use href="#art-kraken" fill={`url(#grad-${v.slug}-lockup)`} />
-                        </svg>
-                        <img
-                          class="lockup__wordmark"
-                          src={wordmarkSrc}
-                          alt=""
-                          width="612"
-                          height="408"
-                          loading="lazy"
-                        />
-                      </div>
+                      {marks.map((m) => (
+                        <div
+                          class={`lockup art art--${m.key}`}
+                          style={`aspect-ratio:${aspect(m.viewBox)}`}
+                          role="img"
+                          aria-label={`Lockup — ${m.label}, ${v.name} on dark`}
+                        >
+                          <svg class="lockup__kraken" viewBox={m.viewBox} aria-hidden="true">
+                            {gradientDef(`grad-${v.slug}-lockup-${m.key}`, m.viewBox)}
+                            <use href={`#art-kraken-${m.key}`} fill={`url(#grad-${v.slug}-lockup-${m.key})`} />
+                          </svg>
+                          <img
+                            class="lockup__wordmark"
+                            src={wordmarkSrc}
+                            alt=""
+                            width="612"
+                            height="408"
+                            loading="lazy"
+                          />
+                        </div>
+                      ))}
                       <figcaption class="tile__label">Lockup · dark</figcaption>
                     </figure>
                   )}
@@ -258,6 +310,17 @@ function cssGradient(stops: Stop[]) {
   </main>
 </Base>
 
+<script>
+  const main = document.querySelector<HTMLElement>('.variations')!;
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.mark-toggle__btn');
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      main.dataset.option = btn.dataset.option;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    });
+  });
+</script>
+
 <style>
   .variations {
     background: var(--surface-alt);
@@ -267,7 +330,7 @@ function cssGradient(stops: Stop[]) {
 
   .variations__head {
     max-width: 680px;
-    margin-bottom: var(--space-10);
+    margin-bottom: var(--space-6);
   }
   .variations__eyebrow {
     font-family: var(--font-subhead);
@@ -293,6 +356,60 @@ function cssGradient(stops: Stop[]) {
     line-height: 1.6;
     color: var(--text-body);
     margin: 0;
+  }
+
+  /* Sticky Option 1/2/3 switch — flips data-option on <main>. */
+  .mark-toggle {
+    position: sticky;
+    top: var(--space-3);
+    z-index: 20;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    box-shadow: 0 4px 16px rgba(16, 24, 64, 0.1);
+  }
+  .mark-toggle__caption {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 0 var(--space-1) 0 var(--space-2);
+  }
+  .mark-toggle__btn {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 13px;
+    color: var(--navy-700);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  .mark-toggle__btn:hover {
+    border-color: var(--border);
+  }
+  .mark-toggle__btn[aria-pressed='true'] {
+    background: var(--navy-700);
+    color: #fff;
+  }
+
+  /* Per-option artwork: only the selected mark's tiles are visible. */
+  .art {
+    display: none;
+  }
+  .variations[data-option='o1'] .art--o1,
+  .variations[data-option='o2'] .art--o2,
+  .variations[data-option='o3'] .art--o3 {
+    display: block;
   }
 
   .variation {
@@ -362,6 +479,7 @@ function cssGradient(stops: Stop[]) {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
     gap: var(--space-3);
   }
   .tile--light {
@@ -374,7 +492,6 @@ function cssGradient(stops: Stop[]) {
   .tile__art {
     width: 100%;
     height: auto;
-    display: block;
   }
   /* Wordmark exists only as a raster — paint the gradient through its alpha. */
   .tile__wordmark {
@@ -391,13 +508,11 @@ function cssGradient(stops: Stop[]) {
     mask-position: center;
   }
   /* Composed lockup: indigo kraken behind, original two-tone wordmark in front,
-     centered at two-thirds height. */
-  /* Match the cropped viewBox's aspect so the mark renders at the same size
-     as the standalone kraken tiles, wordmark layered over its lower third. */
+     centered over its lower third. Aspect ratio is set inline per option to
+     match that mark's cropped viewBox. */
   .lockup {
     position: relative;
     width: 100%;
-    aspect-ratio: 294 / 372;
   }
   .lockup__kraken {
     position: absolute;

@@ -24,6 +24,10 @@ export function loadLogoArt(relPath: string): LogoArt {
     .replace(/<\/svg>\s*$/, '')
     .replace(/<defs>[\s\S]*?<\/defs>/g, '')
     .replace(/<!--[\s\S]*?-->/g, '')
+    // Embedded rasters live in display:none Illustrator layers whose hiding
+    // class is stripped below — drop them before they become visible (and
+    // before megabytes of base64 get inlined into the page).
+    .replace(/<image[\s\S]*?(?:\/>|<\/image>)/g, '')
     .replace(/\s*class="[^"]*"/g, '')
     .trim();
   return { viewBox, inner };
