@@ -1,29 +1,30 @@
-# Variations page: Option 1 / Option 2 mark toggle
+# Variations page: Option 1 / 2 / 3 mark toggle
 
 **Date:** 2026-07-12
 **Page:** `src/pages/variations.astro`
-**New assets:** `public/option_1.svg`, `public/option_2.svg`
+**New assets:** `public/option_1.svg`, `public/option_2.svg`, `public/option_3.svg`
 
 ## Goal
 
-Let the client choose between two new kraken marks on the `/variations` review
-page. The page keeps its current layout (composed lockup + five gradient
-variations), but every kraken-bearing tile can show either mark. The current
-mark (`logo_bg_transparent_5.svg`) retires from this page — the choice is a
-two-way Option 1 / Option 2.
+Let the client choose between three new kraken marks on the `/variations`
+review page. The page keeps its current layout (composed lockup + five
+gradient variations), but every kraken-bearing tile can show any of the marks.
+The current mark (`logo_bg_transparent_5.svg`) retires from this page — the
+choice is a three-way Option 1 / Option 2 / Option 3.
 
 ## Toggle mechanics
 
-- A segmented **Option 1 / Option 2** control is pinned at the top of the page.
-- Both marks are emitted once each as hidden defs (`#art-kraken-o1`,
-  `#art-kraken-o2`), referenced per tile via `<use>` — same pattern as today's
-  single hidden `<g>`.
-- Each kraken tile (and each lockup tile) renders **two** `<svg>` elements, one
-  per option. Each carries its own `viewBox` and its own `userSpaceOnUse`
-  gradient line, because the two files live in different coordinate spaces
-  (612×792 vs 612×1034, both cropped to measured artwork bounds).
+- A segmented **Option 1 / Option 2 / Option 3** control is pinned at the top
+  of the page.
+- The marks are emitted once each as hidden defs (`#art-kraken-o1`,
+  `#art-kraken-o2`, `#art-kraken-o3`), referenced per tile via `<use>` — same
+  pattern as today's single hidden `<g>`.
+- Each kraken tile (and each lockup tile) renders **one `<svg>` per option**.
+  Each carries its own `viewBox` and its own `userSpaceOnUse` gradient line,
+  because the files live in different coordinate spaces (612×792, 612×1034,
+  612×1024 — all cropped to measured artwork bounds).
 - Visibility is pure CSS: `<main data-option="1">` shows `.art--o1` and hides
-  `.art--o2`; the toggle flips the attribute with ~5 lines of inline script.
+  the others; the toggle flips the attribute with ~5 lines of inline script.
   No flash, no JS re-plumbing of `href`/`viewBox`/gradients; the page defaults
   to Option 1 if script fails.
 - Wordmark-only tiles are mark-independent and stay single.
@@ -41,7 +42,8 @@ Why: `option_1.svg` contains two hidden Illustrator layers (`class="st4"` →
 class-stripping would delete the `display:none` and make those rasters visible
 — and inline 1.4MB into the page HTML. Removing `<image>` elements first
 deletes both problems; the now-empty wrapper `<g>` groups are harmless.
-`option_2.svg` (241 bare paths, no classes/fills) passes through untouched.
+`option_2.svg` (241 bare paths, no classes/fills) and `option_3.svg` (101 bare
+paths, no classes/fills/images) pass through untouched.
 
 ## Asset nuances
 
