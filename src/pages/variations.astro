@@ -20,13 +20,15 @@ import { loadLogoArt } from '@lib/logoArt';
 
 // Each source canvas is mostly padding — viewBoxes are cropped to the
 // artwork's measured bounds (headless-Chrome getBBox over the stripped
-// paths) plus a ~10-unit margin. Option 1 also has a few stray editing
-// scraps far off-canvas (x ≈ -240..-172); the cropped viewBox clips them.
-//   option_1 bbox: x 0.6   y 196.8  w 536.1  h 421.0
+// paths) plus a ~10-unit margin. Option 1 also has stray editing scraps far
+// off-canvas (x ≈ -240..-172) and a couple of degenerate zero-size paths
+// out to x ≈ 537 — both ignored when measuring; the cropped viewBox clips
+// the strays.
+//   option_1 bbox: x 188   y 208    w 306    h 410
 //   option_2 bbox: x 26.4  y 165.7  w 557.2  h 689.5
 //   option_3 bbox: x 42.0  y 240.4  w 530.4  h 535.4
 const marks = [
-  { key: 'o1', label: 'Option 1', src: 'public/option_1.svg', viewBox: '-9 187 556 441' },
+  { key: 'o1', label: 'Option 1', src: 'public/option_1.svg', viewBox: '178 198 326 430' },
   { key: 'o2', label: 'Option 2', src: 'public/option_2.svg', viewBox: '16 156 577 710' },
   { key: 'o3', label: 'Option 3', src: 'public/option_3.svg', viewBox: '32 230 550 556' },
 ].map((m) => ({ ...m, inner: loadLogoArt(m.src).inner }));
