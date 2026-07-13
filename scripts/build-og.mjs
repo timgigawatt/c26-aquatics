@@ -34,11 +34,11 @@ const WORDMARK = path.join(PUBLIC_DIR, 'logo_text_transparent.png');
 // navy-900 — the "Lockup · dark" tile background from /variations.
 const NAVY = { r: 0x0e, g: 0x13, b: 0x30, alpha: 1 };
 
-/** Rasterize an SVG at `size` px square. The sources are 311x363 (portrait,
+/** Rasterize an SVG at `size` px square. The sources are 311x344 (portrait,
  *  height-bound inside the square); density scales librsvg's render so we
  *  never upscale a soft bitmap. */
 async function renderSvg(file, size) {
-  return sharp(file, { density: Math.ceil((72 * size) / 363) })
+  return sharp(file, { density: Math.ceil((72 * size) / 344) })
     .resize(size, size, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
     .png()
     .toBuffer();
