@@ -151,7 +151,7 @@ const html = `<!doctype html>
 
   /* Composed lockup: gradient kraken behind, wordmark centered at 74%
      height at 92% width (same geometry as /variations). */
-  .lockup { position: relative; height: 7.6in; aspect-ratio: 294 / 372; }
+  .lockup { position: relative; height: 7.6in; aspect-ratio: ${vw} / ${vh}; }
   .lockup__kraken { position: absolute; inset: 0; width: 100%; height: 100%; }
   .lockup__wordmark {
     position: absolute;
