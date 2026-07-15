@@ -37,10 +37,11 @@ export const site = {
     hours: '',
   },
 
-  // TODO: confirm real social handles
+  // Shared with the C26 Hub site — one set of accounts for the LLC.
   social: {
-    instagram: 'https://www.instagram.com/c26aquatics',
-    facebook: 'https://www.facebook.com/c26aquatics',
+    instagram: 'https://www.instagram.com/c26hub/',
+    facebook: 'https://www.facebook.com/c26hub',
+    twitter: 'https://x.com/c26hub',
   },
 
   /**
