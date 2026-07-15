@@ -16,8 +16,12 @@ const ga4Enabled = ga4Id && ga4Id !== 'G-XXXXXXXXXX';
   <div class="c26-consent__inner">
     <p class="c26-consent__text">
       We use a single analytics cookie to understand how visitors use this site.
-      {/* TODO: replace `#` with real privacy policy URL once published */}
-      <a href="#" class="c26-consent__link">Read our privacy notice.</a>
+      <a
+        href="https://www.c26hub.com/privacy-policy/"
+        class="c26-consent__link"
+        target="_blank"
+        rel="noopener noreferrer"
+      >Read our privacy notice.</a>
     </p>
     <div class="c26-consent__actions">
       <Button id="c26-consent-decline" variant="outline-light" size="sm">Decline</Button>

@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import krakenWhite from '@assets/brand/kraken-white.svg';
 import wordmark from '@assets/brand/wordmark-navy.png';
-import { footerLinks } from '@data/nav';
+import { footerLinks, legalLinks } from '@data/nav';
 import { site } from '@data/site';
 import { serviceArea } from '@data/serviceArea';
 
@@ -96,8 +96,24 @@ const cityList = serviceArea.map((c) => `${c.name}, ${c.state}`).join(' · ');
   <div class="c26-footer__bottom">
     <div class="c26-footer__bottom-inner">
       <span class="c26-footer__copy">
-        © {year} {site.name} · Kansas City, {site.address.addressRegion}
+        © {year} {site.name} | Powered by
+        <a
+          href="https://gigawattlab.com"
+          class="c26-footer__credit-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Gigawatt Lab</a>
       </span>
+      <nav class="c26-footer__legal" aria-label="Legal">
+        {legalLinks.map((link) => (
+          <a
+            href={link.href}
+            class="c26-footer__legal-link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >{link.label}</a>
+        ))}
+      </nav>
     </div>
   </div>
 </footer>
@@ -236,7 +252,17 @@ const cityList = serviceArea.map((c) => `${c.name}, ${c.state}`).join(' · ');
   }
   .c26-footer__legal {
     display: inline-flex;
-    gap: var(--space-5);
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+  }
+  .c26-footer__credit-link,
+  .c26-footer__legal-link {
+    color: var(--text-on-dark-muted);
+    transition: color var(--dur-base) var(--ease-out);
+  }
+  .c26-footer__credit-link:hover,
+  .c26-footer__legal-link:hover {
+    color: var(--text-on-dark);
   }
 
   @media (max-width: 900px) {
