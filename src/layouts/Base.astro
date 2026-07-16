@@ -1,5 +1,6 @@
 ---
 import '@styles/global.css';
+import AnnouncementHost from '@components/layout/AnnouncementHost.astro';
 
 interface Props {
   title: string;
@@ -57,6 +58,7 @@ const fullTitle = title.includes('C26 Aquatics') ? title : `${title} | C26 Aquat
     <slot name="head" />
   </head>
   <body>
+    <AnnouncementHost />
     <slot />
   </body>
 </html>

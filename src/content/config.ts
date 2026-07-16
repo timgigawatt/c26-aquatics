@@ -87,9 +87,39 @@ const testimonials = defineCollection({
   }),
 });
 
+/**
+ * Scheduled announcements — popup on first visit, then a banner above the
+ * header until `endDate` passes. Body markdown is the popup text.
+ *
+ * Decap CMS (future): map this folder as a collection with media folder
+ * `public/uploads`; fields are string, image, datetime ×2, boolean, body.
+ */
+const announcements = defineCollection({
+  type: 'content',
+  schema: z
+    .object({
+      title: z.string(),
+      // Path under /public, e.g. "/uploads/clinic.jpg" — Decap's future
+      // media folder, so paths authored today stay valid.
+      image: z.string().optional(),
+      imageAlt: z.string().optional(),
+      startDate: z.coerce.date(),
+      endDate: z.coerce.date(),
+      // Kill-switch without deleting the file.
+      draft: z.boolean().default(false),
+    })
+    .refine((a) => !a.image || a.imageAlt, {
+      message: 'imageAlt is required when image is set',
+    })
+    .refine((a) => a.endDate > a.startDate, {
+      message: 'endDate must be after startDate',
+    }),
+});
+
 export const collections = {
   coaches,
   'training-groups': trainingGroups,
   faqs,
   testimonials,
+  announcements,
 };

@@ -1,0 +1,255 @@
+---
+/**
+ * Scheduled announcements — popup (dialog) on a visitor's first encounter,
+ * then a slim banner above the header until `endDate` passes. Mounted once
+ * in Base.astro so every page gets it.
+ *
+ * Everything still-live at build ships in the HTML; the precise date-window
+ * check runs client-side so announcements scheduled ahead appear on time
+ * without a rebuild (the site only rebuilds on commits). Dismissal is
+ * per-announcement via localStorage — a new file/slug means a fresh popup.
+ */
+import { getCollection } from 'astro:content';
+import Button from '@components/ui/Button.astro';
+
+const buildNow = new Date();
+const entries = (
+  await getCollection('announcements', ({ data }) => !data.draft && data.endDate > buildNow)
+).sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
+
+const rendered = await Promise.all(
+  entries.map(async (entry) => ({ entry, Content: (await entry.render()).Content })),
+);
+
+// The banner that is live at build time renders visible so it doesn't pop
+// in after the script runs; the popup decision is client-only (localStorage).
+const liveSlug = entries.find(
+  (e) => e.data.startDate <= buildNow && buildNow < e.data.endDate,
+)?.slug;
+---
+{rendered.map(({ entry }) => (
+  <div
+    class="ann-banner"
+    role="region"
+    aria-label="Announcement"
+    data-ann-banner
+    data-slug={entry.slug}
+    data-start={entry.data.startDate.toISOString()}
+    data-end={entry.data.endDate.toISOString()}
+    hidden={entry.slug !== liveSlug}
+  >
+    <p class="ann-banner__text">
+      <span>{entry.data.title}</span>
+      <button type="button" class="ann-banner__more" data-ann-more>Read more</button>
+    </p>
+  </div>
+))}
+
+{rendered.map(({ entry, Content }) => (
+  <dialog
+    class="ann-dialog"
+    aria-labelledby={`ann-${entry.slug}-title`}
+    data-ann-dialog
+    data-slug={entry.slug}
+    data-start={entry.data.startDate.toISOString()}
+    data-end={entry.data.endDate.toISOString()}
+  >
+    <div class="ann-dialog__inner">
+      <button type="button" class="ann-dialog__close" data-ann-close aria-label="Dismiss announcement">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
+      {entry.data.image && (
+        <img
+          class="ann-dialog__media"
+          src={entry.data.image}
+          alt={entry.data.imageAlt}
+          loading="lazy"
+          decoding="async"
+        />
+      )}
+      <div class="ann-dialog__body">
+        <h2 id={`ann-${entry.slug}-title`} class="ann-dialog__title">{entry.data.title}</h2>
+        <div class="ann-dialog__content"><Content /></div>
+        <div class="ann-dialog__actions">
+          <Button variant="primary" size="sm" class="ann-dialog__ok">Got it</Button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+))}
+
+<script>
+  const SEEN = 'c26-announcement-seen:';
+  const banners = Array.from(document.querySelectorAll<HTMLElement>('[data-ann-banner]'));
+  const dialogs = Array.from(document.querySelectorAll<HTMLDialogElement>('[data-ann-dialog]'));
+  const now = Date.now();
+  const isLive = (el: HTMLElement) =>
+    Date.parse(el.dataset.start ?? '') <= now && now < Date.parse(el.dataset.end ?? '');
+  const dialog = dialogs.find(isLive);
+
+  // Drop dismissal keys for announcements no longer shipped (expired/removed).
+  const slugs = new Set(dialogs.map((d) => d.dataset.slug));
+  try {
+    for (let i = localStorage.length - 1; i >= 0; i -= 1) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith(SEEN) && !slugs.has(key.slice(SEEN.length))) {
+        localStorage.removeItem(key);
+      }
+    }
+  } catch {
+    /* storage blocked — nothing to clean */
+  }
+
+  // Correct the build-time guess: only the currently-live banner shows.
+  for (const banner of banners) {
+    banner.hidden = !dialog || banner.dataset.slug !== dialog.dataset.slug;
+  }
+
+  if (dialog) {
+    const slug = dialog.dataset.slug ?? '';
+    let seen = false;
+    try {
+      seen = localStorage.getItem(SEEN + slug) !== null;
+    } catch {
+      /* storage blocked — popup shows each visit, acceptable */
+    }
+    dialog.addEventListener('close', () => {
+      try {
+        localStorage.setItem(SEEN + slug, '1');
+      } catch {
+        /* ignore */
+      }
+    });
+    // Backdrop click closes — the inner wrapper swallows content clicks.
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+    for (const btn of dialog.querySelectorAll('[data-ann-close], .ann-dialog__ok')) {
+      btn.addEventListener('click', () => dialog.close());
+    }
+    banners
+      .find((b) => b.dataset.slug === slug)
+      ?.querySelector('[data-ann-more]')
+      ?.addEventListener('click', () => dialog.showModal());
+    if (!seen) window.setTimeout(() => dialog.showModal(), 600);
+  }
+</script>
+
+<style>
+  .ann-banner {
+    background: var(--navy-900);
+    border-bottom: 2px solid var(--teal-400);
+    color: var(--text-on-dark);
+  }
+  .ann-banner__text {
+    width: min(var(--container), 100% - 2 * var(--gutter));
+    margin: 0 auto;
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+    font-size: 14px;
+    font-weight: var(--fw-semibold, 600);
+    text-align: center;
+  }
+  .ann-banner__more {
+    border: none;
+    background: none;
+    padding: 0;
+    font: inherit;
+    font-weight: var(--fw-semibold, 600);
+    color: var(--teal-400);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .ann-banner__more:hover {
+    color: var(--teal-200);
+  }
+
+  .ann-dialog {
+    width: min(560px, calc(100vw - 2 * var(--space-4)));
+    max-height: min(86vh, 720px);
+    padding: 0;
+    border: none;
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    color: var(--text-body);
+    box-shadow: var(--shadow-lg, 0 24px 60px rgba(11, 22, 44, 0.35));
+    overflow: auto;
+  }
+  .ann-dialog::backdrop {
+    background: rgba(9, 18, 38, 0.62);
+    backdrop-filter: blur(2px);
+  }
+  .ann-dialog[open] {
+    animation: ann-dialog-in var(--dur-base, 200ms) var(--ease-out, ease-out);
+  }
+  @keyframes ann-dialog-in {
+    from { opacity: 0; transform: translateY(8px) scale(0.985); }
+    to { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ann-dialog[open] { animation: none; }
+  }
+
+  .ann-dialog__inner {
+    position: relative;
+  }
+  .ann-dialog__close {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: var(--r-pill);
+    background: rgba(9, 18, 38, 0.55);
+    color: var(--white);
+    cursor: pointer;
+  }
+  .ann-dialog__close:hover {
+    background: rgba(9, 18, 38, 0.75);
+  }
+  .ann-dialog__media {
+    display: block;
+    width: 100%;
+    max-height: 320px;
+    object-fit: cover;
+  }
+  .ann-dialog__body {
+    padding: var(--space-6) var(--space-6) var(--space-6);
+  }
+  .ann-dialog__title {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold, 700);
+    font-size: 28px;
+    line-height: 1.1;
+    color: var(--text-strong);
+    /* Keep clear of the × when there's no image above. */
+    padding-right: var(--space-10);
+    margin-bottom: var(--space-3);
+  }
+  .ann-dialog__content {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .ann-dialog__content :global(p) {
+    margin: 0 0 var(--space-3);
+  }
+  .ann-dialog__content :global(a) {
+    color: var(--teal-700);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .ann-dialog__actions {
+    margin-top: var(--space-5);
+  }
+</style>
