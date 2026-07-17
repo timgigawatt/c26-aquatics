@@ -12,9 +12,7 @@ highlights:
   - "In the sport since age six"
   - "Nearly four years of coaching experience"
   - "Student at Johnson County Community College"
-credentials:
-  - "USA Swimming Registered Coach"
-usaSwimmingMember: true
+usaSwimmingMember: false
 safeSportCertified: false
 order: 4
 ---

@@ -16,8 +16,7 @@ highlights:
   - "Guided athletes from first open water race to the English Channel"
 credentials:
   - "Open Water Specialist"
-  - "USA Swimming Registered Coach"
-usaSwimmingMember: true
+usaSwimmingMember: false
 safeSportCertified: false
 order: 2
 ---
