@@ -1,10 +1,14 @@
 /**
  * Build-time client for the Gigawatt CMS (Payload 3 REST API).
  *
- * Authenticates as the c26 client-editor, so every read is automatically
- * scoped to the c26 tenant. All fetchers cache in-module — the whole build
- * makes one request per collection. Any failure throws: a broken build is
- * visible, silently-stale content is not.
+ * Reads anonymously and scopes every query to the c26 tenant with a
+ * `tenant.slug` filter — the standard pattern for Gigawatt tenant sites (the
+ * CMS's public read access expects sites to filter by tenant slug themselves;
+ * drafted collections only expose published docs to anonymous readers).
+ *
+ * All fetchers cache in-module — the whole build makes one request per
+ * collection. Any failure throws: a broken build is visible, silently-stale
+ * content is not.
  */
 
 const env = (key: string): string | undefined =>
@@ -12,6 +16,8 @@ const env = (key: string): string | undefined =>
 
 const CMS_URL = env('CMS_URL') || 'https://gigawatt-cms--gigawatt-lab.us-central1.hosted.app';
 const BASE = `${CMS_URL}/api`;
+const TENANT = env('CMS_TENANT') || 'c26';
+const tenantFilter = `where%5Btenant.slug%5D%5Bequals%5D=${TENANT}`;
 
 // --- Types (the fields this site actually consumes) -------------------------
 
@@ -109,38 +115,19 @@ export interface CmsSeoSettings {
   defaultDescription?: string;
 }
 
-// --- Auth + fetch ------------------------------------------------------------
-
-let tokenPromise: Promise<string> | undefined;
-
-const getToken = () => {
-  tokenPromise ??= (async () => {
-    const email = env('CMS_EMAIL');
-    const password = env('CMS_PASSWORD');
-    if (!email || !password) {
-      throw new Error('CMS build failed: set CMS_EMAIL and CMS_PASSWORD (c26 editor account).');
-    }
-    const res = await fetch(`${BASE}/users/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-    if (!res.ok) throw new Error(`CMS build failed: login returned ${res.status}.`);
-    return (await res.json()).token as string;
-  })();
-  return tokenPromise;
-};
+// --- Fetch -------------------------------------------------------------------
 
 const get = async (path: string) => {
-  const token = await getToken();
-  const res = await fetch(`${BASE}${path}`, { headers: { Authorization: `JWT ${token}` } });
+  const res = await fetch(`${BASE}${path}`);
   if (!res.ok) throw new Error(`CMS build failed: GET ${path} returned ${res.status}.`);
   return res.json();
 };
 
-/** Fetch every doc in a (tenant-scoped) collection, sorted. */
+/** Fetch every c26 doc in a tenant-scoped collection, sorted. */
 const allDocs = async <T>(collection: string, sort = 'order'): Promise<T[]> => {
-  const json = await get(`/${collection}?limit=200&depth=1&sort=${encodeURIComponent(sort)}`);
+  const json = await get(
+    `/${collection}?limit=200&depth=1&sort=${encodeURIComponent(sort)}&${tenantFilter}`,
+  );
   return json.docs as T[];
 };
 
@@ -177,19 +164,19 @@ export const getAnnouncements = () =>
 
 export const getNavigation = () =>
   cached('navigation', async () => {
-    const json = await get('/navigation?limit=1&depth=0');
+    const json = await get(`/navigation?limit=1&depth=0&${tenantFilter}`);
     return (json.docs?.[0]?.items ?? []) as CmsNavItem[];
   });
 
 export const getFooter = () =>
   cached('footer', async () => {
-    const json = await get('/footer?limit=1&depth=0');
+    const json = await get(`/footer?limit=1&depth=0&${tenantFilter}`);
     return (json.docs?.[0] ?? {}) as CmsFooter;
   });
 
 export const getSeoSettings = () =>
   cached('seo-settings', async () => {
-    const json = await get('/seo-settings?limit=1&depth=0');
+    const json = await get(`/seo-settings?limit=1&depth=0&${tenantFilter}`);
     return (json.docs?.[0] ?? {}) as CmsSeoSettings;
   });
 
