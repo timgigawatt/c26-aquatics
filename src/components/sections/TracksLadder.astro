@@ -4,20 +4,27 @@
  * Whole card is an anchor; visual treatment per design handoff
  * (faded ordinal rail, blue age pill, magenta CTA text).
  */
-import { tracks as defaultTracks, type Track } from '@data/tracks';
+export interface Track {
+  num: string;
+  title: string;
+  age: string;
+  desc: string;
+  cta: string;
+  href: string;
+}
 
 interface Props {
   eyebrow?: string;
   heading?: string;
   intro?: string;
-  tracks?: Track[];
+  tracks: Track[];
 }
 
 const {
   eyebrow = 'Programs',
   heading = 'Training groups',
-  intro = 'Seven groups take a swimmer from their first strokes to the highest levels of competition — one clear development pathway, one standard.',
-  tracks = defaultTracks,
+  intro,
+  tracks,
 } = Astro.props;
 ---
 <section id="tracks" class="tracks" aria-labelledby="tracks-title">

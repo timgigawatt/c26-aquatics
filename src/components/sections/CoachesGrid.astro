@@ -1,22 +1,32 @@
 ---
 /**
- * CoachesGrid — responsive grid of coach cards.
- * Fetches the `coaches` collection, sorts by `order`, slices to `limit`.
- * Each card has an id matching the entry slug so `/coaches#robbie-bruce` works.
+ * CoachesGrid — responsive grid of coach cards. Coaches come prepared from
+ * the CMS team-members collection via BlockRenderer (`teamGrid` blocks).
+ * Each card has an id matching the coach slug so `/coaches#robbie-bruce` works.
  *
- * Headshots are runtime path strings (under /public), not bundled assets — we
- * render with a plain <img> with explicit width/height to prevent CLS.
+ * Without a headshot we render the gradient kraken placeholder with the
+ * coach's initials in front, instead of a broken <img>.
  */
-import fs from 'node:fs';
-import path from 'node:path';
-import { getCollection, getEntries, type CollectionEntry } from 'astro:content';
-import Card from '@components/ui/Card.astro';
 import Badge from '@components/ui/Badge.astro';
 import krakenWhite from '@assets/brand/kraken-white.svg';
 import krakenGradient from '@assets/brand/kraken-gradient.svg';
 
+export interface CoachCard {
+  slug: string;
+  name: string;
+  role: string;
+  headshotUrl?: string;
+  tagline?: string;
+  groups: { name: string; href: string }[];
+  programs: string[];
+  highlights: string[];
+  /** Rendered HTML of the coach's bio markdown. */
+  bioHtml: string;
+  initials: string;
+}
+
 interface Props {
-  limit?: number;
+  coaches: CoachCard[];
   eyebrow?: string;
   heading?: string;
   subtitle?: string;
@@ -34,7 +44,7 @@ interface Props {
 }
 
 const {
-  limit,
+  coaches,
   eyebrow = 'The staff',
   heading = 'Coaches & bios',
   subtitle,
@@ -45,41 +55,6 @@ const {
   ctaLabel,
   ctaHref,
 } = Astro.props;
-
-type CoachEntry = CollectionEntry<'coaches'>;
-const all = await getCollection('coaches');
-const sorted = all.sort(
-  (a: CoachEntry, b: CoachEntry) => a.data.order - b.data.order,
-);
-const coaches = typeof limit === 'number' ? sorted.slice(0, limit) : sorted;
-
-// Headshots are placeholders until real photos land in /public/coaches. Check
-// at build time so we render the gradient kraken on dark ("Kraken · dark"
-// from /variations) with the coach's initials in front, instead of a broken <img>.
-const initialsOf = (name: string) =>
-  name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((word) => word[0])
-    .join('')
-    .toUpperCase();
-
-const rendered = await Promise.all(
-  coaches.map(async (coach: CoachEntry) => {
-    const { Content } = await coach.render();
-    const hasHeadshot = fs.existsSync(
-      path.join(process.cwd(), 'public', coach.data.headshot),
-    );
-    // Resolve group references (frontmatter order preserved) so chips show the
-    // group's real name and link to its tab on /team.
-    const groups = (await getEntries(coach.data.groups)).map((entry) => ({
-      name: entry.data.name,
-      href: `/team#${entry.slug}`,
-    }));
-    return { coach, Content, groups, hasHeadshot, initials: initialsOf(coach.data.name) };
-  }),
-);
 ---
 <section
   class:list={['coaches', `coaches--${tone}`, { 'coaches--watermarked': watermark }]}
@@ -102,13 +77,13 @@ const rendered = await Promise.all(
     </header>
 
     <div class:list={['coaches__grid', `coaches__grid--${columns}`]}>
-      {rendered.map(({ coach, groups, hasHeadshot, initials }) => (
+      {coaches.map((coach) => (
         <article id={coach.slug} class:list={['coach-card', { 'coach-card--compact': compact }]}>
           <div class="coach-card__media">
-            {hasHeadshot ? (
+            {coach.headshotUrl ? (
               <img
-                src={coach.data.headshot}
-                alt={`${coach.data.name}, ${coach.data.role}`}
+                src={coach.headshotUrl}
+                alt={`${coach.name}, ${coach.role}`}
                 width="600"
                 height="600"
                 loading="lazy"
@@ -118,23 +93,23 @@ const rendered = await Promise.all(
               <div class="coach-card__placeholder" aria-hidden="true">
                 <img src={krakenGradient.src} alt="" loading="lazy" decoding="async" />
                 <span class="coach-card__initials">
-                  <span class="coach-card__initials-first">{initials[0]}</span>{initials.slice(1)}
+                  <span class="coach-card__initials-first">{coach.initials[0]}</span>{coach.initials.slice(1)}
                 </span>
               </div>
             )}
           </div>
           <div class="coach-card__body">
-            <h3 class="coach-card__name">{coach.data.name}</h3>
-            <div class="coach-card__role">{coach.data.role}</div>
-            {!compact && coach.data.tagline && (
-              <p class="coach-card__tagline">{coach.data.tagline}</p>
+            <h3 class="coach-card__name">{coach.name}</h3>
+            <div class="coach-card__role">{coach.role}</div>
+            {!compact && coach.tagline && (
+              <p class="coach-card__tagline">{coach.tagline}</p>
             )}
-            {!compact && (groups.length > 0 || coach.data.programs.length > 0) && (
+            {!compact && (coach.groups.length > 0 || coach.programs.length > 0) && (
               <div class="coach-card__facts">
-                {groups.map((group) => (
+                {coach.groups.map((group) => (
                   <a class="coach-chip" href={group.href}>{group.name}</a>
                 ))}
-                {coach.data.programs.map((program) => (
+                {coach.programs.map((program) => (
                   <Badge tone="teal" size="sm">{program}</Badge>
                 ))}
               </div>
@@ -156,14 +131,14 @@ const rendered = await Promise.all(
       ))}
     </div>
 
-    {!compact && rendered.map(({ coach, Content, groups, hasHeadshot, initials }) => (
+    {!compact && coaches.map((coach) => (
       <dialog id={`bio-${coach.slug}`} class="coach-dialog" aria-labelledby={`bio-${coach.slug}-name`}>
         <div class="coach-dialog__inner">
           <button
             type="button"
             class="coach-dialog__close"
             data-coach-close
-            aria-label={`Close ${coach.data.name}'s bio`}
+            aria-label={`Close ${coach.name}'s bio`}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
@@ -171,53 +146,43 @@ const rendered = await Promise.all(
           </button>
           <div class="coach-dialog__header">
             <div class="coach-dialog__media">
-              {hasHeadshot ? (
-                <img src={coach.data.headshot} alt={`${coach.data.name}, ${coach.data.role}`} width="200" height="200" />
+              {coach.headshotUrl ? (
+                <img src={coach.headshotUrl} alt={`${coach.name}, ${coach.role}`} width="200" height="200" />
               ) : (
                 <div class="coach-dialog__placeholder" aria-hidden="true">
                   <img src={krakenGradient.src} alt="" loading="lazy" decoding="async" />
                   <span class="coach-card__initials">
-                    <span class="coach-card__initials-first">{initials[0]}</span>{initials.slice(1)}
+                    <span class="coach-card__initials-first">{coach.initials[0]}</span>{coach.initials.slice(1)}
                   </span>
                 </div>
               )}
             </div>
             <div class="coach-dialog__ident">
-              <h3 id={`bio-${coach.slug}-name`} class="coach-dialog__name">{coach.data.name}</h3>
-              <div class="coach-dialog__role">{coach.data.role}</div>
-              <div class="coach-dialog__badges">
-                {coach.data.usaSwimmingMember && (
-                  <Badge tone="teal" size="sm">USA Swimming</Badge>
-                )}
-                {coach.data.safeSportCertified && (
-                  <Badge tone="orange" size="sm">SafeSport Certified</Badge>
-                )}
-              </div>
+              <h3 id={`bio-${coach.slug}-name`} class="coach-dialog__name">{coach.name}</h3>
+              <div class="coach-dialog__role">{coach.role}</div>
             </div>
           </div>
 
           <div class="coach-dialog__body">
-            {(groups.length > 0 || coach.data.programs.length > 0) && (
+            {(coach.groups.length > 0 || coach.programs.length > 0) && (
               <div class="coach-dialog__facts">
                 <h4 class="coach-dialog__facts-title">Groups &amp; programs</h4>
                 <div class="coach-card__facts">
-                  {groups.map((group) => (
+                  {coach.groups.map((group) => (
                     <a class="coach-chip" href={group.href}>{group.name}</a>
                   ))}
-                  {coach.data.programs.map((program) => (
+                  {coach.programs.map((program) => (
                     <Badge tone="teal" size="sm">{program}</Badge>
                   ))}
                 </div>
               </div>
             )}
-            <div class="coach-dialog__bio">
-              <Content />
-            </div>
-            {coach.data.highlights.length > 0 && (
+            <div class="coach-dialog__bio" set:html={coach.bioHtml} />
+            {coach.highlights.length > 0 && (
               <div class="coach-dialog__highlights">
                 <h4 class="coach-dialog__highlights-title">Career highlights</h4>
                 <ul class="coach-dialog__highlights-list">
-                  {coach.data.highlights.map((item) => (
+                  {coach.highlights.map((item) => (
                     <li>{item}</li>
                   ))}
                 </ul>

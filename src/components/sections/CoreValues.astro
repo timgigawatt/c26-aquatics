@@ -1,21 +1,23 @@
 ---
 /**
- * CoreValues — card grid of the eight C26 core values. Data from
- * src/data/approach.ts. Sits within the Mission/Vision/Values block on
- * /our-approach.
+ * CoreValues — card grid of the eight C26 core values. Values come from the
+ * CMS `servicesPreview` block on /our-approach.
  */
-import { coreValues, type CoreValue } from '@data/approach';
+export interface CoreValue {
+  title: string;
+  body: string;
+}
 
 interface Props {
   eyebrow?: string;
   heading?: string;
-  values?: CoreValue[];
+  values: CoreValue[];
 }
 
 const {
   eyebrow = 'What we stand for',
   heading = 'Our core values',
-  values = coreValues,
+  values,
 } = Astro.props;
 ---
 <section class="values" aria-labelledby="values-title">

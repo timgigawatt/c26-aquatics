@@ -1,0 +1,68 @@
+---
+/**
+ * CMS-driven pages. One route renders every published page in the Gigawatt
+ * CMS as a block layout ('home' maps to '/'). The contact page keeps its own
+ * static file (form shell) and is excluded here.
+ */
+import Base from '@layouts/Base.astro';
+import Header from '@components/layout/Header.astro';
+import Footer from '@components/layout/Footer.astro';
+import ConsentBanner from '@components/layout/ConsentBanner.astro';
+import BlockRenderer from '@components/BlockRenderer.astro';
+import {
+  sportsOrganizationSchema,
+  sportsTeamSchema,
+  coachesListSchema,
+  aboutPageSchema,
+  jsonLd,
+} from '@lib/schemas';
+import { getPages, getTeamMembers, mediaUrl, type CmsPage } from '@lib/cms';
+
+export async function getStaticPaths() {
+  const pages = await getPages();
+  return pages
+    .filter((p) => p.slug !== 'contact')
+    .map((p) => ({
+      params: { slug: p.slug === 'home' ? undefined : p.slug },
+      props: { page: p },
+    }));
+}
+
+interface Props {
+  page: CmsPage;
+}
+
+const { page } = Astro.props;
+
+const schemas: object[] = [sportsOrganizationSchema()];
+if (page.slug === 'team') schemas.push(sportsTeamSchema());
+if (page.slug === 'our-story') schemas.push(aboutPageSchema());
+if (page.slug === 'coaches') {
+  const members = await getTeamMembers();
+  schemas.push(
+    coachesListSchema(
+      members.map((m) => ({
+        slug: m.slug,
+        name: m.name,
+        role: m.role ?? '',
+        headshot: mediaUrl(m.headshot),
+        credentials: (m.specialties ?? []).map((s) => s.label),
+      })),
+    ),
+  );
+}
+---
+<Base title={page.seo?.title ?? page.title} description={page.seo?.description ?? ''}>
+  <Fragment slot="head">
+    {schemas.map((schema) => (
+      <script type="application/ld+json" set:html={jsonLd(schema)} />
+    ))}
+  </Fragment>
+
+  <Header />
+  <main>
+    <BlockRenderer blocks={page.layout} pageSlug={page.slug} />
+  </main>
+  <Footer />
+  <ConsentBanner />
+</Base>

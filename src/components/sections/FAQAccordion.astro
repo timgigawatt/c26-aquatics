@@ -4,90 +4,52 @@
  *
  * IMPORTANT (SEO): the visible DOM text and the JSON-LD `acceptedAnswer.text` must
  * match within Google's tolerance — otherwise the FAQ rich result is suppressed.
- * Both are derived from the same content collection entry: the visible answer
- * uses the rendered Markdown <Content />, and the JSON-LD answer uses the same
- * raw body run through `markdownToPlainText`.
+ * Both are derived from the same CMS `faq` block item: the visible answer is the
+ * markdown answer rendered with micromark, and the JSON-LD answer is the same
+ * raw text run through `markdownToPlainText`.
  */
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { micromark } from 'micromark';
 import { markdownToPlainText } from '@lib/markdown';
-import Button from '@components/ui/Button.astro';
-import { site } from '@data/site';
 
-type Surface = 'home' | 'team' | 'faq';
-type Category = 'team' | 'logistics' | 'general';
+interface FaqItem {
+  question: string;
+  /** Markdown; blank lines separate paragraphs. */
+  answer: string;
+}
 
 interface Props {
-  surface: Surface;
+  items: FaqItem[];
   heading?: string;
   eyebrow?: string;
   subtitle?: string;
-  groupByCategory?: boolean;
 }
 
 const {
-  surface,
+  items,
   heading = 'Frequently asked questions',
   eyebrow = 'Questions',
   subtitle,
-  groupByCategory = false,
 } = Astro.props;
 
-type FaqEntry = CollectionEntry<'faqs'>;
-const all = await getCollection('faqs');
-const filtered = all
-  .filter((f: FaqEntry) => f.data.surfaces.includes(surface))
-  .sort((a: FaqEntry, b: FaqEntry) => a.data.order - b.data.order);
-
-// Pre-render the markdown answers once.
-const rendered = await Promise.all(
-  filtered.map(async (entry: FaqEntry) => {
-    const { Content } = await entry.render();
-    return {
-      entry,
-      Content,
-      plainText: markdownToPlainText(entry.body),
-    };
-  }),
-);
+const rendered = items.map((item) => ({
+  question: item.question,
+  html: micromark(item.answer),
+  plainText: markdownToPlainText(item.answer),
+}));
 
 // JSON-LD scoped to exactly what's visible.
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: rendered.map(({ entry, plainText }) => ({
+  mainEntity: rendered.map(({ question, plainText }) => ({
     '@type': 'Question',
-    name: entry.data.question,
+    name: question,
     acceptedAnswer: {
       '@type': 'Answer',
       text: plainText,
     },
   })),
 };
-
-// Frontmatter CTAs can name a `site.booking` key instead of a raw URL so the
-// booking link stays single-sourced in site.ts.
-function resolveCtaHref(href: string): string {
-  if (href === 'booking.team') return site.booking.team;
-  return href;
-}
-
-const categoryLabels: Record<Category, string> = {
-  team: 'Team',
-  logistics: 'Logistics',
-  general: 'General',
-};
-const categoryOrder: Category[] = ['general', 'team', 'logistics'];
-
-const grouped: Record<Category, typeof rendered> = {
-  team: [],
-  logistics: [],
-  general: [],
-};
-if (groupByCategory) {
-  for (const item of rendered) {
-    grouped[item.entry.data.category].push(item);
-  }
-}
 ---
 <section class="faq" aria-labelledby="faq-title">
   <div class="container faq__inner">
@@ -97,58 +59,17 @@ if (groupByCategory) {
       {subtitle && <p class="faq__subtitle">{subtitle}</p>}
     </header>
 
-    {groupByCategory ? (
-      <div class="faq__groups">
-        {categoryOrder
-          .filter((cat) => grouped[cat].length > 0)
-          .map((cat) => (
-            <div class="faq__group">
-              <h3 class="faq__group-title">{categoryLabels[cat]}</h3>
-              <div class="faq__list">
-                {grouped[cat].map(({ entry, Content }) => (
-                  <details class="faq__item">
-                    <summary class="faq__summary">
-                      <span class="faq__question">{entry.data.question}</span>
-                      <span class="faq__chevron" aria-hidden="true"></span>
-                    </summary>
-                    <div class="faq__answer">
-                      <Content />
-                      {entry.data.cta && (
-                        <div class="faq__cta">
-                          <Button href={resolveCtaHref(entry.data.cta.href)} variant="primary">
-                            {entry.data.cta.label}
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </details>
-                ))}
-              </div>
-            </div>
-          ))}
-      </div>
-    ) : (
-      <div class="faq__list">
-        {rendered.map(({ entry, Content }) => (
-          <details class="faq__item">
-            <summary class="faq__summary">
-              <span class="faq__question">{entry.data.question}</span>
-              <span class="faq__chevron" aria-hidden="true"></span>
-            </summary>
-            <div class="faq__answer">
-              <Content />
-              {entry.data.cta && (
-                <div class="faq__cta">
-                  <Button href={resolveCtaHref(entry.data.cta.href)} variant="primary">
-                    {entry.data.cta.label}
-                  </Button>
-                </div>
-              )}
-            </div>
-          </details>
-        ))}
-      </div>
-    )}
+    <div class="faq__list">
+      {rendered.map(({ question, html }) => (
+        <details class="faq__item">
+          <summary class="faq__summary">
+            <span class="faq__question">{question}</span>
+            <span class="faq__chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="faq__answer" set:html={html} />
+        </details>
+      ))}
+    </div>
   </div>
 </section>
 

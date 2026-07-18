@@ -3,21 +3,18 @@
  * DifferenceMatrix — the "Traditional Swim Clubs vs C26 Aquatics" comparison,
  * rendered as a head-to-head pair of cards: a muted "Traditional" card (✕
  * badges) beside a navy C26 card with a teal radial glow (✓ badges). Stacks to
- * one column under ~720px. Data from src/data/approach.ts.
+ * one column under ~720px. Rows come from the CMS `comparisonTable` block.
  */
-import {
-  differenceIntro,
-  differenceRows,
-  condensedDifferenceRows,
-  differenceSummary,
-  type DifferenceRow,
-} from '@data/approach';
+export interface DifferenceRow {
+  traditional: string;
+  c26: string;
+}
 
 interface Props {
   eyebrow?: string;
   heading?: string;
   intro?: string;
-  rows?: DifferenceRow[];
+  rows: DifferenceRow[];
   summary?: string;
   tagline?: string;
   /** Homepage teaser: 4 rows, no intro/summary prose, optional CTA link. */
@@ -32,15 +29,15 @@ const {
   heading = 'The C26 difference',
   intro,
   rows,
-  summary = differenceSummary,
+  summary,
   tagline = 'One Home. One Pool. One Standard.',
   condensed = false,
   cta,
   id = 'difference',
 } = Astro.props;
 
-const displayRows = rows ?? (condensed ? condensedDifferenceRows : differenceRows);
-const introText = intro ?? (condensed ? undefined : differenceIntro);
+const displayRows = rows;
+const introText = intro;
 ---
 <section id={id} class:list={['diffmatrix', { 'diffmatrix--condensed': condensed }]} aria-labelledby="diffmatrix-title">
   <div class="container">

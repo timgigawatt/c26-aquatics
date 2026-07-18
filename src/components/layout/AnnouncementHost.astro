@@ -9,50 +9,56 @@
  * without a rebuild (the site only rebuilds on commits). Dismissal is
  * per-announcement via localStorage — a new file/slug means a fresh popup.
  */
-import { getCollection } from 'astro:content';
+import { micromark } from 'micromark';
 import Button from '@components/ui/Button.astro';
+import { getAnnouncements, mediaUrl } from '@lib/cms';
 
 const buildNow = new Date();
-const entries = (
-  await getCollection('announcements', ({ data }) => !data.draft && data.endDate > buildNow)
-).sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
-
-const rendered = await Promise.all(
-  entries.map(async (entry) => ({ entry, Content: (await entry.render()).Content })),
-);
+const rendered = (await getAnnouncements())
+  .filter((a) => !a.draft && new Date(a.endDate) > buildNow)
+  .map((a, i) => ({
+    // Stable dismissal key per announcement (new title = fresh popup).
+    slug: a.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
+    title: a.title,
+    imageUrl: mediaUrl(a.image),
+    imageAlt: a.image?.alt ?? '',
+    startDate: new Date(a.startDate),
+    endDate: new Date(a.endDate),
+    bodyHtml: micromark(a.body ?? ''),
+  }));
 
 // The banner that is live at build time renders visible so it doesn't pop
 // in after the script runs; the popup decision is client-only (localStorage).
-const liveSlug = entries.find(
-  (e) => e.data.startDate <= buildNow && buildNow < e.data.endDate,
+const liveSlug = rendered.find(
+  (e) => e.startDate <= buildNow && buildNow < e.endDate,
 )?.slug;
 ---
-{rendered.map(({ entry }) => (
+{rendered.map((entry) => (
   <div
     class="ann-banner"
     role="region"
     aria-label="Announcement"
     data-ann-banner
     data-slug={entry.slug}
-    data-start={entry.data.startDate.toISOString()}
-    data-end={entry.data.endDate.toISOString()}
+    data-start={entry.startDate.toISOString()}
+    data-end={entry.endDate.toISOString()}
     hidden={entry.slug !== liveSlug}
   >
     <p class="ann-banner__text">
-      <span>{entry.data.title}</span>
+      <span>{entry.title}</span>
       <button type="button" class="ann-banner__more" data-ann-more>Read more</button>
     </p>
   </div>
 ))}
 
-{rendered.map(({ entry, Content }) => (
+{rendered.map((entry) => (
   <dialog
     class="ann-dialog"
     aria-labelledby={`ann-${entry.slug}-title`}
     data-ann-dialog
     data-slug={entry.slug}
-    data-start={entry.data.startDate.toISOString()}
-    data-end={entry.data.endDate.toISOString()}
+    data-start={entry.startDate.toISOString()}
+    data-end={entry.endDate.toISOString()}
   >
     <div class="ann-dialog__inner">
       <button type="button" class="ann-dialog__close" data-ann-close aria-label="Dismiss announcement">
@@ -60,18 +66,18 @@ const liveSlug = entries.find(
           <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
         </svg>
       </button>
-      {entry.data.image && (
+      {entry.imageUrl && (
         <img
           class="ann-dialog__media"
-          src={entry.data.image}
-          alt={entry.data.imageAlt}
+          src={entry.imageUrl}
+          alt={entry.imageAlt}
           loading="lazy"
           decoding="async"
         />
       )}
       <div class="ann-dialog__body">
-        <h2 id={`ann-${entry.slug}-title`} class="ann-dialog__title">{entry.data.title}</h2>
-        <div class="ann-dialog__content"><Content /></div>
+        <h2 id={`ann-${entry.slug}-title`} class="ann-dialog__title">{entry.title}</h2>
+        <div class="ann-dialog__content" set:html={entry.bodyHtml} />
         <div class="ann-dialog__actions">
           <Button variant="primary" size="sm" class="ann-dialog__ok">Got it</Button>
         </div>

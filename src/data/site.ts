@@ -57,6 +57,20 @@ export const site = {
   // GA4 — set via env var or hardcode once provisioned
   // TODO: replace with real measurement ID
   ga4MeasurementId: 'G-XXXXXXXXXX',
+
+  /**
+   * Communities served across the KC metro. Infrastructure, not page copy —
+   * emitted in the SportsOrganization `areaServed` JSON-LD and the footer.
+   * (The visible service-area band on the homepage is CMS content.)
+   */
+  serviceArea: [
+    { name: 'Leawood', state: 'KS' },
+    { name: 'Lenexa', state: 'KS' },
+    { name: 'Olathe', state: 'KS' },
+    { name: 'Overland Park', state: 'KS' },
+    { name: 'Prairie Village', state: 'KS' },
+    { name: 'Shawnee', state: 'KS' },
+  ],
 } as const;
 
 export type Site = typeof site;

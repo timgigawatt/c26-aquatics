@@ -2,14 +2,18 @@
 /**
  * NumberedPrinciples — big-number principle cards (2 columns on desktop,
  * single column under ~860px). Used for the four commitments of the C26
- * method and the six-item C26 coaching system on /our-approach. Data from
- * src/data/approach.ts. Number accents alternate teal/orange by row pair
+ * method and the six-item C26 coaching system on /our-approach. Items come
+ * from CMS `process` blocks. Number accents alternate teal/orange by row pair
  * (01/02 teal, 03/04 orange, 05/06 teal, …).
  *
  * `intro` accepts a string or string[] (rendered as separate paragraphs);
  * an optional named `outro` slot renders below the grid.
  */
-import { principles, type Principle } from '@data/approach';
+export interface Principle {
+  n: string;
+  title: string;
+  body: string;
+}
 
 interface Props {
   /** Anchor id for deep links; also namespaces the heading id. */
@@ -17,7 +21,7 @@ interface Props {
   eyebrow?: string;
   heading?: string;
   intro?: string | string[];
-  items?: Principle[];
+  items: Principle[];
   /** 'alt' renders on var(--surface-alt) instead of var(--surface). */
   tone?: 'default' | 'alt';
 }
@@ -26,12 +30,12 @@ const {
   id,
   eyebrow = 'The C26 method',
   heading = 'Train with purpose',
-  intro = 'Every practice has a purpose. Every set has an objective. Every season has a plan. Our whole philosophy comes down to four commitments we make to every swimmer.',
-  items = principles,
+  intro,
+  items,
   tone = 'default',
 } = Astro.props;
 
-const introParas = Array.isArray(intro) ? intro : [intro];
+const introParas = intro ? (Array.isArray(intro) ? intro : [intro]) : [];
 const headingId = id ? `${id}-title` : 'principles-title';
 ---
 <section

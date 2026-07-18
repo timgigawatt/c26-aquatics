@@ -1,7 +1,12 @@
 ---
-import { primaryNav } from '@data/nav';
 import { site } from '@data/site';
+import { getNavigation } from '@lib/cms';
 import Button from '@components/ui/Button.astro';
+
+const primaryNav = (await getNavigation()).map((item) => ({
+  ...item,
+  external: item.href.startsWith('http'),
+}));
 
 const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 function isCurrent(href: string): boolean {

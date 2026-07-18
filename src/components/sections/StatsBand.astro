@@ -4,16 +4,19 @@
  * edge (negative top margin), rendered as a continuously scrolling ticker. The row is duplicated so the loop wraps
  * seamlessly; the duplicate is aria-hidden. Pauses on hover/focus, and under
  * `prefers-reduced-motion` it collapses to a static, centered, wrapped row.
- * Pulls from src/data/stats.ts by default; pass `stats` to override per-page.
+ * Stats come from the CMS `statsBand` block via BlockRenderer.
  */
-import { homeStats, type Stat } from '@data/stats';
+export interface Stat {
+  value?: string;
+  label: string;
+}
 
 interface Props {
-  stats?: Stat[];
+  stats: Stat[];
   ariaLabel?: string;
 }
 
-const { stats = homeStats, ariaLabel = 'Program highlights' } = Astro.props;
+const { stats, ariaLabel = 'Program highlights' } = Astro.props;
 ---
 <section class="ticker" aria-label={ariaLabel}>
   <div class="container">

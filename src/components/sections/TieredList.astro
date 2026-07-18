@@ -1,0 +1,103 @@
+---
+/**
+ * TieredList — CMS `tieredList` blocks: labelled tiers of list items with an
+ * optional footnote. Used for the required-equipment kits on /team.
+ */
+interface Props {
+  heading?: string;
+  intro?: string;
+  tiers: { label: string; intro?: string; items?: { text: string }[] }[];
+  footnote?: string;
+}
+
+const { heading, intro, tiers, footnote } = Astro.props;
+---
+<section class="tiered" aria-labelledby={heading ? 'tiered-title' : undefined}>
+  <div class="container">
+    {heading && <h2 id="tiered-title" class="tiered__heading">{heading}</h2>}
+    {intro && <p class="tiered__intro">{intro}</p>}
+    <div class="tiered__grid">
+      {tiers.map((tier) => (
+        <article class="tier-card">
+          <h3 class="tier-card__title">{tier.label}</h3>
+          {tier.intro && <p class="tier-card__intro">{tier.intro}</p>}
+          {tier.items && tier.items.length > 0 && (
+            <ul class="tier-card__list">
+              {tier.items.map((item) => (
+                <li>{item.text}</li>
+              ))}
+            </ul>
+          )}
+        </article>
+      ))}
+    </div>
+    {footnote && <p class="tiered__footnote">{footnote}</p>}
+  </div>
+</section>
+
+<style>
+  .tiered {
+    background: var(--surface-alt);
+    padding: var(--section-y) 0;
+  }
+  .tiered__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(24px, 3vw, 34px);
+    color: var(--navy-700);
+    margin: 0 0 var(--space-3);
+  }
+  .tiered__intro {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-body);
+    margin: 0 0 var(--space-6);
+    max-width: 640px;
+  }
+  .tiered__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-6);
+    margin-top: var(--space-6);
+  }
+  .tier-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-sm);
+  }
+  .tier-card__title {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 16px;
+    color: var(--navy-700);
+    margin: 0 0 var(--space-2);
+  }
+  .tier-card__intro {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-muted, var(--text-body));
+    margin: 0 0 var(--space-3);
+  }
+  .tier-card__list {
+    margin: 0;
+    padding-left: 1.1em;
+  }
+  .tier-card__list li {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-body);
+    margin-bottom: var(--space-1);
+  }
+  .tiered__footnote {
+    margin: var(--space-6) 0 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-muted, var(--text-body));
+    max-width: 640px;
+  }
+</style>

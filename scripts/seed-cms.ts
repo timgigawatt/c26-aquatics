@@ -502,6 +502,11 @@ await upsertPage('our-approach', {
       body: 'Great swimmers are developed through purpose, patience, and consistency — not endless laps and accumulated yardage.',
     },
     {
+      blockType: 'richText',
+      eyebrow: 'The C26 coaching system',
+      body: 'At C26 Aquatics, every coach teaches from the same coaching philosophy.\n\nEvery drill, every set, every conversation, and every practice is intentionally designed to develop not only faster swimmers — but more confident athletes and better people.\n\nThat means every practice includes:',
+    },
+    {
       blockType: 'process',
       heading: "Our coaches don't supervise workouts. They coach.",
       steps: coachingSystem.map((c) => ({ num: c.n, title: c.title, copy: c.body })),

@@ -2,12 +2,15 @@
 import { Image } from 'astro:assets';
 import krakenWhite from '@assets/brand/kraken-white.svg';
 import wordmark from '@assets/brand/wordmark-navy.png';
-import { footerLinks, legalLinks } from '@data/nav';
 import { site } from '@data/site';
-import { serviceArea } from '@data/serviceArea';
+import { getFooter } from '@lib/cms';
+
+const footer = await getFooter();
+const footerLinks = footer.columns?.[0]?.links ?? [];
+const legalLinks = footer.legal ?? [];
 
 const year = new Date().getFullYear();
-const cityList = serviceArea.map((c) => `${c.name}, ${c.state}`).join(' · ');
+const cityList = site.serviceArea.map((c) => `${c.name}, ${c.state}`).join(' · ');
 ---
 <footer class="c26-footer">
   <div class="c26-footer__inner">

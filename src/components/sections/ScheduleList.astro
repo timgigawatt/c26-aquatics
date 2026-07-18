@@ -1,0 +1,91 @@
+---
+/**
+ * ScheduleList — CMS `scheduleList` blocks: period rows with items. Used for
+ * the proposed meet schedule on /team.
+ */
+interface Props {
+  heading?: string;
+  intro?: string;
+  periods: { period: string; items?: { text: string }[] }[];
+}
+
+const { heading, intro, periods } = Astro.props;
+---
+<section class="sched" aria-labelledby={heading ? 'sched-title' : undefined}>
+  <div class="container sched__inner">
+    {heading && <h2 id="sched-title" class="sched__heading">{heading}</h2>}
+    {intro && <p class="sched__intro">{intro}</p>}
+    <dl class="sched__list">
+      {periods.map((p) => (
+        <div class="sched__row">
+          <dt class="sched__period">{p.period}</dt>
+          <dd class="sched__meets">
+            {(p.items ?? []).map((item) => (
+              <span class="sched__meet">{item.text}</span>
+            ))}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<style>
+  .sched {
+    background: var(--surface);
+    padding: var(--section-y) 0;
+  }
+  .sched__inner {
+    max-width: 860px;
+  }
+  .sched__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(24px, 3vw, 34px);
+    color: var(--navy-700);
+    margin: 0 0 var(--space-3);
+  }
+  .sched__intro {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-muted, var(--text-body));
+    margin: 0 0 var(--space-6);
+  }
+  .sched__list {
+    margin: 0;
+    border-top: 1px solid var(--border);
+  }
+  .sched__row {
+    display: grid;
+    grid-template-columns: minmax(140px, 220px) 1fr;
+    gap: var(--space-4);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .sched__period {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 14px;
+    color: var(--teal-700);
+  }
+  .sched__meets {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .sched__meet {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text-body);
+  }
+  @media (max-width: 560px) {
+    .sched__row {
+      grid-template-columns: 1fr;
+      gap: var(--space-1);
+    }
+  }
+</style>

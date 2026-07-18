@@ -1,0 +1,406 @@
+---
+/**
+ * BlockRenderer — maps CMS page-layout blocks to design-system sections.
+ * Each `blockType` corresponds 1:1 to a section component; this file is the
+ * only place that knows both the CMS field names and the component props.
+ *
+ * All block→prop mapping happens here in the frontmatter (the Astro template
+ * below stays trivial — the compiler does not accept TS casts in templates).
+ */
+import { micromark } from 'micromark';
+import Hero from '@components/sections/Hero.astro';
+import StatsBand from '@components/sections/StatsBand.astro';
+import RichTextSection from '@components/sections/RichTextSection.astro';
+import DifferenceMatrix from '@components/sections/DifferenceMatrix.astro';
+import TracksLadder from '@components/sections/TracksLadder.astro';
+import TrackTabs from '@components/widgets/TrackTabs.astro';
+import TrainingGroupsTable from '@components/widgets/TrainingGroupsTable.astro';
+import CoachesGrid from '@components/sections/CoachesGrid.astro';
+import TestimonialsBand from '@components/sections/TestimonialsBand.astro';
+import LocationBand from '@components/sections/LocationBand.astro';
+import ChipsBand from '@components/sections/ServiceAreaBand.astro';
+import FAQAccordion from '@components/sections/FAQAccordion.astro';
+import NumberedPrinciples from '@components/sections/NumberedPrinciples.astro';
+import CoreValues from '@components/sections/CoreValues.astro';
+import TieredList from '@components/sections/TieredList.astro';
+import ScheduleList from '@components/sections/ScheduleList.astro';
+import CTABand from '@components/sections/CTABand.astro';
+import SeamHatch from '@components/ui/SeamHatch.astro';
+import {
+  getPrograms,
+  getTeamMembers,
+  mediaUrl,
+  firstParagraph,
+  restParagraphs,
+  type CmsBlock,
+  type CmsButton,
+  type CmsMedia,
+} from '@lib/cms';
+
+interface Props {
+  blocks: CmsBlock[];
+  pageSlug: string;
+}
+
+const { blocks, pageSlug } = Astro.props;
+
+const programs = await getPrograms();
+const teamMembers = await getTeamMembers();
+
+// --- shims ------------------------------------------------------------------
+
+const cta = (b: CmsButton | undefined) =>
+  b ? { label: b.label, href: b.href, external: b.href.startsWith('http') } : undefined;
+
+const buttons = (block: CmsBlock) => (block.buttons ?? []) as CmsButton[];
+
+const usd = (n: number) => (n % 1 === 0 ? `$${n}` : `$${n.toFixed(2)}`);
+
+const initialsOf = (name: string) =>
+  name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+
+const programSlugByName = new Map(programs.map((p) => [p.name, p.slug]));
+
+/** Coaches prepared for CoachesGrid from the team-members collection. */
+const coachCards = (group?: string, limit?: number) => {
+  let members = teamMembers;
+  if (group) members = members.filter((m) => m.group === group);
+  members = [...members].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  if (typeof limit === 'number') members = members.slice(0, limit);
+  return members.map((m) => {
+    const section = (name: string) => m.sections?.find((s) => s.heading === name);
+    const groupNames = (section('Training groups')?.items ?? []).map((i) => i.text);
+    return {
+      slug: m.slug,
+      name: m.name,
+      role: m.role ?? '',
+      headshotUrl: mediaUrl(m.headshot),
+      tagline: m.summary,
+      groups: groupNames.map((name) => ({
+        name,
+        href: `/team#${programSlugByName.get(name) ?? ''}`,
+      })),
+      programs: (m.specialties ?? []).map((s) => s.label),
+      highlights: (section('Highlights')?.items ?? []).map((i) => i.text),
+      bioHtml: micromark(m.bio ?? ''),
+      initials: initialsOf(m.name),
+    };
+  });
+};
+
+/** Coaches assigned to a program (matched via the Training groups pills). */
+const coachesForProgram = (programName: string) =>
+  teamMembers
+    .filter((m) =>
+      m.sections
+        ?.find((s) => s.heading === 'Training groups')
+        ?.items?.some((i) => i.text === programName),
+    )
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    .map((m) => ({
+      slug: m.slug,
+      name: m.name,
+      role: m.role ?? '',
+      headshot: mediaUrl(m.headshot) ?? '',
+      hasHeadshot: Boolean(mediaUrl(m.headshot)),
+      initials: initialsOf(m.name),
+    }));
+
+/** Program cards for the TracksLadder (first description paragraph = tagline). */
+const ladderTracks = programs.map((p) => ({
+  num: String(p.order ?? 0).padStart(2, '0'),
+  title: p.name,
+  age: p.ageRange ?? '',
+  desc: firstParagraph(p.description),
+  cta: p.ctaLabel ?? 'View group →',
+  href: p.ctaHref ?? `/team#${p.slug}`,
+}));
+
+/** Full program tabs for TrackTabs (evaluation standards appended to the body). */
+const tabTracks = programs.map((p) => {
+  const standards = (p.evaluationStandards ?? []).map((s) => s.text);
+  const bodyMd = restParagraphs(p.description) || p.description || '';
+  const standardsMd = standards.length
+    ? `\n\n#### Evaluation standards\n\n${standards.map((s) => `- ${s}`).join('\n')}`
+    : '';
+  return {
+    slug: p.slug,
+    name: p.name,
+    eyebrowText: p.ageRange ?? '',
+    bodyHtml: micromark(bodyMd + standardsMd),
+    meta: [
+      { label: 'Ages', value: p.ageRange ?? '' },
+      { label: 'Group size', value: `${p.groupSize ?? ''}` },
+      { label: 'Practices', value: p.suggestedPractices ?? '' },
+      { label: 'Hrs/mo', value: `${p.monthlyHours ?? ''}` },
+      { label: 'Monthly', value: usd(p.monthlyCost ?? 0) },
+      { label: 'Per hour', value: usd(p.costPerHour ?? 0) },
+    ],
+    scheduleOptions: p.scheduleOptions ?? [],
+    coaches: coachesForProgram(p.name),
+  };
+});
+
+const tableRows = programs.map((p) => ({
+  slug: p.slug,
+  name: p.name,
+  ageRange: p.ageRange ?? '',
+  groupSize: p.groupSize ?? 0,
+  suggestedPractices: p.suggestedPractices ?? '',
+  monthlyHours: p.monthlyHours ?? 0,
+  monthlyCost: p.monthlyCost ?? 0,
+  costPerHour: p.costPerHour ?? 0,
+  commitmentLevel: p.commitmentLevel ?? 'developmental',
+}));
+
+const media = (m: unknown) => mediaUrl(m as CmsMedia | null);
+
+// Deep-link anchors + tones the site relies on, keyed by block heading. If a
+// heading is edited in the CMS the anchor is dropped (links then land at the
+// top of the page — degraded, not broken).
+const SECTION_META: Record<string, { id?: string; tone?: 'alt' }> = {
+  "Our coaches don't supervise workouts. They coach.": { id: 'coaching-system', tone: 'alt' },
+  'More than a sport': { id: 'well-being' },
+};
+const metaFor = (heading: unknown) => SECTION_META[(heading as string) ?? ''] ?? {};
+
+// --- block → { Component, props } -------------------------------------------
+
+interface Rendered {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Component: any;
+  props: Record<string, unknown>;
+  /** Render a SeamHatch divider before this section. */
+  seamBefore?: boolean;
+}
+
+const prepare = (block: CmsBlock): Rendered | null => {
+  const str = (v: unknown) => v as string | undefined;
+  switch (block.blockType) {
+    case 'hero':
+      return {
+        Component: Hero,
+        props: {
+          variant: str(block.variant) ?? 'page',
+          eyebrow: str(block.eyebrow),
+          title: block.headline as string,
+          subtitle: str(block.body),
+          primaryCta: cta(buttons(block)[0]),
+          secondaryCta: cta(buttons(block)[1]),
+        },
+      };
+    case 'statsBand':
+      return {
+        Component: StatsBand,
+        props: {
+          stats: ((block.stats ?? []) as { num?: string; label: string }[]).map((s) => ({
+            value: s.num,
+            label: s.label,
+          })),
+        },
+      };
+    case 'richText':
+      return {
+        Component: RichTextSection,
+        props: {
+          id: metaFor(block.heading).id,
+          eyebrow: str(block.eyebrow),
+          heading: str(block.heading),
+          body: str(block.body) ?? '',
+          imageUrl: media(block.image),
+          imageAlt: (block.image as CmsMedia | null)?.alt,
+          imagePosition: str(block.imagePosition) ?? 'left',
+          buttons: buttons(block),
+        },
+      };
+    case 'comparisonTable':
+      return {
+        Component: DifferenceMatrix,
+        props: {
+          eyebrow: str(block.eyebrow),
+          heading: str(block.heading),
+          intro: str(block.intro),
+          rows: ((block.rows ?? []) as { left: string; right: string }[]).map((r) => ({
+            traditional: r.left,
+            c26: r.right,
+          })),
+          summary: str(block.summary),
+          tagline: str(block.tagline),
+          condensed: Boolean(block.condensed),
+          cta:
+            block.ctaLabel && block.ctaHref
+              ? { label: block.ctaLabel as string, href: block.ctaHref as string }
+              : undefined,
+        },
+      };
+    case 'programLadder': {
+      const shared = { eyebrow: str(block.eyebrow), heading: str(block.heading) };
+      if (block.display === 'tabs')
+        return {
+          Component: TrackTabs,
+          props: { id: 'team-tabs', ...shared, subtitle: str(block.intro), tracks: tabTracks },
+        };
+      if (block.display === 'table')
+        return {
+          Component: TrainingGroupsTable,
+          props: { ...shared, subtitle: str(block.intro), rows: tableRows },
+        };
+      return {
+        Component: TracksLadder,
+        props: { ...shared, intro: str(block.intro), tracks: ladderTracks },
+      };
+    }
+    case 'teamGrid':
+      return {
+        Component: CoachesGrid,
+        seamBefore: pageSlug === 'home',
+        props: {
+          eyebrow: str(block.eyebrow),
+          heading: str(block.heading),
+          subtitle: str(block.subtitle),
+          tone: str(block.tone) ?? 'light',
+          columns: block.columns === '4' ? 4 : 3,
+          watermark: block.watermark && block.watermark !== 'none' ? str(block.watermark) : undefined,
+          coaches: coachCards(str(block.group), block.limit as number | undefined),
+          ctaLabel: str(block.ctaLabel),
+          ctaHref: str(block.ctaHref),
+        },
+      };
+    case 'testimonials':
+      return {
+        Component: TestimonialsBand,
+        props: {
+          variant: pageSlug === 'home' ? 'feature' : 'grid',
+          eyebrow: 'In their words',
+          heading: str(block.heading),
+          testimonials: (
+            (block.items ?? []) as { quote: string; name: string; role?: string; draft?: boolean }[]
+          )
+            .filter((t) => !t.draft)
+            .map((t) => ({ quote: t.quote, author: t.name, role: t.role ?? '' })),
+        },
+      };
+    case 'locationBand': {
+      const addr = (block.address ?? {}) as Record<string, string>;
+      const street = (addr.streetAddress ?? '').replace(/ (Suite|Ste\.?) /i, ', $1 ');
+      const composed = [
+        street,
+        addr.addressLocality,
+        `${addr.addressRegion ?? ''} ${addr.postalCode ?? ''}`.trim(),
+      ]
+        .filter(Boolean)
+        .join(', ');
+      const hours = ((block.hours ?? []) as { label: string; value: string }[])
+        .map((h) => `${h.label} ${h.value}`)
+        .join(' · ');
+      return {
+        Component: LocationBand,
+        props: {
+          eyebrow: str(block.eyebrow),
+          heading: str(block.heading),
+          blurb: str(block.blurb),
+          address: composed || undefined,
+          hours: hours || undefined,
+          image: media(block.image),
+          imageAlt: (block.image as CmsMedia | null)?.alt,
+        },
+      };
+    }
+    case 'chipsBand':
+      return {
+        Component: ChipsBand,
+        props: {
+          heading: str(block.heading),
+          subtitle: str(block.subtitle),
+          chips: (block.chips ?? []) as { text: string; note?: string }[],
+          ctaLabel: str(block.ctaLabel),
+          ctaHref: str(block.ctaHref),
+        },
+      };
+    case 'faq':
+      return {
+        Component: FAQAccordion,
+        props: {
+          heading: str(block.heading),
+          items: (block.items ?? []) as { question: string; answer: string }[],
+        },
+      };
+    case 'process':
+      return {
+        Component: NumberedPrinciples,
+        props: {
+          id: metaFor(block.heading).id,
+          tone: metaFor(block.heading).tone ?? 'default',
+          heading: str(block.heading),
+          items: ((block.steps ?? []) as { num: string; title: string; copy?: string }[]).map((s) => ({
+            n: s.num,
+            title: s.title,
+            body: s.copy ?? '',
+          })),
+        },
+      };
+    case 'servicesPreview':
+      return {
+        Component: CoreValues,
+        props: {
+          heading: str(block.heading),
+          values: ((block.items ?? []) as { title: string; description?: string }[]).map((i) => ({
+            title: i.title,
+            body: i.description ?? '',
+          })),
+        },
+      };
+    case 'tieredList':
+      return {
+        Component: TieredList,
+        props: {
+          heading: str(block.heading),
+          intro: str(block.intro),
+          tiers: (block.tiers ?? []) as { label: string; intro?: string; items?: { text: string }[] }[],
+          footnote: str(block.footnote),
+        },
+      };
+    case 'scheduleList':
+      return {
+        Component: ScheduleList,
+        props: {
+          heading: str(block.heading),
+          intro: str(block.intro),
+          periods: (block.periods ?? []) as { period: string; items?: { text: string }[] }[],
+        },
+      };
+    case 'ctaBand': {
+      const btns = buttons(block);
+      const primary =
+        cta(btns[0]) ??
+        (block.ctaLabel && block.ctaHref
+          ? { label: block.ctaLabel as string, href: block.ctaHref as string, external: false }
+          : undefined);
+      if (!primary) return null;
+      const toneMap: Record<string, string> = { default: 'navy', accent: 'orange', gradient: 'gradient' };
+      return {
+        Component: CTABand,
+        seamBefore: true,
+        props: {
+          title: ((block.headingLines ?? []) as { text: string }[]).map((l) => l.text).join('<br />'),
+          subtitle: str(block.text),
+          primaryCta: primary,
+          secondaryCta: cta(btns[1]),
+          tone: toneMap[str(block.tone) ?? 'default'],
+          watermark: block.watermark && block.watermark !== 'none' ? str(block.watermark) : undefined,
+        },
+      };
+    }
+    default:
+      return null;
+  }
+};
+
+const rendered = blocks.map(prepare).filter((r): r is Rendered => r !== null);
+---
+{rendered.map(({ Component, props, seamBefore }) => (
+  <>
+    {seamBefore && <SeamHatch />}
+    <Component {...props} />
+  </>
+))}
