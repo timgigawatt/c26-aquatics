@@ -10,6 +10,14 @@ Another local club had complained. Leaving the claims up risked a penalty.
 Verify with `grep -ri "usa swimming" src public` — before restore it should return
 nothing; after restore it should match this list.
 
+> **⚠️ CMS migration (2026-07-18):** the site is now fully CMS-driven — the page
+> copy, coach bios, and FAQ answers below no longer live in this repo. A `git
+> revert` will NOT restore them. Instead, re-apply the "before" wording from the
+> tables below by editing the c26 tenant's pages, team members, and SEO settings
+> in the Gigawatt CMS admin (publishing triggers a rebuild automatically). The
+> only rows still restored via code are the ones referencing files that survive
+> in the repo (e.g. `src/lib/schemas.ts`, `public/llms.txt`, OG images).
+
 ## What was removed / changed
 
 ### Page copy
