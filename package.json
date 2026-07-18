@@ -9,11 +9,16 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "build:og": "node scripts/build-og.mjs"
+    "build:og": "node scripts/build-og.mjs",
+    "seed:cms": "tsx scripts/seed-cms.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",
     "astro": "^4.16.18",
     "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "gray-matter": "^4.0.3",
+    "tsx": "^4.23.1"
   }
 }
