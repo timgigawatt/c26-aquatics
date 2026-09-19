@@ -1,0 +1,47 @@
+{
+  "items": [
+    {
+      "label": "Home",
+      "href": "/",
+      "children": [],
+      "id": "6a5b9532417e010001df996c"
+    },
+    {
+      "label": "Team",
+      "href": "/team",
+      "children": [],
+      "id": "6a5b9532417e010001df996d"
+    },
+    {
+      "label": "Our Approach",
+      "href": "/our-approach",
+      "children": [],
+      "id": "6a5b9532417e010001df996e"
+    },
+    {
+      "label": "Our Story",
+      "href": "/our-story",
+      "children": [],
+      "id": "6a5b9532417e010001df996f"
+    },
+    {
+      "label": "Coaches",
+      "href": "/coaches",
+      "children": [],
+      "id": "6a5b9532417e010001df9970"
+    },
+    {
+      "label": "FAQ",
+      "href": "/faq",
+      "children": [],
+      "id": "6a5b9532417e010001df9971"
+    },
+    {
+      "label": "Contact",
+      "href": "/contact",
+      "children": [],
+      "id": "6a5b9532417e010001df9972"
+    }
+  ],
+  "id": "6a9c29b134de8d6e62758b8f"
+}
