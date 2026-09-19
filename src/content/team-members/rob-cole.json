@@ -1,0 +1,105 @@
+{
+  "name": "Rob Cole",
+  "shortName": null,
+  "slug": "rob-cole",
+  "headshot": null,
+  "role": "Head Coach & Program Director",
+  "group": "Coaches",
+  "order": 1,
+  "showInTeam": true,
+  "summary": "Every swimmer matters — from novice to elite, there's a place to thrive.",
+  "bio": "Rob Cole brings more than 40 years of coaching experience — over 30 as a club coach — across recreational, club, high school, and collegiate swimming. He believes every swimmer matters and develops each athlete in a safe, supportive environment. From novice to elite, there is a place for every swimmer to thrive.\n\nHis career includes serving as Zone Distance Camp Director and Coach, national camp coordinator, and Missouri Valley Zone Team Director. He has coached National Top 10 age-group swimmers, Junior National finalists, Senior National swimmers, and Olympic Trials qualifiers, and led high school programs to 30 league titles, 11 state championships, and numerous state champions, All-State honorees, record holders, and All-Americans. Rob works across every C26 training group and directs the C26 strength program.",
+  "specialties": [
+    {
+      "label": "Strength",
+      "id": "6a5b94fb7a9f7700012d93fa"
+    }
+  ],
+  "sections": [
+    {
+      "heading": "Training groups",
+      "display": "pills",
+      "body": null,
+      "items": [
+        {
+          "text": "Pre-Competitive",
+          "link": null,
+          "id": "6a5b94fb7a9f7700012d93fb"
+        },
+        {
+          "text": "Novice Age Group",
+          "link": null,
+          "id": "6a5b94fb7a9f7700012d93fc"
+        },
+        {
+          "text": "Advanced Age Group",
+          "link": null,
+          "id": "6a5b94fb7a9f7700012d93fd"
+        },
+        {
+          "text": "Junior Olympic",
+          "link": null,
+          "id": "6a5b94fb7a9f7700012d93fe"
+        },
+        {
+          "text": "Pre-Senior",
+          "link": null,
+          "id": "6a5b94fb7a9f7700012d93ff"
+        },
+        {
+          "text": "High School Prep",
+          "link": null,
+          "id": "6a5b94fb7a9f7700012d9400"
+        },
+        {
+          "text": "Senior Elite",
+          "link": null,
+          "id": "6a5b94fb7a9f7700012d9401"
+        }
+      ],
+      "id": "6a5b94fb7a9f7700012d9402"
+    },
+    {
+      "heading": "Highlights",
+      "display": "list",
+      "body": null,
+      "items": [
+        {
+          "text": "40+ years coaching — 30+ as a club coach",
+          "link": null,
+          "id": "6a5b94fb7a9f7700012d9403"
+        },
+        {
+          "text": "Zone Distance Camp Director & Coach",
+          "link": null,
+          "id": "6a5b94fb7a9f7700012d9404"
+        },
+        {
+          "text": "Coached National Top 10, Junior National finalists & Olympic Trials qualifiers",
+          "link": null,
+          "id": "6a5b94fb7a9f7700012d9405"
+        },
+        {
+          "text": "Led high school programs to 11 state championships & 30 league titles",
+          "link": null,
+          "id": "6a5b94fb7a9f7700012d9406"
+        }
+      ],
+      "id": "6a5b94fb7a9f7700012d9407"
+    },
+    {
+      "heading": "Credentials",
+      "display": "pills",
+      "body": null,
+      "items": [
+        {
+          "text": "40+ Years Coaching",
+          "link": null,
+          "id": "6a5b94fb7a9f7700012d9408"
+        }
+      ],
+      "id": "6a5b94fb7a9f7700012d9409"
+    }
+  ],
+  "id": "6a9c29b134de8d6e62758b78"
+}

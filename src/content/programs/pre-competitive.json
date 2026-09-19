@@ -1,0 +1,52 @@
+{
+  "name": "Pre-Competitive",
+  "slug": "pre-competitive",
+  "order": 1,
+  "ageRange": "5–8 yrs",
+  "groupSize": 30,
+  "commitmentLevel": "developmental",
+  "description": "Learn to Love Swimming — foundation skills, water comfort, and strong technical habits in a fun, supportive environment.\n\nIntroduces young swimmers to the foundation skills for future competitive swimming in a fun, supportive, confidence-building environment. The focus isn't racing — it's strong technical habits, water comfort, and a love for the sport.",
+  "suggestedPractices": "1–3×/week",
+  "monthlyHours": 11,
+  "monthlyCost": 170,
+  "costPerHour": 18.57,
+  "scheduleOptions": [
+    {
+      "label": null,
+      "slots": [
+        {
+          "day": "Tue",
+          "time": "5:00–5:45 PM",
+          "id": "6a5b95007a9f7700012d9428"
+        },
+        {
+          "day": "Thu",
+          "time": "5:00–5:45 PM",
+          "id": "6a5b95007a9f7700012d9429"
+        },
+        {
+          "day": "Sat",
+          "time": "1:30–2:30 PM",
+          "id": "6a5b95007a9f7700012d942a"
+        }
+      ],
+      "id": "6a5b95007a9f7700012d942b"
+    }
+  ],
+  "prerequisites": [],
+  "evaluationStandards": [
+    {
+      "text": "Demonstrate streamlining, proper breathing, and stroke coordination.",
+      "id": "6a5b95007a9f7700012d942c"
+    },
+    {
+      "text": "Perform freestyle and backstroke for 15–25 yards.",
+      "id": "6a5b95007a9f7700012d942d"
+    }
+  ],
+  "ctaLabel": "View group →",
+  "ctaHref": "/team#pre-competitive",
+  "id": "6a9c29b134de8d6e62758b80",
+  "structure": [],
+  "skills": []
+}

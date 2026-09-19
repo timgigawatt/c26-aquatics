@@ -1,0 +1,81 @@
+{
+  "title": "Our Coaches",
+  "type": "generic",
+  "slug": "coaches",
+  "publishedAt": null,
+  "hero": {
+    "eyebrow": null,
+    "headline": null,
+    "body": null,
+    "buttons": []
+  },
+  "stats": [],
+  "serviceRows": [],
+  "caseStudies": [],
+  "layout": [
+    {
+      "blockType": "hero",
+      "eyebrow": "Coaches",
+      "headline": "Meet the <span class='hero-accent'>coaching staff</span>",
+      "body": "KC-rooted and career-committed — every coach here is a professional, not a part-timer.",
+      "buttons": [],
+      "image": null,
+      "variant": "page",
+      "id": "6a5b951a7a9f7700012d94e1",
+      "blockName": null
+    },
+    {
+      "blockType": "teamGrid",
+      "eyebrow": "The staff",
+      "heading": "The C26 coaching staff",
+      "subtitle": "See bios, credentials, and how to reach the right coach for your swimmer.",
+      "group": "Coaches",
+      "limit": null,
+      "columns": "3",
+      "tone": "light",
+      "watermark": "none",
+      "ctaLabel": null,
+      "ctaHref": null,
+      "id": "6a5b951a7a9f7700012d94e2",
+      "blockName": null
+    },
+    {
+      "blockType": "ctaBand",
+      "headingLines": [
+        {
+          "text": "Train with the <span class='hero-accent accent'>best</span>",
+          "id": "6a5b951a7a9f7700012d94e3"
+        }
+      ],
+      "text": null,
+      "ctaLabel": null,
+      "ctaHref": null,
+      "buttons": [
+        {
+          "label": "Join the Team",
+          "href": "https://momence.com/C26-Hub-LLC/product/Swim-Team-Evaluation-and-Placement-Fee%3A-%24100.00/500138",
+          "style": "accent",
+          "id": "6a5b951a7a9f7700012d94e4"
+        },
+        {
+          "label": "Read our approach",
+          "href": "/our-approach",
+          "style": "paper",
+          "id": "6a5b951a7a9f7700012d94e5"
+        }
+      ],
+      "tone": "default",
+      "watermark": "none",
+      "id": "6a5b951a7a9f7700012d94e6",
+      "blockName": null
+    }
+  ],
+  "seo": {
+    "title": "Our Coaches | C26 Aquatics",
+    "description": "Meet the C26 Aquatics coaching staff — professional coaches developing competitive and beginner swimmers across the KC metro.",
+    "image": null,
+    "noindex": null
+  },
+  "id": "6a9c29b134de8d6e62758ab8",
+  "published": true
+}

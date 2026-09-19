@@ -1,0 +1,417 @@
+{
+  "title": "Home",
+  "type": "generic",
+  "slug": "home",
+  "publishedAt": null,
+  "hero": {
+    "eyebrow": null,
+    "headline": null,
+    "body": null,
+    "buttons": []
+  },
+  "stats": [],
+  "serviceRows": [],
+  "caseStudies": [],
+  "layout": [
+    {
+      "blockType": "hero",
+      "eyebrow": null,
+      "headline": "Become a <span class=\"hero-accent-magenta\">stronger</span> swimmer",
+      "body": "Competitive swim training in the Kansas City metro — one pool, one coaching staff, one standard.",
+      "buttons": [
+        {
+          "label": "Join the Team",
+          "href": "https://momence.com/C26-Hub-LLC/product/Swim-Team-Evaluation-and-Placement-Fee%3A-%24100.00/500138",
+          "style": "accent",
+          "id": "6a5b950f7a9f7700012d9476"
+        },
+        {
+          "label": "Explore training groups",
+          "href": "#tracks",
+          "style": "paper",
+          "id": "6a5b950f7a9f7700012d9477"
+        }
+      ],
+      "image": null,
+      "variant": "home",
+      "id": "6a5b950f7a9f7700012d9478",
+      "blockName": null
+    },
+    {
+      "blockType": "statsBand",
+      "stats": [
+        {
+          "num": "35+",
+          "label": "years coaching experience",
+          "id": "6a5b950f7a9f7700012d9479"
+        },
+        {
+          "num": "500+",
+          "label": "swimmers coached",
+          "id": "6a5b950f7a9f7700012d947a"
+        },
+        {
+          "num": "300+",
+          "label": "video stroke sessions",
+          "id": "6a5b950f7a9f7700012d947b"
+        },
+        {
+          "num": "21+",
+          "label": "states represented",
+          "id": "6a5b950f7a9f7700012d947c"
+        },
+        {
+          "num": "4",
+          "label": "strokes. 1 development system.",
+          "id": "6a5b950f7a9f7700012d947d"
+        }
+      ],
+      "id": "6a5b950f7a9f7700012d947e",
+      "blockName": null
+    },
+    {
+      "blockType": "richText",
+      "eyebrow": "Our mission",
+      "heading": "Coach the person first, the swimmer second",
+      "body": "To inspire every swimmer to reach their potential through individualized training, meaningful goals, positive culture, and a commitment to personal excellence.\n\nWe prioritize relationships, consistency, and intentional progress — building confident, resilient young people who learn discipline, accountability, and a love for the process.",
+      "image": {
+        "alt": "The C26 Aquatics founders on deck",
+        "url": "/media/founders.png",
+        "filename": "founders.png",
+        "mimeType": "application/octet-stream",
+        "filesize": 113588,
+        "width": null,
+        "height": null,
+        "sizes": {
+          "thumb": {
+            "url": null,
+            "width": null,
+            "height": null,
+            "mimeType": null,
+            "filesize": null,
+            "filename": null
+          },
+          "card": {
+            "url": null,
+            "width": null,
+            "height": null,
+            "mimeType": null,
+            "filesize": null,
+            "filename": null
+          },
+          "full": {
+            "url": null,
+            "width": null,
+            "height": null,
+            "mimeType": null,
+            "filesize": null,
+            "filename": null
+          }
+        },
+        "id": "6a9c29b134de8d6e62758be1"
+      },
+      "imagePosition": "right",
+      "buttons": [
+        {
+          "label": "Read our story",
+          "href": "/our-story",
+          "style": "ink",
+          "id": "6a5b950f7a9f7700012d947f"
+        }
+      ],
+      "id": "6a5b950f7a9f7700012d9480",
+      "blockName": null
+    },
+    {
+      "blockType": "comparisonTable",
+      "eyebrow": "Why C26",
+      "heading": "The C26 difference",
+      "intro": null,
+      "leftLabel": "Traditional clubs",
+      "rightLabel": "C26 Aquatics",
+      "rows": [
+        {
+          "left": "Multiple pool locations and changing practice sites",
+          "right": "One home. One pool. One standard — we own our facility.",
+          "id": "6a5b950f7a9f7700012d9481"
+        },
+        {
+          "left": "Different coaches from practice to practice",
+          "right": "Consistent staff who know your swimmer and how they learn.",
+          "id": "6a5b950f7a9f7700012d9482"
+        },
+        {
+          "left": "Generalized plans for large groups",
+          "right": "Individualized development tailored to age and ability.",
+          "id": "6a5b950f7a9f7700012d9483"
+        },
+        {
+          "left": "Swimmers wait months for move-ups",
+          "right": "Move up when ready — no waiting for a calendar date.",
+          "id": "6a5b950f7a9f7700012d9484"
+        }
+      ],
+      "summary": null,
+      "tagline": null,
+      "condensed": true,
+      "ctaLabel": "See the full comparison",
+      "ctaHref": "/our-approach#difference",
+      "id": "6a5b950f7a9f7700012d9485",
+      "blockName": null
+    },
+    {
+      "blockType": "chipsBand",
+      "heading": "Six things every C26 practice includes — from every coach, in every group.",
+      "subtitle": null,
+      "chips": [
+        {
+          "text": "Teach",
+          "note": null,
+          "id": "6a5b950f7a9f7700012d9486"
+        },
+        {
+          "text": "Observe",
+          "note": null,
+          "id": "6a5b950f7a9f7700012d9487"
+        },
+        {
+          "text": "Correct",
+          "note": null,
+          "id": "6a5b950f7a9f7700012d9488"
+        },
+        {
+          "text": "Reinforce",
+          "note": null,
+          "id": "6a5b950f7a9f7700012d9489"
+        },
+        {
+          "text": "Challenge",
+          "note": null,
+          "id": "6a5b950f7a9f7700012d948a"
+        },
+        {
+          "text": "Connect",
+          "note": null,
+          "id": "6a5b950f7a9f7700012d948b"
+        }
+      ],
+      "ctaLabel": "See how we coach",
+      "ctaHref": "/our-approach/#coaching-system",
+      "id": "6a5b950f7a9f7700012d948c",
+      "blockName": null
+    },
+    {
+      "blockType": "programLadder",
+      "eyebrow": "Programs",
+      "heading": "Training groups",
+      "intro": "Seven groups take a swimmer from their first strokes to the highest levels of competition — one clear development pathway, one standard.",
+      "display": "cards",
+      "id": "6a5b950f7a9f7700012d948d",
+      "blockName": null
+    },
+    {
+      "blockType": "teamGrid",
+      "eyebrow": "The staff",
+      "heading": "Coaches & bios",
+      "subtitle": "Professional coaches building swimmers across the KC metro.",
+      "group": "Coaches",
+      "limit": 4,
+      "columns": "4",
+      "tone": "light",
+      "watermark": "left",
+      "ctaLabel": null,
+      "ctaHref": null,
+      "id": "6a5b950f7a9f7700012d948e",
+      "blockName": null
+    },
+    {
+      "blockType": "testimonials",
+      "heading": "In their words",
+      "items": [
+        {
+          "quote": "My daughter went from afraid of the deep end to making the swim team in one season. The coaches at C26 know exactly how to push without pressuring.",
+          "name": "Sarah M.",
+          "role": "Parent of Novice Age Group swimmer, Overland Park",
+          "company": null,
+          "href": null,
+          "draft": false,
+          "id": "6a5b950f7a9f7700012d948f"
+        },
+        {
+          "quote": "Robbie and the C26 staff treat every kid like they're worth investing in — not just the fast ones. That's why our family is here.",
+          "name": "David L.",
+          "role": "Parent of two Junior Olympic swimmers, Leawood",
+          "company": null,
+          "href": null,
+          "draft": false,
+          "id": "6a5b950f7a9f7700012d9490"
+        },
+        {
+          "quote": "I wasn't sure my son would take to a competitive team. Two years later he's training with a best friend group and genuinely loves practice. Worth every drive across Johnson County.",
+          "name": "Jenny R.",
+          "role": "Parent of Advanced Age Group swimmer, Olathe",
+          "company": null,
+          "href": null,
+          "draft": false,
+          "id": "6a5b950f7a9f7700012d9491"
+        }
+      ],
+      "id": "6a5b950f7a9f7700012d9492",
+      "blockName": null
+    },
+    {
+      "blockType": "locationBand",
+      "eyebrow": "Our home",
+      "heading": "One pool. One standard.",
+      "blurb": "Everything happens under one roof — inside Bluhawk in Overland Park. No satellites, no rotating rental lanes. Every swimmer trains in the same water with the same staff.",
+      "address": {
+        "streetAddress": "16201 Shawnee Dr Suite 126",
+        "addressLocality": "Overland Park",
+        "addressRegion": "KS",
+        "postalCode": "66223"
+      },
+      "hours": [],
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Bluhawk+16201+Shawnee+Dr+Suite+126+Overland+Park+KS+66223",
+      "image": {
+        "alt": "The C26 Aquatics facility inside Bluhawk",
+        "url": "/media/facility-exterior.webp",
+        "filename": "facility-exterior.webp",
+        "mimeType": "image/webp",
+        "width": 2000,
+        "height": 1429,
+        "sizes": {
+          "thumb": {
+            "url": null,
+            "width": null,
+            "height": null,
+            "mimeType": null,
+            "filesize": null,
+            "filename": null
+          },
+          "card": {
+            "url": null,
+            "width": null,
+            "height": null,
+            "mimeType": null,
+            "filesize": null,
+            "filename": null
+          },
+          "full": {
+            "url": null,
+            "width": null,
+            "height": null,
+            "mimeType": null,
+            "filesize": null,
+            "filename": null
+          }
+        },
+        "id": "6a9c29b134de8d6e62758be2"
+      },
+      "id": "6a5b950f7a9f7700012d9493",
+      "blockName": null,
+      "display": "band"
+    },
+    {
+      "blockType": "chipsBand",
+      "heading": "Proudly serving the KC metro",
+      "subtitle": "One pool, one staff — drawing swimmers from across the Kansas City suburbs.",
+      "chips": [
+        {
+          "text": "Leawood",
+          "note": "KS",
+          "id": "6a5b950f7a9f7700012d9494"
+        },
+        {
+          "text": "Lenexa",
+          "note": "KS",
+          "id": "6a5b950f7a9f7700012d9495"
+        },
+        {
+          "text": "Olathe",
+          "note": "KS",
+          "id": "6a5b950f7a9f7700012d9496"
+        },
+        {
+          "text": "Overland Park",
+          "note": "KS",
+          "id": "6a5b950f7a9f7700012d9497"
+        },
+        {
+          "text": "Prairie Village",
+          "note": "KS",
+          "id": "6a5b950f7a9f7700012d9498"
+        },
+        {
+          "text": "Shawnee",
+          "note": "KS",
+          "id": "6a5b950f7a9f7700012d9499"
+        }
+      ],
+      "ctaLabel": "Explore the team",
+      "ctaHref": "/team",
+      "id": "6a5b950f7a9f7700012d949a",
+      "blockName": null
+    },
+    {
+      "blockType": "faq",
+      "heading": "Frequently asked",
+      "items": [
+        {
+          "question": "Where are you located?",
+          "answer": "C26 Aquatics trains out of a year-round indoor pool inside **Bluhawk** in south Overland Park, at **16201 Shawnee Dr, Suite 126, Overland Park, KS 66223**. From this single home we serve families across Johnson County and the surrounding area, including **Leawood, Lenexa, Olathe, Overland Park, Prairie Village, and Shawnee**.",
+          "id": "6a5b950f7a9f7700012d949b"
+        },
+        {
+          "question": "What ages do you serve?",
+          "answer": "Our competitive training groups serve swimmers from **ages 5 through 18**, across seven groups:\n\n- **Pre-Competitive** (5–8) and **Novice Age Group** (7–12) for developing swimmers.\n- **Advanced Age Group** (9–14), **Junior Olympic** (9–14), and **Pre-Senior** (11–14) for competitive age-groupers.\n- **High School Prep** (14–18) and **Senior Elite** (13–18) for the highest levels of the sport.\n\nIf you're not sure where your swimmer fits, we'll evaluate them in the water and recommend the right group.",
+          "id": "6a5b950f7a9f7700012d949c"
+        },
+        {
+          "question": "How do I sign up?",
+          "answer": "Use the **Join the Team** button anywhere on the site to request a team evaluation and get started. New families begin with an evaluation so our coaches can place your swimmer in the right training group — reach out if you'd prefer to talk through options first. Team evaluations for the coming season run **August 22–26**.\n\n[Join the Team](https://momence.com/C26-Hub-LLC/product/Swim-Team-Evaluation-and-Placement-Fee%3A-%24100.00/500138)",
+          "id": "6a5b950f7a9f7700012d949d"
+        }
+      ],
+      "id": "6a5b950f7a9f7700012d949e",
+      "blockName": null
+    },
+    {
+      "blockType": "ctaBand",
+      "headingLines": [
+        {
+          "text": "Get in the <span class='hero-accent accent'>water</span>",
+          "id": "6a5b950f7a9f7700012d949f"
+        }
+      ],
+      "text": null,
+      "ctaLabel": null,
+      "ctaHref": null,
+      "buttons": [
+        {
+          "label": "Join the Team",
+          "href": "https://momence.com/C26-Hub-LLC/product/Swim-Team-Evaluation-and-Placement-Fee%3A-%24100.00/500138",
+          "style": "accent",
+          "id": "6a5b950f7a9f7700012d94a0"
+        },
+        {
+          "label": "Read our approach",
+          "href": "/our-approach",
+          "style": "paper",
+          "id": "6a5b950f7a9f7700012d94a1"
+        }
+      ],
+      "tone": "default",
+      "watermark": "right",
+      "id": "6a5b950f7a9f7700012d94a2",
+      "blockName": null
+    }
+  ],
+  "seo": {
+    "title": "C26 Aquatics — Competitive Swim Team in Kansas City",
+    "description": "C26 Aquatics is a Kansas City–metro competitive swim team — one pool, one coaching staff, one standard. Training groups from developmental to elite.",
+    "image": null,
+    "noindex": null
+  },
+  "id": "6a9c29b134de8d6e62758ab0",
+  "published": true
+}

@@ -1,23 +1,17 @@
 /**
- * Build-time client for the Gigawatt CMS (Payload 3 REST API).
+ * Build-time content reader. Content is files in this repo — exported from the
+ * Payload CMS (tenant c26) on 2026-09-18 and edited here since:
  *
- * Reads anonymously and scopes every query to the c26 tenant with a
- * `tenant.slug` filter — the standard pattern for Gigawatt tenant sites (the
- * CMS's public read access expects sites to filter by tenant slug themselves;
- * drafted collections only expose published docs to anonymous readers).
+ *   src/content/pages/<slug>.json          page docs (title, slug, seo, layout[], published)
+ *   src/content/programs/*.json            programs (sorted by order)
+ *   src/content/team-members/*.json        team
+ *   src/content/announcements/*.json       announcements
+ *   src/content/globals/{navigation,footer,seo-settings}.json
+ *   public/media/*                         every referenced media file (+ size variants)
  *
- * All fetchers cache in-module — the whole build makes one request per
- * collection. Any failure throws: a broken build is visible, silently-stale
- * content is not.
+ * Types are the CMS doc shapes, unchanged, so every component keeps working.
+ * Unpublished pages are hidden in production only (Netlify CONTEXT=production).
  */
-
-const env = (key: string): string | undefined =>
-  (import.meta.env?.[key] as string | undefined) ?? process.env[key];
-
-const CMS_URL = env('CMS_URL') || 'https://gigawatt-cms--gigawatt-lab.us-central1.hosted.app';
-const BASE = `${CMS_URL}/api`;
-const TENANT = env('CMS_TENANT') || 'c26';
-const tenantFilter = `where%5Btenant.slug%5D%5Bequals%5D=${TENANT}`;
 
 // --- Types (the fields this site actually consumes) -------------------------
 
@@ -117,74 +111,47 @@ export interface CmsSeoSettings {
 
 // --- Fetch -------------------------------------------------------------------
 
-const get = async (path: string) => {
-  const res = await fetch(`${BASE}${path}`);
-  if (!res.ok) throw new Error(`CMS build failed: GET ${path} returned ${res.status}.`);
-  return res.json();
-};
+// --- Reading --------------------------------------------------------------
 
-/** Fetch every c26 doc in a tenant-scoped collection, sorted. */
-const allDocs = async <T>(collection: string, sort = 'order'): Promise<T[]> => {
-  const json = await get(
-    `/${collection}?limit=200&depth=1&sort=${encodeURIComponent(sort)}&${tenantFilter}`,
-  );
-  return json.docs as T[];
-};
+const files = import.meta.glob<{ default: unknown }>('/src/content/**/*.json', { eager: true });
 
-const cache = new Map<string, Promise<unknown>>();
-const cached = <T>(key: string, load: () => Promise<T>): Promise<T> => {
-  if (!cache.has(key)) cache.set(key, load());
-  return cache.get(key) as Promise<T>;
-};
+const docs = <T>(collection: string): T[] =>
+  Object.entries(files)
+    .filter(([path]) => path.startsWith(`/src/content/${collection}/`))
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([, mod]) => mod.default as T);
 
-// --- Public fetchers -----------------------------------------------------------
+const global = <T>(name: string): T | null =>
+  (files[`/src/content/globals/${name}.json`]?.default as T) ?? null;
 
-export const getPages = () =>
-  cached('pages', async () => {
-    const docs = await allDocs<CmsPage & { _status?: string }>('pages', 'slug');
-    return docs.filter((p) => p._status === 'published');
-  });
+const byOrder = <T extends { order?: number }>(a: T, b: T) => (a.order ?? 0) - (b.order ?? 0);
+const isProduction = process.env.CONTEXT === 'production';
+
+export const getPages = async () =>
+  docs<CmsPage & { published?: boolean }>('pages').filter((p) => !isProduction || p.published !== false);
 
 export const getPage = async (slug: string) => {
   const page = (await getPages()).find((p) => p.slug === slug);
-  if (!page) throw new Error(`CMS build failed: no published page with slug "${slug}".`);
+  if (!page) throw new Error(`No src/content/pages/${slug}.json (or it is unpublished).`);
   return page;
 };
 
-export const getPrograms = () => cached('programs', () => allDocs<CmsProgram>('programs'));
+export const getPrograms = async () => docs<CmsProgram>('programs').sort(byOrder);
 
-export const getTeamMembers = () =>
-  cached('team-members', async () => {
-    const docs = await allDocs<CmsTeamMember>('team-members');
-    return docs.filter((m) => m.showInTeam !== false);
-  });
+export const getTeamMembers = async () =>
+  docs<CmsTeamMember>('team-members').sort(byOrder).filter((m) => m.showInTeam !== false);
 
-export const getAnnouncements = () =>
-  cached('announcements', () => allDocs<CmsAnnouncement>('announcements', '-startDate'));
+export const getAnnouncements = async () =>
+  docs<CmsAnnouncement>('announcements').sort((a, b) => Date.parse(b.startDate) - Date.parse(a.startDate));
 
-export const getNavigation = () =>
-  cached('navigation', async () => {
-    const json = await get(`/navigation?limit=1&depth=0&${tenantFilter}`);
-    return (json.docs?.[0]?.items ?? []) as CmsNavItem[];
-  });
+export const getNavigation = async () => global<{ items?: CmsNavItem[] }>('navigation')?.items ?? [];
 
-export const getFooter = () =>
-  cached('footer', async () => {
-    const json = await get(`/footer?limit=1&depth=0&${tenantFilter}`);
-    return (json.docs?.[0] ?? {}) as CmsFooter;
-  });
+export const getFooter = async () => global<CmsFooter>('footer') ?? ({} as CmsFooter);
 
-export const getSeoSettings = () =>
-  cached('seo-settings', async () => {
-    const json = await get(`/seo-settings?limit=1&depth=0&${tenantFilter}`);
-    return (json.docs?.[0] ?? {}) as CmsSeoSettings;
-  });
+export const getSeoSettings = async () => global<CmsSeoSettings>('seo-settings') ?? ({} as CmsSeoSettings);
 
-// --- Helpers ---------------------------------------------------------------------
-
-/** Absolute URL for an upload (CMS returns host-relative /api/media/file/... paths). */
-export const mediaUrl = (media?: CmsMedia | null) =>
-  media?.url ? (media.url.startsWith('http') ? media.url : `${CMS_URL}${media.url}`) : undefined;
+/** Media urls are site-relative (/media/<file>) — served from public/media. */
+export const mediaUrl = (media?: CmsMedia | null) => media?.url || undefined;
 
 /** First paragraph of a blank-line-separated body (program card taglines). */
 export const firstParagraph = (body?: string) => body?.split(/\n\s*\n/)[0]?.trim() ?? '';
