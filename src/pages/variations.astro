@@ -3,11 +3,11 @@
  * /variations — private client-review page of logo gradient explorations.
  * Deliberately unlinked (no Header/Footer/nav) and noindexed; share by URL.
  *
- * Three candidate kraken marks (option_1/2/3.svg) are reviewed at once: a
- * sticky Option 1/2/3 toggle sets data-option on <main>, and every tile
- * renders one artwork per mark with CSS showing only the selected one — no
- * JS re-plumbing of viewBoxes or gradients, and the page defaults to
- * Option 1 without script.
+ * Two kraken marks are reviewed at once — the selected mark (option_1.svg)
+ * and the kids mark (kraken_kids_bw.svg): a sticky toggle sets data-option
+ * on <main>, and every tile renders one artwork per mark with CSS showing
+ * only the selected one — no JS re-plumbing of viewBoxes or gradients, and
+ * the page defaults to the main mark without script.
  *
  * Two artworks per variation: the kraken mark (vector — paths emitted once
  * per option as hidden <g> defs, referenced per tile with <use> and
@@ -15,20 +15,39 @@
  * raster — the gradient is applied by masking a CSS gradient through the
  * transparent PNG's alpha channel.
  */
+import fs from 'node:fs';
 import Base from '@layouts/Base.astro';
 import { loadLogoArt } from '@lib/logoArt';
 
 // Each source canvas is mostly padding — viewBoxes are cropped to the
-// artwork's measured bounds (headless-Chrome getBBox over the stripped
-// paths) plus a ~10-unit margin, ignoring degenerate zero-size paths.
-//   option_1 bbox: x 146.1 y 120.3  w 291.1  h 324.3  (2026-07-13 re-export)
-//   option_2 bbox: x 26.4  y 165.7  w 557.2  h 689.5
-//   option_3 bbox: x 42.0  y 240.4  w 530.4  h 535.4
+// artwork's measured bounds plus a ~10-unit margin.
+//   option_1 bbox: x 146.1 y 120.3 w 291.1 h 324.3  (headless-Chrome getBBox,
+//     2026-07-13 re-export, ignoring degenerate zero-size paths)
+//   kids bbox:     x 269   y 150   w 760   h 715    (sharp trim offsets, see
+//     scripts/build-tim-logo-pngs.mjs)
+// The kids lockup composes the outlined KRAKEN KIDS type (which shares the
+// mark's 1254 canvas but was exported at a position colliding with the
+// artwork) centered under the mark instead: text bbox is x 188 y 477
+// w 401 h 99; scaled 1.1x it sits 40 units below the mark's bottom edge,
+// so the lockup viewBox extends to y 1040.
 const marks = [
-  { key: 'o1', label: 'Option 1', src: 'public/option_1.svg', viewBox: '136 110 311 344' },
-  { key: 'o2', label: 'Option 2', src: 'public/option_2.svg', viewBox: '16 156 577 710' },
-  { key: 'o3', label: 'Option 3', src: 'public/option_3.svg', viewBox: '32 230 550 556' },
+  { key: 'o1', label: 'Kraken', src: 'public/option_1.svg', viewBox: '136 110 311 344', lockupViewBox: '136 110 311 344' },
+  { key: 'kids', label: 'Kids', src: 'brand/kraken_kids_bw.svg', viewBox: '259 140 780 735', lockupViewBox: '259 140 780 900' },
 ].map((m) => ({ ...m, inner: loadLogoArt(m.src).inner }));
+
+// KRAKEN (white) over KIDS (orange) — the outlined type for the kids lockup.
+// loadLogoArt would strip the class attrs that carry those two fills, so the
+// classes are swapped for explicit fills before the styles are dropped.
+const kidsTextInner = fs
+  .readFileSync('brand/kraken_kids_text.svg', 'utf-8')
+  .replace(/^[\s\S]*?<svg[^>]*>/, '')
+  .replace(/<\/svg>\s*$/, '')
+  .replace(/<defs>[\s\S]*?<\/defs>/g, '')
+  .replace(/<!--[\s\S]*?-->/g, '')
+  .replace(/class="st0"/g, 'fill="#f08821"')
+  .replace(/class="st1"/g, 'fill="#fff"')
+  .trim();
+const KIDS_TEXT_TRANSFORM = 'translate(221.7 380.3) scale(1.1)';
 
 const wordmarkSrc = '/logo_text_transparent.png';
 
@@ -137,13 +156,13 @@ function cssGradient(stops: Stop[]) {
         <p class="variations__eyebrow">C26 Aquatics · For review</p>
         <h1 class="variations__heading">Logo color explorations</h1>
         <p class="variations__intro">
-          Three candidate kraken marks — use the Option 1 / 2 / 3 toggle to switch which
+          The selected kraken mark and the kids mark — use the toggle to switch which
           one every tile shows. For each: the composed lockup in the base brand indigo,
           then five gradient treatments of the magenta / teal / indigo triad — shown on
           the kraken mark and the C26 AQUATICS wordmark (gradient replacing its usual
           two-tone) on light and dark, plus the composed lockup on dark. Reply with a
-          mark option <strong>and</strong> a variation number. Note: the wordmark's
-          white letters are only visible on the dark tiles.
+          variation number. Note: the wordmark's white letters are only visible on
+          the dark tiles.
         </p>
       </header>
 
@@ -180,21 +199,24 @@ function cssGradient(stops: Stop[]) {
               {marks.map((m) => (
                 <div
                   class={`lockup art art--${m.key}`}
-                  style={`aspect-ratio:${aspect(m.viewBox)}`}
+                  style={`aspect-ratio:${aspect(m.lockupViewBox)}`}
                   role="img"
                   aria-label={`Lockup — ${m.label}, brand indigo on ${bg}`}
                 >
-                  <svg class="lockup__kraken" viewBox={m.viewBox} aria-hidden="true">
+                  <svg class="lockup__kraken" viewBox={m.lockupViewBox} aria-hidden="true">
                     <use href={`#art-kraken-${m.key}`} fill="#242b6e" />
+                    {m.key === 'kids' && <g transform={KIDS_TEXT_TRANSFORM} set:html={kidsTextInner} />}
                   </svg>
-                  <img
-                    class="lockup__wordmark"
-                    src={wordmarkSrc}
-                    alt=""
-                    width="612"
-                    height="408"
-                    loading="lazy"
-                  />
+                  {m.key !== 'kids' && (
+                    <img
+                      class="lockup__wordmark"
+                      src={wordmarkSrc}
+                      alt=""
+                      width="612"
+                      height="408"
+                      loading="lazy"
+                    />
+                  )}
                 </div>
               ))}
               <figcaption class="tile__label">Lockup · {bg}</figcaption>
@@ -278,22 +300,25 @@ function cssGradient(stops: Stop[]) {
                       {marks.map((m) => (
                         <div
                           class={`lockup art art--${m.key}`}
-                          style={`aspect-ratio:${aspect(m.viewBox)}`}
+                          style={`aspect-ratio:${aspect(m.lockupViewBox)}`}
                           role="img"
                           aria-label={`Lockup — ${m.label}, ${v.name} on dark`}
                         >
-                          <svg class="lockup__kraken" viewBox={m.viewBox} aria-hidden="true">
-                            {gradientDef(`grad-${v.slug}-lockup-${m.key}`, m.viewBox)}
+                          <svg class="lockup__kraken" viewBox={m.lockupViewBox} aria-hidden="true">
+                            {gradientDef(`grad-${v.slug}-lockup-${m.key}`, m.lockupViewBox)}
                             <use href={`#art-kraken-${m.key}`} fill={`url(#grad-${v.slug}-lockup-${m.key})`} />
+                            {m.key === 'kids' && <g transform={KIDS_TEXT_TRANSFORM} set:html={kidsTextInner} />}
                           </svg>
-                          <img
-                            class="lockup__wordmark"
-                            src={wordmarkSrc}
-                            alt=""
-                            width="612"
-                            height="408"
-                            loading="lazy"
-                          />
+                          {m.key !== 'kids' && (
+                            <img
+                              class="lockup__wordmark"
+                              src={wordmarkSrc}
+                              alt=""
+                              width="612"
+                              height="408"
+                              loading="lazy"
+                            />
+                          )}
                         </div>
                       ))}
                       <figcaption class="tile__label">Lockup · dark</figcaption>
@@ -406,8 +431,7 @@ function cssGradient(stops: Stop[]) {
     display: none;
   }
   .variations[data-option='o1'] .art--o1,
-  .variations[data-option='o2'] .art--o2,
-  .variations[data-option='o3'] .art--o3 {
+  .variations[data-option='kids'] .art--kids {
     display: block;
   }
 

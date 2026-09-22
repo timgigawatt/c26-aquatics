@@ -12,6 +12,8 @@
  * Pure UI primitive — callers shape collection entries into the `tracks` prop;
  * the widget never touches `astro:content`.
  */
+import Button from '@components/ui/Button.astro';
+
 interface MetaItem {
   label: string;
   value: string;
@@ -22,8 +24,14 @@ interface ScheduleSlot {
   time: string;
 }
 
+type Availability = 'open' | 'limited' | 'full';
+
 interface ScheduleOption {
   label?: string;
+  // Per-option availability — shown on the option toggle and as a note
+  // under the slots. Independent of group-level `status`.
+  status?: Availability;
+  statusNote?: string;
   slots: ScheduleSlot[];
 }
 
@@ -43,8 +51,34 @@ interface Track {
   bodyHtml: string;
   meta?: MetaItem[];
   scheduleOptions?: ScheduleOption[];
+  // Practices open to every option — rendered once under the option panels
+  // so the times stay on screen whichever option is selected.
+  sharedSchedule?: {
+    label: string;
+    note?: string;
+    slots: ScheduleSlot[];
+  };
   coaches?: TrackCoach[];
+  // 'full' renders a pill on the tab and an email-first availability callout
+  // in the panel; 'limited' renders a pill and a register-soon callout while
+  // keeping registration buttons active.
+  status?: Availability;
+  statusNote?: string;
+  availabilityHref?: string;
+  // Momence checkout links — hidden when the group is 'full'.
+  registration?: { monthly: string; seasonal: string };
 }
+
+// An option whose slots are exactly the shared sessions (Novice/Advanced
+// Option 3 = Friday and Saturday) skips its own slot list — the shared block
+// below the panels already lists those times.
+const isSharedOnly = (opt: ScheduleOption, shared?: { slots: ScheduleSlot[] }) =>
+  !!shared &&
+  opt.slots.length === shared.slots.length &&
+  opt.slots.every(
+    (slot, i) =>
+      slot.day === shared.slots[i].day && slot.time === shared.slots[i].time,
+  );
 
 interface Props {
   id: string;
@@ -81,7 +115,13 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
             {track.eyebrowText && (
               <span class="tracks__tab-eyebrow">{track.eyebrowText}</span>
             )}
-            <span class="tracks__tab-name">{track.name}</span>
+            <span class="tracks__tab-name">
+              {track.name}
+              {track.status === 'full' && <span class="tracks__pill-full">Full</span>}
+              {track.status === 'limited' && (
+                <span class="tracks__pill-limited">Limited spots</span>
+              )}
+            </span>
           </button>
         ))}
       </div>
@@ -98,6 +138,33 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
             tabindex="0"
             data-panel={track.slug}
           >
+            {track.status === 'full' && (
+              <div class="tracks__availability" role="note">
+                <div class="tracks__availability-copy">
+                  <p class="tracks__availability-title">This group is currently full</p>
+                  <p class="tracks__availability-note">
+                    {track.statusNote ??
+                      'Email us to check availability before registering — we’ll let you know as soon as a spot opens.'}
+                  </p>
+                </div>
+                {track.availabilityHref && (
+                  <Button href={track.availabilityHref} variant="outline" size="sm">
+                    Check availability
+                  </Button>
+                )}
+              </div>
+            )}
+            {track.status === 'limited' && (
+              <div class="tracks__availability tracks__availability--limited" role="note">
+                <div class="tracks__availability-copy">
+                  <p class="tracks__availability-title">Limited availability</p>
+                  <p class="tracks__availability-note">
+                    {track.statusNote ??
+                      'A few spots remain — register soon to hold your swimmer’s place.'}
+                  </p>
+                </div>
+              </div>
+            )}
             {track.meta && track.meta.length > 0 && (
               <dl class="tracks__meta">
                 {track.meta.map((m) => (
@@ -107,6 +174,26 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
                   </div>
                 ))}
               </dl>
+            )}
+            {track.registration && track.status !== 'full' && (
+              <div class="tracks__register">
+                <Button
+                  href={track.registration.monthly}
+                  variant="primary"
+                  size="sm"
+                  external
+                >
+                  Register — Monthly
+                </Button>
+                <Button
+                  href={track.registration.seasonal}
+                  variant="outline"
+                  size="sm"
+                  external
+                >
+                  Register — Seasonal
+                </Button>
+              </div>
             )}
             {track.scheduleOptions && track.scheduleOptions.length > 0 && (
               <div class="tracks__schedule" data-schedule>
@@ -123,24 +210,61 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
                         data-sched-tab={oi}
                       >
                         {opt.label ?? `Option ${oi + 1}`}
+                        {opt.status && (
+                          <span
+                            class={`tracks__sched-status tracks__sched-status--${opt.status}`}
+                          >
+                            {opt.status === 'full'
+                              ? 'Full'
+                              : opt.status === 'limited'
+                                ? 'Limited'
+                                : 'Open'}
+                          </span>
+                        )}
                       </button>
                     ))}
                   </div>
                 )}
                 {track.scheduleOptions.map((opt, oi) => (
-                  <ul
-                    class="tracks__slots"
+                  <div
+                    class="tracks__sched-option"
                     data-sched-panel={oi}
                     hidden={oi !== 0}
                   >
-                    {opt.slots.map((slot) => (
-                      <li class="tracks__slot">
-                        <span class="tracks__slot-day">{slot.day}</span>
-                        <span class="tracks__slot-time">{slot.time}</span>
-                      </li>
-                    ))}
-                  </ul>
+                    {!isSharedOnly(opt, track.sharedSchedule) && (
+                      <ul class="tracks__slots">
+                        {opt.slots.map((slot) => (
+                          <li class="tracks__slot">
+                            <span class="tracks__slot-day">{slot.day}</span>
+                            <span class="tracks__slot-time">{slot.time}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {opt.statusNote && (
+                      <p class="tracks__sched-note">{opt.statusNote}</p>
+                    )}
+                  </div>
                 ))}
+                {track.sharedSchedule && (
+                  <div class="tracks__shared">
+                    <p class="tracks__shared-label">
+                      {track.sharedSchedule.label}
+                      <span class="tracks__shared-pill">All options</span>
+                    </p>
+                    <ul class="tracks__slots">
+                      {track.sharedSchedule.slots.map((slot) => (
+                        <li class="tracks__slot tracks__slot--shared">
+                          <span class="tracks__slot-day">{slot.day}</span>
+                          <span class="tracks__slot-time">{slot.time}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    {track.sharedSchedule.note && (
+                      <p class="tracks__shared-note">{track.sharedSchedule.note}</p>
+                    )}
+                  </div>
+                )}
               </div>
             )}
             <div class="tracks__body" set:html={track.bodyHtml}></div>
@@ -388,6 +512,60 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
   .tracks__tab-name {
     font-size: 18px;
     line-height: 1.1;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .tracks__pill-full,
+  .tracks__pill-limited {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--white);
+    background: var(--orange-500);
+    border-radius: var(--r-pill);
+    padding: 2px 8px;
+  }
+  .tracks__pill-limited {
+    background: var(--teal-600);
+  }
+
+  .tracks__availability {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-5);
+    padding: var(--space-4) var(--space-5);
+    background: var(--surface);
+    border: 1px solid var(--orange-500);
+    border-left-width: 4px;
+    border-radius: var(--r-md);
+  }
+  .tracks__availability-title {
+    margin: 0;
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 13px;
+    color: var(--navy-700);
+  }
+  .tracks__availability-note {
+    margin: var(--space-1) 0 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-body);
+  }
+  .tracks__availability--limited {
+    border-color: var(--teal-600);
+  }
+
+  .tracks__register {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
   }
 
   .tracks__panel {
@@ -478,6 +656,84 @@ const safeId = id.replace(/[^a-zA-Z0-9_-]/g, '-');
   .tracks__sched-tab[aria-selected='true'] {
     background: var(--navy-700);
     color: var(--white);
+  }
+  .tracks__sched-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: var(--space-2);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+  .tracks__sched-status::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .tracks__sched-status--full { color: var(--orange-500); }
+  .tracks__sched-status--limited { color: var(--teal-600); }
+  .tracks__sched-status--open { color: var(--success); }
+  /* Selected tab flips to navy — keep the status legible on the dark bg. */
+  .tracks__sched-tab[aria-selected='true'] .tracks__sched-status--full { color: var(--orange-400); }
+  .tracks__sched-tab[aria-selected='true'] .tracks__sched-status--limited { color: var(--teal-400); }
+  .tracks__sched-tab[aria-selected='true'] .tracks__sched-status--open { color: #4fd394; }
+  .tracks__sched-option {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .tracks__sched-option[hidden] { display: none; }
+  .tracks__sched-note {
+    margin: 0;
+    font-size: 13px;
+    font-weight: var(--fw-medium);
+    color: var(--teal-700);
+  }
+  /* Open to every option, so it sits below the panels as its own block
+     rather than inside any one option's slot list. */
+  .tracks__shared {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-1);
+    padding: var(--space-4);
+    background: var(--teal-100);
+    border: 1px solid var(--teal-600);
+    border-left-width: 4px;
+    border-radius: var(--r-md);
+  }
+  .tracks__shared-label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0;
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: 11px;
+    color: var(--teal-700);
+  }
+  .tracks__shared-pill {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--white);
+    background: var(--teal-600);
+    border-radius: var(--r-pill);
+    padding: 2px 8px;
+  }
+  .tracks__slot--shared {
+    background: var(--white);
+    border-color: var(--teal-200);
+  }
+  .tracks__shared-note {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-body);
   }
   .tracks__slots {
     list-style: none;

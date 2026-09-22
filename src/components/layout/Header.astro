@@ -2,15 +2,11 @@
 import { Image } from 'astro:assets';
 import krakenWhite from '@assets/brand/kraken-white.svg';
 import wordmark from '@assets/brand/wordmark-navy.png';
+import { primaryNav } from '@data/nav';
 import { site } from '@data/site';
-import { getNavigation } from '@lib/cms';
 import Button from '@components/ui/Button.astro';
+import usaSwimming from '@assets/affiliations/usa-swimming-shield.svg';
 import MobileMenu from '@components/layout/MobileMenu.astro';
-
-const primaryNav = (await getNavigation()).map((item) => ({
-  ...item,
-  external: item.href.startsWith('http'),
-}));
 
 const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const isHome = currentPath === '/';
@@ -22,6 +18,7 @@ function isCurrent(href: string): boolean {
 ---
 <header class="c26-header" data-scrolled="false">
   <div class="c26-header__inner">
+    <div class="c26-header__left">
     <a
       href="/"
       class="c26-header__brand"
@@ -48,6 +45,17 @@ function isCurrent(href: string): boolean {
         decoding="sync"
       />
     </a>
+    <a
+      class="c26-header__affil"
+      href="https://www.usaswimming.org/"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="USA Swimming member club (opens in a new tab)"
+      title="USA Swimming member club"
+    >
+      <Image src={usaSwimming} alt="USA Swimming" height={40} loading="eager" />
+    </a>
+    </div>
 
     <nav class="c26-header__nav" aria-label="Primary">
       <ul class="c26-header__nav-list">
@@ -89,6 +97,7 @@ function isCurrent(href: string): boolean {
     </div>
   </div>
 </header>
+
 
 <MobileMenu />
 
@@ -143,6 +152,39 @@ function isCurrent(href: string): boolean {
     gap: var(--space-6);
   }
 
+  .c26-header__left {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-width: 0;
+  }
+  /* Shield per USA Swimming standards: full colour, flat navy behind it,
+     clear space ≈ the "USA" cap height at this size, nothing overlaid. */
+  .c26-header__affil {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    padding: 6px 10px;
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+    line-height: 0;
+  }
+  .c26-header__affil img {
+    height: 40px;
+    width: auto;
+  }
+  /* Home: while the brand is hidden behind the hero, the shield takes the
+     left slot instead of sitting beside an empty gap. */
+  .c26-header__left:has(.c26-header__brand[data-pinned='hero']) .c26-header__brand {
+    width: 0;
+    overflow: hidden;
+  }
+  .c26-header__left:has(.c26-header__brand[data-pinned='hero']) {
+    gap: 0;
+  }
+  .c26-header__left:has(.c26-header__brand[data-pinned='hero']) .c26-header__affil {
+    border-left-color: transparent;
+    padding-left: 0;
+  }
   .c26-header__brand {
     display: inline-flex;
     align-items: center;
@@ -244,6 +286,9 @@ function isCurrent(href: string): boolean {
     .c26-header__kraken {
       width: 40px;
       height: 40px;
+    }
+    .c26-header__affil img {
+      height: 34px;
     }
     .c26-header__wordmark {
       height: 32px;

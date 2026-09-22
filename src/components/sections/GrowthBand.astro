@@ -1,0 +1,237 @@
+---
+/**
+ * GrowthBand — full-bleed growth-claim strip on the hero's 45° hatch motif,
+ * placed between the stats ticker and the mission band. Implements concept 1c
+ * from the designer's "Growth Claim Concepts" (Aug 2026). The swimmer count is
+ * live text from `growth` in @data/stats — roster updates are a one-line edit.
+ */
+import krakenWhite from '@assets/brand/kraken-white.svg';
+import { growth } from '@data/stats';
+
+// Rising bar chart, oldest → newest. Heights only; the last bar is magenta.
+const bars = [26, 34, 42, 52, 62, 74, 86, 100];
+---
+<section class="growth" aria-labelledby="growth-title">
+  <img
+    class="growth__watermark"
+    src={krakenWhite.src}
+    alt=""
+    aria-hidden="true"
+    loading="lazy"
+    decoding="async"
+  />
+  <div class="container growth__inner">
+    <div class="growth__copy">
+      <p class="growth__eyebrow">
+        <span class="growth__dot" aria-hidden="true">
+          <span class="growth__dot-halo"></span>
+          <span class="growth__dot-core"></span>
+        </span>
+        Roster update · {growth.updated}
+      </p>
+      <h2 id="growth-title" class="growth__heading">
+        Fastest Growing Team in the <span class="growth__accent">Midwest</span>
+      </h2>
+      <p class="growth__sub">
+        One pool, one coaching staff, one standard — and more families choosing
+        it every month.
+      </p>
+    </div>
+    <div class="growth__figure">
+      <div class="growth__count-row">
+        <span class="growth__count">{growth.count}</span>
+        <span class="growth__count-label">{growth.label}</span>
+      </div>
+      <div class="growth__bars" aria-hidden="true">
+        {bars.map((h, i) => (
+          <span
+            class:list={['growth__bar', i === bars.length - 1 && 'growth__bar--peak']}
+            style={`--bar-h: ${h}%; --bar-i: ${i}`}
+          ></span>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes growth-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.45; transform: scale(0.72); }
+  }
+  @keyframes growth-halo {
+    0% { opacity: 0.55; transform: scale(1); }
+    70%, 100% { opacity: 0; transform: scale(2.6); }
+  }
+  @keyframes growth-rise {
+    0%, 100% { transform: scaleY(0.62); }
+    50% { transform: scaleY(1); }
+  }
+
+  .growth {
+    position: relative;
+    overflow: hidden;
+    /* Breathing room below the stats ticker card (per concept 1c). */
+    margin-top: 56px;
+    padding: 52px 0;
+    color: var(--text-on-dark);
+    background: repeating-linear-gradient(
+      45deg,
+      var(--hatch-a) 0 11px,
+      var(--hatch-b) 11px 22px
+    );
+  }
+  /* Darkening scrim so the type clears the hatch texture. */
+  .growth::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(14, 19, 48, 0.35), rgba(14, 19, 48, 0.62));
+    pointer-events: none;
+  }
+  .growth__watermark {
+    position: absolute;
+    top: 50%;
+    right: -40px;
+    width: 320px;
+    transform: translateY(-50%);
+    opacity: 0.08;
+    pointer-events: none;
+  }
+  .growth__inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    gap: var(--space-6) 56px;
+    align-items: center;
+  }
+
+  .growth__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .growth__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0;
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 12px;
+    color: var(--teal-400);
+  }
+  .growth__dot {
+    position: relative;
+    display: inline-flex;
+    width: 8px;
+    height: 8px;
+    flex: none;
+  }
+  .growth__dot-halo,
+  .growth__dot-core {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--r-pill);
+    background: var(--magenta-400);
+  }
+  .growth__dot-halo {
+    animation: growth-halo 2.6s cubic-bezier(0.2, 0.7, 0.3, 1) infinite;
+  }
+  .growth__dot-core {
+    animation: growth-pulse 2.6s ease-in-out infinite;
+  }
+  .growth__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-black);
+    text-transform: uppercase;
+    font-size: clamp(40px, 5.2vw, 64px);
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    margin: 0;
+    max-width: 15ch;
+  }
+  .growth__accent {
+    color: var(--teal-400);
+  }
+  .growth__sub {
+    font-size: 18px;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.82);
+    margin: 0;
+    max-width: 46ch;
+  }
+
+  .growth__figure {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    align-items: flex-start;
+    border-left: 3px solid var(--magenta-400);
+    padding-left: 28px;
+  }
+  .growth__count-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+  }
+  .growth__count {
+    font-family: var(--font-display);
+    font-weight: var(--fw-black);
+    font-size: clamp(76px, 9vw, 116px);
+    line-height: 0.82;
+    letter-spacing: -0.03em;
+    color: var(--teal-400);
+  }
+  .growth__count-label {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 13px;
+    line-height: 1.3;
+    color: var(--white);
+    padding-bottom: 12px;
+    max-width: 9ch;
+  }
+  .growth__bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 7px;
+    height: 52px;
+  }
+  .growth__bar {
+    width: 12px;
+    height: var(--bar-h);
+    /* teal-400 (#2fd0e0) ramped toward opaque as the bars climb */
+    background: rgba(47, 208, 224, calc(0.35 + var(--bar-i) * 0.09));
+    transform-origin: bottom;
+    animation: growth-rise 4.2s ease-in-out infinite;
+    animation-delay: calc(var(--bar-i) * 0.3s - 2.4s);
+  }
+  .growth__bar--peak {
+    background: var(--magenta-400);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .growth__dot-halo,
+    .growth__dot-core,
+    .growth__bar {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 800px) {
+    .growth__inner {
+      grid-template-columns: 1fr;
+    }
+    .growth__watermark {
+      width: 220px;
+      right: -60px;
+    }
+  }
+</style>

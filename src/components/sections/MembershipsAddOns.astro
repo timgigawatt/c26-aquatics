@@ -1,0 +1,98 @@
+---
+/**
+ * MembershipsAddOns — compact strip on /team for non-team memberships and
+ * performance add-ons (Open Swim, Recovery, Develop/Performance/Elite).
+ * Data lives in src/data/memberships.ts.
+ */
+import Button from '@components/ui/Button.astro';
+import { memberships } from '@data/memberships';
+---
+<section class="addons" aria-labelledby="addons-title">
+  <div class="container">
+    <header class="addons__head">
+      <p class="addons__eyebrow">Beyond the team</p>
+      <h2 id="addons-title" class="addons__heading">Memberships &amp; add-ons</h2>
+      <p class="addons__subtitle">
+        Open swim, recovery, and performance training that pair with any group —
+        all billed monthly.
+      </p>
+    </header>
+    <ul class="addons__grid">
+      {memberships.map((m) => (
+        <li class="addons__card">
+          <h3 class="addons__name">{m.name}</h3>
+          <p class="addons__desc">{m.description}</p>
+          <Button href={m.href} variant="outline" size="sm" external>
+            Sign up — Monthly
+          </Button>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .addons {
+    background: var(--surface-alt);
+    padding: var(--section-y) 0;
+  }
+  .addons__head {
+    max-width: 720px;
+    margin-bottom: var(--space-8);
+  }
+  .addons__eyebrow {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-eyebrow);
+    font-size: var(--fs-eyebrow);
+    color: var(--teal-600);
+    margin: 0 0 var(--space-2);
+  }
+  .addons__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: clamp(26px, 3.4vw, 38px);
+    color: var(--navy-700);
+    margin: 0;
+  }
+  .addons__subtitle {
+    margin: var(--space-3) 0 0;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--text-body);
+  }
+  .addons__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-4);
+  }
+  .addons__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-5);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+  }
+  .addons__name {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    font-size: 18px;
+    color: var(--navy-700);
+    margin: 0;
+  }
+  .addons__desc {
+    margin: 0;
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-body);
+  }
+</style>

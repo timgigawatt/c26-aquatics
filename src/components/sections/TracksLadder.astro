@@ -4,27 +4,20 @@
  * Whole card is an anchor; visual treatment per design handoff
  * (faded ordinal rail, blue age pill, magenta CTA text).
  */
-export interface Track {
-  num: string;
-  title: string;
-  age: string;
-  desc: string;
-  cta: string;
-  href: string;
-}
+import { tracks as defaultTracks, type Track } from '@data/tracks';
 
 interface Props {
   eyebrow?: string;
   heading?: string;
   intro?: string;
-  tracks: Track[];
+  tracks?: Track[];
 }
 
 const {
   eyebrow = 'Programs',
   heading = 'Training groups',
-  intro,
-  tracks,
+  intro = 'Seven groups take a swimmer from their first strokes to the highest levels of competition — one clear development pathway, one standard.',
+  tracks = defaultTracks,
 } = Astro.props;
 ---
 <section id="tracks" class="tracks" aria-labelledby="tracks-title">
@@ -37,7 +30,13 @@ const {
         <a class="track" href={t.href}>
           <span class="track__num" aria-hidden="true">{t.num}</span>
           <span class="track__body">
-            <span class="track__age">{t.age}</span>
+            <span class="track__pills">
+              <span class="track__age">{t.age}</span>
+              {t.status === 'full' && <span class="track__status">Group full</span>}
+              {t.status === 'limited' && (
+                <span class="track__status track__status--limited">Limited spots</span>
+              )}
+            </span>
             <span class="track__title">{t.title}</span>
             <span class="track__desc">{t.desc}</span>
             <span class="track__cta">{t.cta}</span>
@@ -124,6 +123,11 @@ const {
     gap: var(--space-2);
     min-width: 0;
   }
+  .track__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
   .track__age {
     align-self: flex-start;
     font-family: var(--font-subhead);
@@ -135,6 +139,20 @@ const {
     background: var(--blue-100);
     border-radius: var(--r-pill);
     padding: 3px 10px;
+  }
+  .track__status {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 11px;
+    color: var(--white);
+    background: var(--orange-500);
+    border-radius: var(--r-pill);
+    padding: 3px 10px;
+  }
+  .track__status--limited {
+    background: var(--teal-600);
   }
   .track__title {
     font-family: var(--font-display);

@@ -4,12 +4,6 @@ Production site for C26 Aquatics — competitive swim team + swim lessons in the
 
 **Stack:** Astro 4 (SSG) · Netlify · GitHub
 
-Content is files in `src/content/` (pages as JSON block layouts, programs, team-members,
-announcements, globals — exported from the Gigawatt CMS on 2026-09-18); media in
-`public/media/`. `npm run context` regenerates `_context/structure.md` (also on every
-commit); `npm run validate` checks the content files. A 6am build
-(`.github/workflows/daily-build.yml`) keeps date-gated announcements honest.
-
 ## Quick start
 
 ```sh

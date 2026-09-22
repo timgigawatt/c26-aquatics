@@ -5,6 +5,7 @@
  * Pages compose these into the `<slot name="head">` of Base.astro.
  */
 import { site } from '@data/site';
+import { serviceArea } from '@data/serviceArea';
 
 const SITE_URL = site.url;
 
@@ -26,7 +27,7 @@ function postalAddress() {
 }
 
 function areaServed() {
-  return site.serviceArea.map((city) => ({
+  return serviceArea.map((city) => ({
     '@type': 'City',
     name: city.name,
     containedInPlace: {
@@ -83,7 +84,7 @@ interface CoachInput {
   slug: string;
   name: string;
   role: string;
-  headshot?: string;
+  headshot: string;
   credentials: string[];
 }
 
@@ -101,7 +102,7 @@ export function coachesListSchema(coaches: CoachInput[]) {
         name: coach.name,
         jobTitle: coach.role,
         worksFor: { '@id': `${SITE_URL}/#organization` },
-        ...(coach.headshot ? { image: absUrl(coach.headshot) } : {}),
+        image: absUrl(coach.headshot),
         knowsAbout: coach.credentials,
       },
     })),
