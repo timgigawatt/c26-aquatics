@@ -9,7 +9,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "build:og": "node scripts/build-og.mjs"
+    "build:og": "node scripts/build-og.mjs",
+    "context": "node scripts/context.mjs",
+    "validate": "node scripts/validate.mjs",
+    "prepare": "git config core.hooksPath .githooks 2>/dev/null || true"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",

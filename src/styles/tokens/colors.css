@@ -19,8 +19,8 @@
   --hatch-b: #26306c;
 
   /* ---- Cyan (secondary / energy) — v2 palette (token names kept as teal-*) ---- */
-  --teal-700: #0a7886;
-  --teal-600: #0e96a8;
+  --teal-700: #075a66;
+  --teal-600: #0a7886;   /* accent on light — WCAG AA as small text (5.19 on white) */
   --teal-500: #18bcd0;   /* BASE cyan */
   --teal-400: #2fd0e0;   /* bright cyan accent (v2) */
   --teal-200: #a6e8f2;
@@ -35,7 +35,8 @@
   --orange-100: #fff0db;
 
   /* ---- Secondary accents (per design handoff) ---- */
-  --blue-500:    #2f63ef;  /* used on TracksLadder eyebrow + age pill text, DifferenceBand pillar border */
+  --blue-500:    #2f63ef;  /* used on TracksLadder eyebrow + DifferenceBand pillar border */
+  --blue-600:    #2b57d1;  /* small text on --blue-100 (5.2) — the age pill */
   --blue-100:    #e4ebff;  /* age pill background */
   --magenta-400: #e3267e;  /* brighter magenta for on-dark accents — hero headline word + outline CTA */
   --magenta-500: #c41e6f;  /* DifferenceBand eyebrow, TracksLadder card CTA text */
@@ -46,7 +47,7 @@
   --mist:   #eaf0f3;   /* alt surface / inset */
   --line:   #d7e0e5;   /* hairline borders */
   --line-strong: #b9c7ce;
-  --slate:  #5d7480;   /* secondary text */
+  --slate:  #566c77;   /* secondary text — AA on --mist (4.8), the tightest ground it sits on */
   --ink:    #15262f;   /* primary text on light */
 
   /* ---- Semantic aliases (use these in components) ---- */
