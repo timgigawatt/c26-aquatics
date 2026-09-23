@@ -15,7 +15,7 @@ function inlineSitemap({ changefreq = 'monthly', priority = 0.7 } = {}) {
     name: 'c26-inline-sitemap',
     hooks: {
       'astro:build:done': async ({ pages, dir, logger }) => {
-        const siteUrl = 'https://c26aquatics.com';
+        const siteUrl = 'https://aquatics.c26hub.com';
         const lastmod = new Date().toISOString();
 
         const urls = pages
@@ -66,7 +66,7 @@ function inlineSitemap({ changefreq = 'monthly', priority = 0.7 } = {}) {
 const integrations = [inlineSitemap({ changefreq: 'monthly', priority: 0.7 })];
 
 export default defineConfig({
-  site: 'https://c26aquatics.com',
+  site: 'https://aquatics.c26hub.com',
   output: 'static',
   trailingSlash: 'ignore',
   build: { format: 'directory' },

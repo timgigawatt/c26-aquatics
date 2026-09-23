@@ -11,6 +11,6 @@ startDate: 2026-07-01
 endDate: 2026-07-02
 draft: true
 ---
-Write the announcement here in markdown. Paragraphs and [links](https://c26aquatics.com)
+Write the announcement here in markdown. Paragraphs and [links](https://aquatics.c26hub.com)
 work. This text appears in the popup; the title above is what shows in
 the banner.

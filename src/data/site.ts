@@ -10,7 +10,7 @@ export const site = {
   tagline: 'Become a stronger swimmer.',
   description:
     'C26 Aquatics is a Kansas City–area competitive swim team — one pool, one coaching staff, one standard. Train with certified coaches across the KC metro.',
-  url: 'https://c26aquatics.com',
+  url: 'https://aquatics.c26hub.com',
 
   contact: {
     email: 'robbie@c26hub.com',
