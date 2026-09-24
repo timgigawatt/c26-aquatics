@@ -4,12 +4,15 @@ import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { join, basename, extname } from 'node:path';
 
 export const ROOT = new URL('..', import.meta.url).pathname.replace(/\/$/, '');
+// CONTENT_ROOT (relative to ROOT) points the scripts at another content folder — the previews
+// site validates each lead's folder this way. Default: src/content.
+const CONTENT = process.env.CONTENT_ROOT ? join(ROOT, process.env.CONTENT_ROOT) : join(ROOT, 'src/content');
 export const P = {
   blocks: join(ROOT, 'src/blocks'),
-  pages: join(ROOT, 'src/content/pages'),
-  globals: join(ROOT, 'src/content/globals'),
-  content: join(ROOT, 'src/content'),
-  media: join(ROOT, 'src/assets/media'),
+  pages: join(CONTENT, 'pages'),
+  globals: join(CONTENT, 'globals'),
+  content: CONTENT,
+  media: process.env.CONTENT_ROOT ? join(CONTENT, 'media') : join(ROOT, 'src/assets/media'),
   files: join(ROOT, 'src/assets/files'),
   collectionsConfig: join(ROOT, 'src/content.config.ts'),
   context: join(ROOT, '_context'),
@@ -41,8 +44,9 @@ export function loadPages() {
   // home.json first, then alphabetical — matches how a reader thinks about the site.
   const files = listFiles(P.pages, '.json').sort((a, b) => (a === 'home.json' ? -1 : b === 'home.json' ? 1 : a.localeCompare(b)));
   return files.map((f) => {
-    const slug = basename(f, '.json');
     const page = readJson(join(P.pages, f));
+    // cms-export docs carry their own slug (may be nested: 'services/rapid-websites'); the filename is flat.
+    const slug = typeof page.slug === 'string' && page.slug ? page.slug : basename(f, '.json');
     const raw = page.blocks ?? page.layout ?? [];
     const blocks = raw.map((b) => {
       const { block, blockType, variant, ...fields } = b;
@@ -59,13 +63,14 @@ export function loadPages() {
 export function loadCollections() {
   if (!existsSync(P.collectionsConfig)) return loadJsonCollections();
   const src = readFileSync(P.collectionsConfig, 'utf8');
-  const baseMatch = src.match(/const base = \{([\s\S]*?)\n\};/);
+  const baseMatch = src.match(/const base = \{([\s\S]*?)\n\};?/);
   const baseFields = baseMatch ? parseFields(baseMatch[1]) : [];
   const out = [];
-  const re = /const (\w+) = defineCollection\(\{([\s\S]*?)\n\}\);/g;
+  const re = /const (\w+) = defineCollection\(\{([\s\S]*?)\n\}\);?/g;
   let m;
   while ((m = re.exec(src))) {
     const [, name, body] = m;
+    if (['pages', 'globals'].includes(name)) continue; // declared for zod, but they're pages/globals, not collections
     const folder = (body.match(/base:\s*'([^']+)'/) || [])[1] || '';
     const pattern = (body.match(/pattern:\s*'([^']+)'/) || [])[1] || '';
     const own = parseFields((body.match(/schema:\s*z\.object\(\{([\s\S]*?)\}\)/) || ['', ''])[1]);

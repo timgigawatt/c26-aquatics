@@ -1,6 +1,7 @@
 # USA Swimming references — removal log & restore plan
 
 **Date removed:** 2026-07-17 (commit `a99fee6`)
+**Restored:** 2026-09-16 — club license official per Robbie's "Time to turn it on!" email; `a99fee6` reverted cleanly.
 **Why:** USA Swimming called the club and asked that all affiliation claims come off
 the website until the club license is official (expected ~2 weeks, early August 2026).
 Another local club had complained. Leaving the claims up risked a penalty.
@@ -9,14 +10,6 @@ Another local club had complained. Leaving the claims up risked a penalty.
 (`git revert a99fee6`, then resolve any drift) or re-apply each change below by hand.
 Verify with `grep -ri "usa swimming" src public` — before restore it should return
 nothing; after restore it should match this list.
-
-> **⚠️ CMS migration (2026-07-18):** the site is now fully CMS-driven — the page
-> copy, coach bios, and FAQ answers below no longer live in this repo. A `git
-> revert` will NOT restore them. Instead, re-apply the "before" wording from the
-> tables below by editing the c26 tenant's pages, team members, and SEO settings
-> in the Gigawatt CMS admin (publishing triggers a rebuild automatically). The
-> only rows still restored via code are the ones referencing files that survive
-> in the repo (e.g. `src/lib/schemas.ts`, `public/llms.txt`, OG images).
 
 ## What was removed / changed
 

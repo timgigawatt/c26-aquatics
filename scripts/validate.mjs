@@ -35,7 +35,7 @@ for (const { file, page, blocks: list, shape } of loadPages()) {
 }
 // Collections and globals: JSON must parse (readJson throws) and media must exist.
 import { readdirSync, statSync } from 'node:fs';
-for (const d of readdirSync(P.content)) {
+for (const d of existsSync(P.content) ? readdirSync(P.content) : []) {
   const dir = join(P.content, d);
   if (d === 'pages' || !statSync(dir).isDirectory()) continue;
   for (const f of listFiles(dir, '.json')) { try { checkMedia(`src/content/${d}/${f}`, readJson(join(dir, f))); } catch (e) { errors.push(`src/content/${d}/${f}: ${e.message}`); } }

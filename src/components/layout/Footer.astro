@@ -2,15 +2,12 @@
 import { Image } from 'astro:assets';
 import krakenWhite from '@assets/brand/kraken-white.svg';
 import wordmark from '@assets/brand/wordmark-navy.png';
+import { footerLinks, legalLinks } from '@data/nav';
 import { site } from '@data/site';
-import { getFooter } from '@lib/cms';
-
-const footer = await getFooter();
-const footerLinks = footer.columns?.[0]?.links ?? [];
-const legalLinks = footer.legal ?? [];
+import { serviceArea } from '@data/serviceArea';
 
 const year = new Date().getFullYear();
-const cityList = site.serviceArea.map((c) => `${c.name}, ${c.state}`).join(' · ');
+const cityList = serviceArea.map((c) => `${c.name}, ${c.state}`).join(' · ');
 ---
 <footer class="c26-footer">
   <div class="c26-footer__inner">
@@ -43,7 +40,16 @@ const cityList = site.serviceArea.map((c) => `${c.name}, ${c.state}`).join(' · 
       <h2 class="c26-footer__heading">Site</h2>
       <ul class="c26-footer__list">
         {footerLinks.map((link) => (
-          <li><a href={link.href} class="c26-footer__link">{link.label}</a></li>
+          <li>
+            <a
+              href={link.href}
+              class="c26-footer__link"
+              target={link.external ? '_blank' : undefined}
+              rel={link.external ? 'noopener noreferrer' : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
         ))}
       </ul>
     </div>

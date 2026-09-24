@@ -9,26 +9,33 @@
  * tallest quote; JS cross-fades between them, pauses on hover/focus, and honors
  * prefers-reduced-motion (no auto-advance; dot navigation still works).
  */
-export interface Testimonial {
-  quote: string;
-  author: string;
-  role?: string;
-}
+import { getCollection, type CollectionEntry } from 'astro:content';
 
 interface Props {
   variant?: 'grid' | 'feature';
-  testimonials: Testimonial[];
+  featuredOnly?: boolean;
   eyebrow?: string;
   heading?: string;
+  limit?: number;
 }
 
 const {
   variant = 'grid',
-  testimonials,
+  featuredOnly = true,
   eyebrow = 'In their words',
   heading = 'Families who swim with us',
+  limit,
 } = Astro.props;
 
+type TestimonialEntry = CollectionEntry<'testimonials'>;
+const all = await getCollection('testimonials');
+const filtered = featuredOnly
+  ? all.filter((t: TestimonialEntry) => t.data.featured)
+  : all;
+const sorted = filtered.sort(
+  (a: TestimonialEntry, b: TestimonialEntry) => a.data.order - b.data.order,
+);
+const testimonials = typeof limit === 'number' ? sorted.slice(0, limit) : sorted;
 const hasFeature = testimonials.length > 0;
 ---
 {variant === 'feature' && hasFeature ? (
@@ -36,13 +43,13 @@ const hasFeature = testimonials.length > 0;
     <div class="container">
       <h2 id="testimonials-title" class="sr-only">{heading}</h2>
       <div class="fq-stack">
-        {testimonials.map((t, i) => (
+        {testimonials.map((t: TestimonialEntry, i: number) => (
           <figure class="fq" data-slide data-active={i === 0 ? 'true' : 'false'} aria-hidden={i === 0 ? undefined : 'true'}>
             <span class="fq__mark" aria-hidden="true">&ldquo;</span>
-            <blockquote class="fq__text">{t.quote}</blockquote>
+            <blockquote class="fq__text">{t.data.quote}</blockquote>
             <figcaption class="fq__cite">
-              <span class="fq__author">{t.author}</span>
-              <span class="fq__role">{t.role}</span>
+              <span class="fq__author">{t.data.author}</span>
+              <span class="fq__role">{t.data.role}</span>
             </figcaption>
           </figure>
         ))}
@@ -50,7 +57,7 @@ const hasFeature = testimonials.length > 0;
 
       {testimonials.length > 1 && (
         <div class="fq-dots" role="tablist" aria-label="Choose a testimonial">
-          {testimonials.map((t, i) => (
+          {testimonials.map((t: TestimonialEntry, i: number) => (
             <button
               type="button"
               role="tab"
@@ -74,13 +81,13 @@ const hasFeature = testimonials.length > 0;
       </header>
 
       <div class="testimonials__grid">
-        {testimonials.map((t) => (
+        {testimonials.map((t: TestimonialEntry) => (
           <figure class="quote">
             <span class="quote__mark" aria-hidden="true">&ldquo;</span>
-            <blockquote class="quote__text">{t.quote}</blockquote>
+            <blockquote class="quote__text">{t.data.quote}</blockquote>
             <figcaption class="quote__cite">
-              <span class="quote__author">{t.author}</span>
-              <span class="quote__role">{t.role}</span>
+              <span class="quote__author">{t.data.author}</span>
+              <span class="quote__role">{t.data.role}</span>
             </figcaption>
           </figure>
         ))}

@@ -10,6 +10,7 @@ type CommitmentLevel = 'developmental' | 'competitive' | 'elite';
 interface Row {
   slug: string;
   name: string;
+  status?: 'open' | 'limited' | 'full';
   ageRange: string;
   groupSize: number;
   suggestedPractices: string;
@@ -71,7 +72,13 @@ const usd = (n: number) =>
                   class:list={['compare__dot', `compare__dot--${row.commitmentLevel}`]}
                   aria-hidden="true"
                 ></span>
-                <span class="compare__group-name">{row.name}</span>
+                <span class="compare__group-name">
+                  {row.name}
+                  {row.status === 'full' && <span class="compare__full">Full</span>}
+                  {row.status === 'limited' && (
+                    <span class="compare__full compare__limited">Limited</span>
+                  )}
+                </span>
                 <span class="compare__group-level">{levelLabel[row.commitmentLevel]}</span>
               </th>
               <td>{row.ageRange}</td>
@@ -186,6 +193,22 @@ const usd = (n: number) =>
     font-size: 16px;
     color: var(--navy-700);
     line-height: 1.1;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .compare__full {
+    font-family: var(--font-subhead);
+    font-weight: var(--fw-semibold);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--white);
+    background: var(--orange-500);
+    border-radius: var(--r-pill);
+    padding: 2px 8px;
+  }
+  .compare__limited {
+    background: var(--teal-600);
   }
   .compare__group-level {
     grid-column: 2;

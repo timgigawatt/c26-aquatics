@@ -1,25 +1,25 @@
 ---
 /**
- * ServiceAreaBand — light mist band of readable text chips (KC-metro cities,
- * coaching-system keywords…). Renders CMS `chipsBand` blocks. Chips must be
- * plain DOM text (not images) for local SEO.
+ * ServiceAreaBand — light mist band listing KC-metro cities as readable text
+ * chips. Sits inside the home page's light "logistics" run (Location → here →
+ * FAQ) so the page doesn't zebra-stripe dark/light near the footer.
+ * Cities must render as plain DOM text (not images) for local SEO.
  */
 import Badge from '@components/ui/Badge.astro';
+import { serviceArea } from '@data/serviceArea';
 
 interface Props {
   heading?: string;
   subtitle?: string;
-  chips: { text: string; note?: string }[];
   ctaLabel?: string;
   ctaHref?: string;
 }
 
 const {
-  heading,
-  subtitle,
-  chips,
-  ctaLabel,
-  ctaHref,
+  heading = 'Proudly serving the KC metro',
+  subtitle = 'One pool, one staff — drawing swimmers from across the Kansas City suburbs.',
+  ctaLabel = 'Explore the team',
+  ctaHref = '/team',
 } = Astro.props;
 ---
 <section id="service-area" class="service" aria-labelledby="service-title">
@@ -29,22 +29,20 @@ const {
       {subtitle && <p class="service__subtitle">{subtitle}</p>}
     </header>
 
-    <ul class="service__cities">
-      {chips.map((chip) => (
+    <ul class="service__cities" aria-label="Communities served">
+      {serviceArea.map((city) => (
         <li>
           <Badge tone="outline" size="md">
-            {chip.text}{chip.note ? `, ${chip.note}` : ''}
+            {city.name}, {city.state}
           </Badge>
         </li>
       ))}
     </ul>
 
-    {ctaLabel && ctaHref && (
-      <a href={ctaHref} class="service__cta">
-        {ctaLabel}
-        <span aria-hidden="true">&rarr;</span>
-      </a>
-    )}
+    <a href={ctaHref} class="service__cta">
+      {ctaLabel}
+      <span aria-hidden="true">&rarr;</span>
+    </a>
   </div>
 </section>
 
