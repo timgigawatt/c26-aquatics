@@ -37,10 +37,11 @@ export const site = {
     hours: '',
   },
 
-  // Shared with the C26 Hub site — one set of accounts for the LLC.
+  // Facebook/Instagram are the C26 Aquatics (swim team) accounts; X still
+  // points at the shared C26 Hub (LLC) account until the team has its own.
   social: {
-    instagram: 'https://www.instagram.com/c26hub/',
-    facebook: 'https://www.facebook.com/c26hub',
+    instagram: 'https://www.instagram.com/c26aquatics',
+    facebook: 'https://www.facebook.com/C26Aquatics',
     twitter: 'https://x.com/c26hub',
   },
 
