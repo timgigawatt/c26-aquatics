@@ -9,7 +9,7 @@ costPerHour: 18.57
 commitmentLevel: "developmental"
 order: 1
 registration:
-  monthly: "https://momence.com/m/903829"
+  monthly: "https://momence.com/m/915729"
   seasonal: "https://momence.com/m/903820"
 scheduleOptions:
   - slots:

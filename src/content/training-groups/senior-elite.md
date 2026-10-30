@@ -9,7 +9,7 @@ costPerHour: 5.50
 commitmentLevel: "elite"
 order: 7
 registration:
-  monthly: "https://momence.com/m/880909"
+  monthly: "https://momence.com/m/915726"
   seasonal: "https://momence.com/m/903828"
 scheduleOptions:
   - slots:

@@ -10,7 +10,7 @@ commitmentLevel: "competitive"
 status: "limited"
 order: 4
 registration:
-  monthly: "https://momence.com/m/880906"
+  monthly: "https://momence.com/m/915712"
   seasonal: "https://momence.com/m/903824"
 scheduleOptions:
   - slots:
