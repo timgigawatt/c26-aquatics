@@ -51,7 +51,7 @@ export const site = {
   booking: {
     // Momence product page for the team evaluation & placement fee. Wired to
     // every "Join the Team" CTA and the /team evaluations section.
-    team: 'https://momence.com/C26-Hub-LLC/product/Swim-Team-Evaluation-and-Placement-Fee%3A-%24100.00/500138',
+    team: 'https://momence.com/m/953439',
   },
 
   // Elsmore Swim team store — nav, footer, and the /team equipment block
