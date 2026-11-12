@@ -17,9 +17,6 @@ const pageSchema = contactPageSchema();
 
 const { streetAddress, addressLocality, addressRegion, postalCode } = site.address;
 const addressLine = `${streetAddress}, ${addressLocality}, ${addressRegion} ${postalCode}`;
-const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(
-  `Bluhawk ${addressLine}`,
-)}&output=embed`;
 
 // Kept in sync with the site's current offerings — lessons/multisport pages
 // are retired, so the form only asks about the team.
@@ -68,14 +65,9 @@ const interests = ['Joining the team', 'Team evaluation', 'Something else'];
               <dd><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></dd>
             </div>
           </dl>
-          <iframe
-            class="contact__map"
-            src={mapEmbedUrl}
-            title={`Map to C26 Aquatics at ${addressLine}`}
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            allowfullscreen
-          ></iframe>
+          <p class="contact__map-link">
+            <Button href={site.place.mapsUrl} variant="outline" size="md" external>Open in Google Maps</Button>
+          </p>
         </div>
 
         <div class="contact__card">
@@ -210,13 +202,8 @@ const interests = ['Joining the team', 'Team evaluation', 'Something else'];
     color: var(--blue-500);
   }
 
-  .contact__map {
-    display: block;
-    width: 100%;
-    height: 260px;
-    border: 0;
-    border-radius: var(--r-lg);
-    margin-top: var(--space-8);
+  .contact__map-link {
+    margin: var(--space-8) 0 0;
   }
 
   .contact__card {
