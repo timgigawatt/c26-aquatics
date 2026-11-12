@@ -89,6 +89,14 @@ const privacyExternal = privacyUrl === privacyPolicy.externalUrl;
     window.dispatchEvent(new CustomEvent('consent:denied'));
     hideBanner();
   });
+
+  // "Privacy choices" (footer) reopens the banner so a stored choice can be changed.
+  document.querySelectorAll('[data-consent-open]').forEach((el) => {
+    el.addEventListener('click', () => {
+      showBanner();
+      acceptBtn?.focus();
+    });
+  });
 </script>
 
 <style>
