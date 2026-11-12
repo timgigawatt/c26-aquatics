@@ -132,10 +132,11 @@ const cityList = serviceArea.map((c) => `${c.name}, ${c.state}`).join(' · ');
           <a
             href={link.href}
             class="c26-footer__legal-link"
-            target="_blank"
-            rel="noopener noreferrer"
+            target={link.external ? '_blank' : undefined}
+            rel={link.external ? 'noopener noreferrer' : undefined}
           >{link.label}</a>
         ))}
+        <button type="button" class="c26-footer__legal-link c26-footer__legal-btn" data-consent-open>Privacy choices</button>
       </nav>
     </div>
   </div>
@@ -286,6 +287,18 @@ const cityList = serviceArea.map((c) => `${c.name}, ${c.state}`).join(' · ');
   .c26-footer__credit-link:hover,
   .c26-footer__legal-link:hover {
     color: var(--text-on-dark);
+  }
+  .c26-footer__legal-btn {
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+  .c26-footer__legal-btn:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
   }
 
   @media (max-width: 900px) {

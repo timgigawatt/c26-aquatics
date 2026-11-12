@@ -1,4 +1,5 @@
 import { site } from './site';
+import { privacyPolicy, privacyUrl } from './legal';
 
 export interface NavItem {
   label: string;
@@ -28,9 +29,10 @@ export const footerLinks: readonly NavItem[] = [
   { label: 'Team Store', href: site.store, external: true },
 ] as const;
 
-// Legal pages live on the C26 Hub site (same LLC) — no local routes.
+// Legal pages live on the C26 Hub site (same LLC). The privacy policy moves
+// on-site once src/data/legal.ts → privacyPolicy.published is true.
 export const legalLinks: readonly NavItem[] = [
-  { label: 'Privacy Policy', href: 'https://www.c26hub.com/privacy-policy/', external: true },
+  { label: 'Privacy Policy', href: privacyUrl, external: privacyUrl === privacyPolicy.externalUrl },
   { label: 'Cookie Policy', href: 'https://www.c26hub.com/cookie-policy/', external: true },
   { label: 'Terms of Service', href: 'https://www.c26hub.com/terms-of-service/', external: true },
   { label: 'Disclaimer', href: 'https://www.c26hub.com/disclaimer/', external: true },

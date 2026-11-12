@@ -22,7 +22,7 @@ function inlineSitemap({ changefreq = 'monthly', priority = 0.7 } = {}) {
           // Drop status-code pages and private/unlinked pages from sitemap
           .filter((p) => {
             const clean = p.pathname.replace(/\/+$/, '');
-            return clean !== '404' && clean !== '500' && clean !== 'variations';
+            return clean !== '404' && clean !== '500' && clean !== 'variations' && clean !== 'thanks';
           })
           .map((p) => {
             // Astro emits e.g. "", "team/", "about/", "swim-lessons/"

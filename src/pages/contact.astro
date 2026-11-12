@@ -11,19 +11,20 @@ import {
   jsonLd,
 } from '@lib/schemas';
 import { site } from '@data/site';
+import { privacyPolicy, privacyUrl } from '@data/legal';
 
 const orgSchema = sportsOrganizationSchema();
 const pageSchema = contactPageSchema();
 
 const { streetAddress, addressLocality, addressRegion, postalCode } = site.address;
 const addressLine = `${streetAddress}, ${addressLocality}, ${addressRegion} ${postalCode}`;
-const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(
-  `Bluhawk ${addressLine}`,
-)}&output=embed`;
 
 // Kept in sync with the site's current offerings — lessons/multisport pages
 // are retired, so the form only asks about the team.
 const interests = ['Joining the team', 'Team evaluation', 'Something else'];
+
+// Privacy link beside the submit button: new tab only while it points off-site.
+const privacyExternal = privacyUrl !== privacyPolicy.route;
 ---
 <Base
   title="Contact | C26 Aquatics"
@@ -68,14 +69,9 @@ const interests = ['Joining the team', 'Team evaluation', 'Something else'];
               <dd><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></dd>
             </div>
           </dl>
-          <iframe
-            class="contact__map"
-            src={mapEmbedUrl}
-            title={`Map to C26 Aquatics at ${addressLine}`}
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            allowfullscreen
-          ></iframe>
+          <p class="contact__map-link">
+            <Button href={site.place.mapsUrl} variant="outline" size="md" external>Open in Google Maps</Button>
+          </p>
         </div>
 
         <div class="contact__card">
@@ -92,6 +88,7 @@ const interests = ['Joining the team', 'Team evaluation', 'Something else'];
             class="contact__form"
             name="contact"
             method="POST"
+            action="/thanks?form=contact"
             data-netlify="true"
             netlify-honeypot="bot-field"
           >
@@ -125,6 +122,13 @@ const interests = ['Joining the team', 'Team evaluation', 'Something else'];
               ></textarea>
             </label>
             <Button type="submit" variant="primary" size="lg">Send message</Button>
+            <p class="contact__privacy">
+              <a
+                href={privacyUrl}
+                target={privacyExternal ? '_blank' : undefined}
+                rel={privacyExternal ? 'noopener noreferrer' : undefined}
+              >How we handle your information</a>
+            </p>
           </form>
         </div>
       </div>
@@ -210,13 +214,8 @@ const interests = ['Joining the team', 'Team evaluation', 'Something else'];
     color: var(--blue-500);
   }
 
-  .contact__map {
-    display: block;
-    width: 100%;
-    height: 260px;
-    border: 0;
-    border-radius: var(--r-lg);
-    margin-top: var(--space-8);
+  .contact__map-link {
+    margin: var(--space-8) 0 0;
   }
 
   .contact__card {
@@ -302,6 +301,21 @@ const interests = ['Joining the team', 'Team evaluation', 'Something else'];
   .contact__form textarea:focus {
     border-color: var(--teal-500);
     box-shadow: 0 0 0 3px var(--focus-ring, rgba(47, 208, 224, 0.25));
+  }
+
+  .contact__privacy {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-muted);
+    margin: 0;
+  }
+  .contact__privacy a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .contact__privacy a:hover {
+    color: var(--navy-700);
   }
 
   /* Honeypot — visually gone, still in the POST body for Netlify. */

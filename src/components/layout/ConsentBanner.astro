@@ -1,9 +1,11 @@
 ---
 import { site } from '@data/site';
+import { privacyPolicy, privacyUrl } from '@data/legal';
 import Button from '@components/ui/Button.astro';
 
 const ga4Id = site.ga4MeasurementId;
 const ga4Enabled = ga4Id && ga4Id !== 'G-XXXXXXXXXX';
+const privacyExternal = privacyUrl === privacyPolicy.externalUrl;
 ---
 <div
   id="c26-consent"
@@ -17,10 +19,10 @@ const ga4Enabled = ga4Id && ga4Id !== 'G-XXXXXXXXXX';
     <p class="c26-consent__text">
       We use a single analytics cookie to understand how visitors use this site.
       <a
-        href="https://www.c26hub.com/privacy-policy/"
+        href={privacyUrl}
         class="c26-consent__link"
-        target="_blank"
-        rel="noopener noreferrer"
+        target={privacyExternal ? '_blank' : undefined}
+        rel={privacyExternal ? 'noopener noreferrer' : undefined}
       >Read our privacy notice.</a>
     </p>
     <div class="c26-consent__actions">
@@ -86,6 +88,14 @@ const ga4Enabled = ga4Id && ga4Id !== 'G-XXXXXXXXXX';
     try { localStorage.setItem(STORAGE_KEY, 'denied'); } catch {}
     window.dispatchEvent(new CustomEvent('consent:denied'));
     hideBanner();
+  });
+
+  // "Privacy choices" (footer) reopens the banner so a stored choice can be changed.
+  document.querySelectorAll('[data-consent-open]').forEach((el) => {
+    el.addEventListener('click', () => {
+      showBanner();
+      acceptBtn?.focus();
+    });
   });
 </script>
 
