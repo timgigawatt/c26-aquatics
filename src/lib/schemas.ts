@@ -53,6 +53,10 @@ export function sportsOrganizationSchema() {
     image: absUrl('/og-default.png'),
     description: site.description,
     sport: 'Swimming',
+    // Top-level telephone/email beside contactPoint: answer engines read the node, not the
+    // nested point, when they name, place and contact the business (seo.md, 2026-11-12).
+    telephone: site.contact.phone,
+    email: site.contact.email,
     address: postalAddress(),
     ...(site.place.mapsUrl ? { hasMap: site.place.mapsUrl } : {}),
     areaServed: areaServed(),
@@ -64,6 +68,20 @@ export function sportsOrganizationSchema() {
       telephone: site.contact.phone,
       areaServed: 'US',
     },
+  };
+}
+
+/** WebSite node naming the organization as publisher — emitted on home beside the org. */
+export function websiteSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${SITE_URL}/#website`,
+    url: SITE_URL,
+    name: site.name,
+    description: site.description,
+    publisher: { '@id': `${SITE_URL}/#organization` },
+    inLanguage: 'en',
   };
 }
 

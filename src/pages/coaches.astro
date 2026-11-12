@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Base from '@layouts/Base.astro';
+import { pageMeta } from '@data/pages';
 import Header from '@components/layout/Header.astro';
 import Footer from '@components/layout/Footer.astro';
 import ConsentBanner from '@components/layout/ConsentBanner.astro';
@@ -32,10 +33,7 @@ const coachesForSchema = coachEntries.map((entry: CoachEntry) => ({
 
 const coachListSchema = coachesListSchema(coachesForSchema);
 ---
-<Base
-  title="Our Coaches | C26 Aquatics"
-  description="Meet the C26 Aquatics coaching staff — USA Swimming–registered coaches developing competitive and beginner swimmers across the KC metro."
->
+<Base {...pageMeta('/coaches')}>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(orgSchema)}></script>
     <script type="application/ld+json" set:html={jsonLd(coachListSchema)}></script>

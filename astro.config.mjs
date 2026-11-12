@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import { writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
+import { execSync } from 'node:child_process';
 
 /**
  * Lightweight sitemap integration.
@@ -16,7 +17,18 @@ function inlineSitemap({ changefreq = 'monthly', priority = 0.7 } = {}) {
     hooks: {
       'astro:build:done': async ({ pages, dir, logger }) => {
         const siteUrl = 'https://aquatics.c26hub.com';
-        const lastmod = new Date().toISOString();
+        // <lastmod> is the last commit that touched the page's source, when the clone has
+        // history; a shallow Netlify clone says nothing rather than "today" for every page
+        // (_config/standards/seo.md: never faked). Same rule as src/lib/lastmod.ts.
+        const git = (args) => { try { return execSync(`git ${args}`, { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim(); } catch { return ''; } };
+        const deep = git('rev-parse --is-shallow-repository') === 'false' && git('rev-list --count HEAD') !== '1';
+        const lastmodOf = (pathname) => {
+          if (!deep) return '';
+          const name = pathname.replace(/^\/|\/$/g, '') || 'index';
+          const d = git(`log -1 --format=%cI -- "src/pages/${name}.astro"`);
+          return d ? d.slice(0, 10) : '';
+        };
+        const lastmod = new Date().toISOString().slice(0, 10);
 
         const urls = pages
           // Drop status-code pages and private/unlinked pages from sitemap
@@ -28,9 +40,9 @@ function inlineSitemap({ changefreq = 'monthly', priority = 0.7 } = {}) {
             // Astro emits e.g. "", "team/", "about/", "swim-lessons/"
             const path = p.pathname.startsWith('/') ? p.pathname : `/${p.pathname}`;
             const normalized = path === '/' || path.endsWith('/') ? path : `${path}/`;
-            return `${siteUrl}${normalized}`;
+            return { loc: `${siteUrl}${normalized}`, lastmod: lastmodOf(normalized) };
           })
-          .sort();
+          .sort((a, b) => a.loc.localeCompare(b.loc));
 
         if (urls.length === 0) {
           logger.warn('No pages found; sitemap not written.');
@@ -44,7 +56,7 @@ function inlineSitemap({ changefreq = 'monthly', priority = 0.7 } = {}) {
           urls
             .map(
               (u) =>
-                `  <url>\n    <loc>${u}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`,
+                `  <url>\n    <loc>${u.loc}</loc>${u.lastmod ? `\n    <lastmod>${u.lastmod}</lastmod>` : ''}\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`,
             )
             .join('\n') +
           '\n</urlset>\n';
