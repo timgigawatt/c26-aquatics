@@ -1,5 +1,6 @@
 ---
 import Base from '@layouts/Base.astro';
+import { pageMeta } from '@data/pages';
 import Header from '@components/layout/Header.astro';
 import Footer from '@components/layout/Footer.astro';
 import ConsentBanner from '@components/layout/ConsentBanner.astro';
@@ -25,10 +26,7 @@ const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(
 // are retired, so the form only asks about the team.
 const interests = ['Joining the team', 'Team evaluation', 'Something else'];
 ---
-<Base
-  title="Contact | C26 Aquatics"
-  description="Get in touch with C26 Aquatics — one pool, one coaching staff in south Overland Park. Send us a message and a coach replies within one business day."
->
+<Base {...pageMeta('/contact')}>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(orgSchema)}></script>
     <script type="application/ld+json" set:html={jsonLd(pageSchema)}></script>
