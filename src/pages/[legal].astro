@@ -1,0 +1,74 @@
+---
+/**
+ * On-site legal pages. Today only the privacy policy (src/data/legal.ts), and
+ * only once `privacyPolicy.published` is true — until then getStaticPaths()
+ * returns nothing and no /privacy-policy/ exists in the build.
+ */
+import Base from '@layouts/Base.astro';
+import Header from '@components/layout/Header.astro';
+import Footer from '@components/layout/Footer.astro';
+import ConsentBanner from '@components/layout/ConsentBanner.astro';
+import Hero from '@components/sections/Hero.astro';
+import { privacyPolicy } from '@data/legal';
+
+export function getStaticPaths() {
+  if (!privacyPolicy.published) return [];
+  return [{ params: { legal: 'privacy-policy' } }];
+}
+---
+<Base
+  title={`${privacyPolicy.title} | C26 Aquatics`}
+  description={privacyPolicy.description}
+>
+  <Header />
+  <main>
+    <Hero
+      variant="page"
+      eyebrow="Legal"
+      title={privacyPolicy.title}
+      subtitle={`Effective ${privacyPolicy.effective}. This page describes what this website collects and what happens to it.`}
+    />
+
+    <div class="legal">
+      {privacyPolicy.sections.map((section) => (
+        <section class="legal__section">
+          <h2 class="legal__heading">{section.heading}</h2>
+          {section.body.map((paragraph) => (
+            <p class="legal__text">{paragraph}</p>
+          ))}
+        </section>
+      ))}
+    </div>
+  </main>
+  <Footer />
+  <ConsentBanner />
+</Base>
+
+<style>
+  .legal {
+    width: min(68ch, 100% - 2 * var(--gutter));
+    margin-inline: auto;
+    padding: var(--section-y) 0;
+  }
+  .legal__section + .legal__section {
+    margin-top: var(--space-10);
+  }
+  .legal__heading {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-tight);
+    font-size: clamp(24px, 3vw, 30px);
+    color: var(--navy-700);
+    margin: 0 0 var(--space-4);
+  }
+  .legal__text {
+    font-size: var(--fs-body);
+    line-height: 1.65;
+    color: var(--text-body);
+    margin: 0;
+  }
+  .legal__text + .legal__text {
+    margin-top: var(--space-4);
+  }
+</style>

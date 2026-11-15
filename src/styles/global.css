@@ -3,7 +3,6 @@
 @import './tokens/typography.css';
 @import './tokens/spacing.css';
 @import './tokens/effects.css';
-@import './tokens/fonts.css';
 
 /* Reset + base */
 *, *::before, *::after { box-sizing: border-box; }
