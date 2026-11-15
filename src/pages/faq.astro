@@ -1,5 +1,6 @@
 ---
 import Base from '@layouts/Base.astro';
+import { pageMeta } from '@data/pages';
 import Header from '@components/layout/Header.astro';
 import Footer from '@components/layout/Footer.astro';
 import ConsentBanner from '@components/layout/ConsentBanner.astro';
@@ -10,10 +11,7 @@ import { sportsOrganizationSchema, jsonLd } from '@lib/schemas';
 
 const orgSchema = sportsOrganizationSchema();
 ---
-<Base
-  title="Frequently Asked Questions | C26 Aquatics"
-  description="Answers about the C26 Aquatics competitive swim team, evaluations, meets, and logistics across the Kansas City metro — everything KC swim families ask."
->
+<Base {...pageMeta('/faq')}>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(orgSchema)}></script>
   </Fragment>

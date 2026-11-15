@@ -4,6 +4,7 @@ import path from 'node:path';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { micromark } from 'micromark';
 import Base from '@layouts/Base.astro';
+import { pageMeta } from '@data/pages';
 import Header from '@components/layout/Header.astro';
 import Footer from '@components/layout/Footer.astro';
 import ConsentBanner from '@components/layout/ConsentBanner.astro';
@@ -113,10 +114,7 @@ const compareRows = groups.map((entry: GroupEntry) => ({
   commitmentLevel: entry.data.commitmentLevel,
 }));
 ---
-<Base
-  title="Competitive Swim Team | C26 Aquatics"
-  description="Train with C26 Aquatics — USA Swimming–registered competitive training groups for KC-metro athletes from developmental to elite. Find your training group."
->
+<Base {...pageMeta('/team')}>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(orgSchema)}></script>
     <script type="application/ld+json" set:html={jsonLd(teamSchema)}></script>

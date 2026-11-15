@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '@layouts/Base.astro';
+import { pageMeta } from '@data/pages';
 import Header from '@components/layout/Header.astro';
 import Footer from '@components/layout/Footer.astro';
 import ConsentBanner from '@components/layout/ConsentBanner.astro';
@@ -20,10 +21,7 @@ const orgSchema = sportsOrganizationSchema();
 const hubPoolPhoto = publicPhoto('/photos/hub-pool');
 const openWaterPhoto = publicPhoto('/photos/open-water');
 ---
-<Base
-  title="Our Approach | C26 Aquatics"
-  description="How C26 Aquatics develops swimmers — purposeful, periodized training, long-term athlete development, a single home pool, and the Midwest's premier open water program in the Kansas City metro."
->
+<Base {...pageMeta('/our-approach')}>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(orgSchema)}></script>
   </Fragment>

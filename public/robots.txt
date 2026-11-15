@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://aquatics.c26hub.com/sitemap-index.xml

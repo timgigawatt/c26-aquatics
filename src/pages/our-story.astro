@@ -1,5 +1,6 @@
 ---
 import Base from '@layouts/Base.astro';
+import { pageMeta } from '@data/pages';
 import Header from '@components/layout/Header.astro';
 import Footer from '@components/layout/Footer.astro';
 import ConsentBanner from '@components/layout/ConsentBanner.astro';
@@ -17,10 +18,7 @@ import { site } from '@data/site';
 const orgSchema = sportsOrganizationSchema();
 const aboutSchema = aboutPageSchema();
 ---
-<Base
-  title="Our Story | C26 Aquatics"
-  description="Why C26 Aquatics exists — founder Robbie Bruce on burnout, the love of the sport, and building a swim team where every swimmer is known, coached, and developed as an individual."
->
+<Base {...pageMeta('/our-story')}>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(orgSchema)}></script>
     <script type="application/ld+json" set:html={jsonLd(aboutSchema)}></script>

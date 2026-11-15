@@ -1,5 +1,6 @@
 ---
 import Base from '@layouts/Base.astro';
+import { pageMeta } from '@data/pages';
 import Header from '@components/layout/Header.astro';
 import Footer from '@components/layout/Footer.astro';
 import ConsentBanner from '@components/layout/ConsentBanner.astro';
@@ -17,19 +18,18 @@ import LocationBand from '@components/sections/LocationBand.astro';
 import ServiceAreaBand from '@components/sections/ServiceAreaBand.astro';
 import FAQAccordion from '@components/sections/FAQAccordion.astro';
 import CTABand from '@components/sections/CTABand.astro';
-import { sportsOrganizationSchema, jsonLd } from '@lib/schemas';
+import { sportsOrganizationSchema, websiteSchema, jsonLd } from '@lib/schemas';
 import { site } from '@data/site';
 import { publicPhoto } from '@lib/photos';
 import { mission, coachingSystem } from '@data/approach';
 
 const orgSchema = sportsOrganizationSchema();
+const siteSchema = websiteSchema();
 ---
-<Base
-  title="C26 Aquatics — Competitive Swim Team in Kansas City"
-  description="C26 Aquatics is a Kansas City–metro competitive swim team — one pool, one coaching staff, one standard. USA Swimming–registered training groups from developmental to elite."
->
+<Base {...pageMeta('/')}>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={jsonLd(orgSchema)}></script>
+    <script type="application/ld+json" set:html={jsonLd(siteSchema)}></script>
   </Fragment>
 
   <Header />
